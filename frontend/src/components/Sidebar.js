@@ -1,21 +1,22 @@
 import React from 'react';
 import './Sidebar.css';
+import { Link } from 'react-router-dom';
 
 const Sidebar = () => {
     return (
         <div className="sidebar">
             <h2>Menu</h2>
             <ul>
-                <li><a href="#dashboard">Dashboard</a></li>
-                <li><a href="#leaves">Leaves</a></li>
-                <li><a href="#jobs">Jobs</a></li>
-                <li><a href="#applications">Applications</a></li>
-                <li><a href="#employee">Employee</a></li>
-                <li><a href="#salary">Salary</a></li>
-                <li><a href="#programs">Programs</a></li>
-                <li><a href="#clients">Clients</a></li>
-                <li><a href="#profile">Profile</a></li>
-                <li><a href="#logout">Logout</a></li>
+                <li><Link to="/dashboard">Dashboard</Link></li>
+                <li><Link to="/leaves">Leaves</Link></li>
+                <li><Link to="/jobs">Jobs</Link></li>
+                <li><Link to="/applications">Applications</Link></li>
+                <li><Link to="/employee">Employee</Link></li>
+                <li><Link to="/salary">Salary</Link></li>
+                <li><Link to="/programs">Programs</Link></li>
+                <li><Link to="/clients">Clients</Link></li>
+                <li><Link to="/adduser">Profile</Link></li>
+                <li><Link to="/logout">Logout</Link></li>
             </ul>
         </div>
     );
