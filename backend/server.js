@@ -29,6 +29,10 @@ app.use('/users', userRouter);
 const ticketRouter = require('./routes/tickets');
 app.use('/tickets',ticketRouter);
 
+//Leaves
+const leaveRouter = require('./routes/leave');
+app.use('/leaves',leaveRouter);
+
 app.listen(PORT, () => {
     console.log(`Server is up and running on port number: ${PORT}`);
 });
