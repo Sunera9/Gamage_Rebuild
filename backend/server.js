@@ -23,7 +23,14 @@ connection.once("open", () => {
 //Backend Routes 
 
 const userRouter = require('./routes/users'); 
+const jobPositionRouter = require('./routes/jobPosition');
+const salaryComponentRouter = require('./routes/salaryComponent');
+const salaryRouter = require('./routes/salary');
 app.use('/users', userRouter);
+app.use('/jobPosition', jobPositionRouter);
+app.use('/salaryComponent', salaryComponentRouter);
+app.use('/salary', salaryRouter);
+
 
 
 app.listen(PORT, () => {
