@@ -6,7 +6,7 @@ import './AddUser.css';
 
 export default function AddUser() {
 
-    console.log("AddUser component rendered");
+    
   // State variables for attributes
   const [nic, setNic] = useState("");
   const [name, setName] = useState("");
@@ -15,7 +15,7 @@ export default function AddUser() {
   const [phone, setPhone] = useState("");
   const [dob, setDob] = useState("");
   const [gender, setGender] = useState("");
-  const [role, setRole] = useState("visitor"); // Default role
+  const [role, setRole] = useState("visitor"); 
   const [showModal, setShowModal] = useState(false);
 
   function sendData(e) {
