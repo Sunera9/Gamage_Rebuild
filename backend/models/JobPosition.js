@@ -9,12 +9,11 @@ const jobPositionSchema = new mongoose.Schema({
         type: Number,
         required: true,
     },
-    standardAllowance: {
+    overTimePay: {
         type: Number,
         default: 0,
     },
 });
 
 const JobPositionModel = mongoose.model("JobPosition", jobPositionSchema);
-
 module.exports = JobPositionModel;

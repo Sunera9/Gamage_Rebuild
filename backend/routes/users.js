@@ -128,6 +128,8 @@ router.post("/register", async (req, res) => {
     const defaultStartDate = new Date();
     const defaultEndDate = null;
     const defaultJobPosition = null;
+    const defaultBankName = "None";
+    const defaultBankAccountNumber = "None";
 
     // Create new user with default values for missing fields
     const newUser = new UserModel({
@@ -143,7 +145,9 @@ router.post("/register", async (req, res) => {
       department: defaultDepartment,
       company: defaultCompany,
       startDate: defaultStartDate,
-      endDate: defaultEndDate
+      endDate: defaultEndDate,
+      bankAccountNumber: defaultBankAccountNumber,
+      bankName: defaultBankName
     });
 
     await newUser.save();
@@ -160,7 +164,7 @@ router.put("/:id", async (req, res) => {
   const userId = req.params.id;
   const {
     nic, name, email, address, phone, dob, gender, jobPosition, jobCategory,
-    department, company, startDate, endDate
+    department, company, startDate, endDate, bankAccountNumber, bankName
   } = req.body;
 
   try {
@@ -184,6 +188,8 @@ router.put("/:id", async (req, res) => {
     user.company = company || user.company;
     user.startDate = startDate || user.startDate;
     user.endDate = endDate || user.endDate;
+    user.bankAccountNumber = bankAccountNumber || user.bankAccountNumber;
+    user.bankName = bankName || user.bankName;
 
     // Save the updated user to the database
     await user.save();

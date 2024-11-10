@@ -2,10 +2,12 @@ const express = require('express');
 const router = express.Router();
 const SalaryComponent = require('../models/SalaryComponent');
 const UserModel = require("../models/User");
+const SettingModel = require("../models/Setting");
+
 
 // Add Salary Component
 router.post("/", async (req, res) => {
-    const { userId, month, year, overtimeHours, bonuses, allowances, deductions } = req.body;
+    const { userId, month, year, overtimeHours, bonuses } = req.body;
 
     try {
         const user = await UserModel.findById(userId);
@@ -13,14 +15,31 @@ router.post("/", async (req, res) => {
             return res.status(404).json({ status: "User not found" });
         }
 
+        // Fetch settings for allowances and deductions
+        const settings = await SettingModel.find({ name: { $in: [
+            "Health Insurance Deduction", "Professional Tax", "Standard Allowance", 
+            "Medical Allowance", "Dearness Allowance", "Conveyance Allowance", 
+            "EPF Employee", "EPF Employer", "ETF Employer"
+        ]}});
+
+        // Map settings to an object for easy access
+        const settingsMap = settings.reduce((map, setting) => {
+            map[setting.name] = setting.value;
+            return map;
+        }, {});
+
         // Calculate the gross salary
         const baseSalary = user.baseSalary || 0;  // Assuming base salary is in the user model
-        const grossSalary = baseSalary + (overtimeHours || 0) + (bonuses || 0) + (allowances || 0);
+        const grossSalary = baseSalary + (overtimeHours || 0) + (bonuses || 0) + 
+                            (settingsMap["Medical Allowance"] || 0) + 
+                            (settingsMap["Dearness Allowance"] || 0) + 
+                            (settingsMap["Conveyance Allowance"] || 0) +
+                            (settingsMap["Standard Allowance"] || 0);
 
-        // EPF and ETF calculations
-        const epfEmployee = grossSalary * 0.08;  // 8% from the employee
-        const epfEmployer = grossSalary * 0.12;  // 12% from the employer
-        const etfEmployer = grossSalary * 0.03;  // 3% from the employer
+        // EPF and ETF calculations based on settings
+        const epfEmployee = grossSalary * (settingsMap["EPF Employee"] / 100 || 0);
+        const epfEmployer = grossSalary * (settingsMap["EPF Employer"] / 100 || 0);
+        const etfEmployer = grossSalary * (settingsMap["ETF Employer"] / 100 || 0);
 
         // Create and save the salary component
         const salaryComponent = new SalaryComponent({
@@ -29,11 +48,14 @@ router.post("/", async (req, res) => {
             year,
             overtimeHours: overtimeHours || 0,
             bonuses: bonuses || 0,
-            allowances: allowances || 0,
-            deductions: deductions || 0,
+            medicalAllowance: settingsMap["Medical Allowance"] || 0,
+            dearnessAllowance: settingsMap["Dearness Allowance"] || 0,
+            conveyanceAllowance: settingsMap["Conveyance Allowance"] || 0,
             epfEmployee,
             epfEmployer,
-            etfEmployer
+            etfEmployer,
+            healthInsurance: settingsMap["Health Insurance Deduction"] || 0,
+            professionalTax: settingsMap["Professional Tax"] || 0,
         });
 
         await salaryComponent.save();
@@ -71,7 +93,7 @@ router.get("/:userId/:month/:year", async (req, res) => {
 // Update Salary Component
 router.put("/:userId/:month/:year", async (req, res) => {
     const { userId, month, year } = req.params;
-    const { overtimeHours, bonuses, allowances, deductions } = req.body;
+    const { overtimeHours, bonuses} = req.body;
 
     try {
         const salaryComponent = await SalaryComponent.findOne({ user: userId, month, year });
@@ -81,8 +103,6 @@ router.put("/:userId/:month/:year", async (req, res) => {
 
         salaryComponent.overtimeHours = overtimeHours !== undefined ? overtimeHours : salaryComponent.overtimeHours;
         salaryComponent.bonuses = bonuses !== undefined ? bonuses : salaryComponent.bonuses;
-        salaryComponent.allowances = allowances !== undefined ? allowances : salaryComponent.allowances;
-        salaryComponent.deductions = deductions !== undefined ? deductions : salaryComponent.deductions;
 
         await salaryComponent.save();
         res.status(200).json({ status: "Salary component updated", salaryComponent });
