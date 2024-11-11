@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const UserModel = require("../models/User"); 
 const JobPositionModel = require('../models/JobPosition');
+const ProfileModel = require("../models/Profile");
 
 // Get all users
 router.route("/get").get(async (req, res) => {
@@ -110,7 +111,7 @@ router.route("/update/:id").put(async (req, res) => {
   }
 });
 
-// Route to register a new user
+// Route to register a new user and create an associated profile
 router.post("/register", async (req, res) => {
   const { nic, name, email, address, phone, dob, gender } = req.body;
 
@@ -147,12 +148,23 @@ router.post("/register", async (req, res) => {
       startDate: defaultStartDate,
       endDate: defaultEndDate,
       bankAccountNumber: defaultBankAccountNumber,
-      bankName: defaultBankName
+      bankName: defaultBankName,
     });
 
     await newUser.save();
 
-    res.status(201).json({ message: "User registered successfully", newUser });
+    // Create a profile linked to the newly created user
+    const newProfile = new ProfileModel({
+      user: newUser._id,
+      aboutMe: "",
+      facebookLink: "NONE",
+      linkedInLink: "NONE",
+      instagramLink: "NONE",
+    });
+
+    await newProfile.save();
+
+    res.status(201).json({ message: "User and profile created successfully", newUser, newProfile });
   } catch (error) {
     console.error(error.message);
     res.status(500).json({ message: "Error with registering user", error: error.message });
