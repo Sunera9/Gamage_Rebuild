@@ -17,9 +17,14 @@ mongoose.connect(URL);
 
 const connection = mongoose.connection;
 connection.once("open", () => {
-    console.log("MongoDB connection successful");
+  console.log("MongoDB connection successful");
 });
 
+//Backend Routes
+
+const userRouter = require("./routes/users");
+app.use("/users", userRouter);
+
 app.listen(PORT, () => {
-    console.log(`Server is up and running on port number: ${PORT}`);
+  console.log(`Server is up and running on port number: ${PORT}`);
 });
