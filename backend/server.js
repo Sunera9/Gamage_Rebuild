@@ -8,12 +8,13 @@ require("dotenv").config();
 
 const PORT = process.env.PORT || 8070;
 
-//Routes
+
 const adminRoute = require("./routes/adminRoute");
 
 
 
 app.use("/api/admin",adminRoute);
+
 
 
 
@@ -28,6 +29,13 @@ const connection = mongoose.connection;
 connection.once("open", () => {
     console.log("MongoDB connection successful");
 });
+
+
+
+const userRouter = require('./routes/users'); 
+app.use('/users', userRouter);
+
+
 
 app.listen(PORT, () => {
     console.log(`Server is up and running on port number: ${PORT}`);
