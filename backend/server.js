@@ -32,6 +32,7 @@ connection.once("open", () => {
 
 
 
+//Users
 const userRouter = require('./routes/users'); 
 app.use('/users', userRouter);
 
@@ -42,6 +43,10 @@ app.use('/tickets',ticketRouter);
 //Leaves
 const leaveRouter = require('./routes/leave');
 app.use('/leaves',leaveRouter);
+
+
+const programRouter = require('./routes/programs');
+app.use('/programs',programRouter);
 
 
 app.listen(PORT, () => {
