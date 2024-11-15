@@ -5,7 +5,14 @@ const LeaveModel = require('../models/Leave');
 // Create a new leave application
 router.route("/add").post(async (req, res) => {
   try {
-    const leave = new LeaveModel(req.body);
+    const { duration, ...rest } = req.body;
+
+    // Validate duration
+    if (!['Half Day', 'Full Day'].includes(duration)) {
+      return res.status(400).json({ status: "Invalid duration value. It must be 'Half Day' or 'Full Day'" });
+    }
+
+    const leave = new LeaveModel({ ...rest, duration });
     await leave.save();
     res.status(201).json({ status: "Leave application created successfully", leave });
   } catch (error) {
@@ -42,7 +49,19 @@ router.route("/get/:id").get(async (req, res) => {
 // Update a leave application by ID
 router.route("/update/:id").put(async (req, res) => {
   try {
-    const leave = await LeaveModel.findByIdAndUpdate(req.params.id, req.body, { new: true });
+    const { duration, ...rest } = req.body;
+
+    // Validate duration if provided
+    if (duration && !['Half Day', 'Full Day'].includes(duration)) {
+      return res.status(400).json({ status: "Invalid duration value. It must be 'Half Day' or 'Full Day'" });
+    }
+
+    const leave = await LeaveModel.findByIdAndUpdate(
+      req.params.id,
+      { ...rest, ...(duration && { duration }) },
+      { new: true }
+    );
+
     if (!leave) {
       return res.status(404).json({ status: "Leave application not found" });
     }

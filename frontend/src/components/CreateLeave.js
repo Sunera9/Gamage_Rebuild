@@ -9,18 +9,19 @@ export default function CreateLeave() {
     endDate: '',
     type: 'Common', // default value
     reason: '',
+    duration: '' // duration is now part of leaveDetails
   });
-  const [duration, setDuration] = useState(''); // Track "Half Day" or "Full Day" selection
   const [showModal, setShowModal] = useState(false); // Modal state
   const [message, setMessage] = useState("");
 
+  // Consolidated handleChange for all fields, including duration
   const handleChange = (e) => {
     const { name, value } = e.target;
     setLeaveDetails({ ...leaveDetails, [name]: value });
   };
 
   const handleDurationChange = (e) => {
-    setDuration(e.target.value);
+    setLeaveDetails({ ...leaveDetails, duration: e.target.value });
   };
 
   const handleSubmit = async (e) => {
@@ -42,14 +43,13 @@ export default function CreateLeave() {
       endDate: '',
       type: 'Common',
       reason: '',
+      duration: ''
     });
-    setDuration(''); // Reset duration selection
   };
 
   const handleOK = () => {
     setShowModal(false);
   };
-
 
   return (
     <div className="container-ticket">
@@ -101,7 +101,7 @@ export default function CreateLeave() {
                         type="radio"
                         name="duration"
                         value="Full Day"
-                        checked={duration === 'Full Day'}
+                        checked={leaveDetails.duration === 'Full Day'}
                         onChange={handleDurationChange}
                       />{' '}
                       Full Day
@@ -111,7 +111,7 @@ export default function CreateLeave() {
                         type="radio"
                         name="duration"
                         value="Half Day"
-                        checked={duration === 'Half Day'}
+                        checked={leaveDetails.duration === 'Half Day'}
                         onChange={handleDurationChange}
                       />{' '}
                       Half Day
@@ -182,6 +182,4 @@ export default function CreateLeave() {
       {message && <p className="mt-3 text-center">{message}</p>}
     </div>
   );
-};
-
-
+}
