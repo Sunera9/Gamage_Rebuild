@@ -35,6 +35,13 @@ connection.once("open", () => {
 const userRouter = require('./routes/users'); 
 app.use('/users', userRouter);
 
+//Tickets
+const ticketRouter = require('./routes/tickets');
+app.use('/tickets',ticketRouter);
+
+//Leaves
+const leaveRouter = require('./routes/leave');
+app.use('/leaves',leaveRouter);
 
 
 app.listen(PORT, () => {
