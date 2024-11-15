@@ -23,7 +23,18 @@ connection.once("open", () => {
 //Backend Routes 
 
 const userRouter = require('./routes/users'); 
+const jobPositionRouter = require('./routes/jobPosition');
+const salaryComponentRouter = require('./routes/salaryComponent');
+const salaryRouter = require('./routes/salary');
+const settingRouter = require('./routes/setting');
+const profileRouter = require('./routes/profile');
 app.use('/users', userRouter);
+app.use('/jobPosition', jobPositionRouter);
+app.use('/salaryComponent', salaryComponentRouter);
+app.use('/salary', salaryRouter);
+app.use('/setting', settingRouter);
+app.use('/profile', profileRouter);
+
 
 //Tickets
 const ticketRouter = require('./routes/tickets');
