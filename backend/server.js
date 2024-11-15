@@ -22,9 +22,21 @@ connection.once("open", () => {
 
 //Backend Routes 
 
+//Users
 const userRouter = require('./routes/users'); 
 app.use('/users', userRouter);
 
+//Tickets
+const ticketRouter = require('./routes/tickets');
+app.use('/tickets',ticketRouter);
+
+//Leaves
+const leaveRouter = require('./routes/leave');
+app.use('/leaves',leaveRouter);
+
+//Programs
+const programRouter = require('./routes/programs');
+app.use('/programs',programRouter);
 
 app.listen(PORT, () => {
     console.log(`Server is up and running on port number: ${PORT}`);
