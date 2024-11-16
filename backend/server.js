@@ -24,7 +24,18 @@ connection.once("open", () => {
 
 //Users
 const userRouter = require('./routes/users'); 
+const jobPositionRouter = require('./routes/jobPosition');
+const salaryComponentRouter = require('./routes/salaryComponent');
+const salaryRouter = require('./routes/salary');
+const settingRouter = require('./routes/setting');
+const profileRouter = require('./routes/profile');
 app.use('/users', userRouter);
+app.use('/jobPosition', jobPositionRouter);
+app.use('/salaryComponent', salaryComponentRouter);
+app.use('/salary', salaryRouter);
+app.use('/setting', settingRouter);
+app.use('/profile', profileRouter);
+
 
 //Tickets
 const ticketRouter = require('./routes/tickets');
@@ -34,9 +45,10 @@ app.use('/tickets',ticketRouter);
 const leaveRouter = require('./routes/leave');
 app.use('/leaves',leaveRouter);
 
-//Programs
-const programRouter = require('./routes/programs');
-app.use('/programs',programRouter);
+//MailStatus
+const emailRouter = require('./routes/mailStatus');
+app.use('/send-email', emailRouter);
+
 
 app.listen(PORT, () => {
     console.log(`Server is up and running on port number: ${PORT}`);
