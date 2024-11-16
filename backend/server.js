@@ -45,9 +45,10 @@ app.use('/tickets',ticketRouter);
 const leaveRouter = require('./routes/leave');
 app.use('/leaves',leaveRouter);
 
-//Programs
-const programRouter = require('./routes/programs');
-app.use('/programs',programRouter);
+//MailStatus
+const emailRouter = require('./routes/mailStatus');
+app.use('/send-email', emailRouter);
+
 
 app.listen(PORT, () => {
     console.log(`Server is up and running on port number: ${PORT}`);
