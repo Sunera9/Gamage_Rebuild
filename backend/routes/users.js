@@ -1,8 +1,6 @@
 const express = require('express');
 const router = express.Router();
 const UserModel = require("../models/User"); 
-const JobPositionModel = require('../models/JobPosition');
-const ProfileModel = require("../models/Profile");
 
 // Get all users
 router.route("/get").get(async (req, res) => {
@@ -108,108 +106,6 @@ router.route("/update/:id").put(async (req, res) => {
   } catch (err) {
     console.error(err.message);
     res.status(500).json({ status: "Error with updating user", error: err.message });
-  }
-});
-
-// Route to register a new user and create an associated profile
-router.post("/register", async (req, res) => {
-  const { nic, name, email, address, phone, dob, gender } = req.body;
-
-  try {
-    // Check if user already exists
-    const existingUser = await UserModel.findOne({ email });
-    if (existingUser) {
-      return res.status(400).json({ message: "User already exists." });
-    }
-
-    // Default values for the fields not provided during registration
-    const defaultJobCategory = "Full-time";
-    const defaultDepartment = "Other";
-    const defaultCompany = "None";
-    const defaultStartDate = new Date();
-    const defaultEndDate = null;
-    const defaultJobPosition = null;
-    const defaultBankName = "None";
-    const defaultBankAccountNumber = "None";
-
-    // Create new user with default values for missing fields
-    const newUser = new UserModel({
-      nic,
-      name,
-      email,
-      address,
-      phone,
-      dob,
-      gender,
-      jobPosition: defaultJobPosition,
-      jobCategory: defaultJobCategory,
-      department: defaultDepartment,
-      company: defaultCompany,
-      startDate: defaultStartDate,
-      endDate: defaultEndDate,
-      bankAccountNumber: defaultBankAccountNumber,
-      bankName: defaultBankName,
-    });
-
-    await newUser.save();
-
-    // Create a profile linked to the newly created user
-    const newProfile = new ProfileModel({
-      user: newUser._id,
-      aboutMe: "",
-      facebookLink: "NONE",
-      linkedInLink: "NONE",
-      instagramLink: "NONE",
-    });
-
-    await newProfile.save();
-
-    res.status(201).json({ message: "User and profile created successfully", newUser, newProfile });
-  } catch (error) {
-    console.error(error.message);
-    res.status(500).json({ message: "Error with registering user", error: error.message });
-  }
-});
-
-// Route to update a user by their ID
-router.put("/:id", async (req, res) => {
-  const userId = req.params.id;
-  const {
-    nic, name, email, address, phone, dob, gender, jobPosition, jobCategory,
-    department, company, startDate, endDate, bankAccountNumber, bankName
-  } = req.body;
-
-  try {
-    // Find the user by ID
-    const user = await UserModel.findById(userId);
-    if (!user) {
-      return res.status(404).json({ message: "User not found." });
-    }
-
-    // Update only the provided fields
-    user.nic = nic || user.nic;
-    user.name = name || user.name;
-    user.email = email || user.email;
-    user.address = address || user.address;
-    user.phone = phone || user.phone;
-    user.dob = dob || user.dob;
-    user.gender = gender || user.gender;
-    user.jobPosition = jobPosition || user.jobPosition; // Ensure valid JobPosition ID if provided
-    user.jobCategory = jobCategory || user.jobCategory;
-    user.department = department || user.department;
-    user.company = company || user.company;
-    user.startDate = startDate || user.startDate;
-    user.endDate = endDate || user.endDate;
-    user.bankAccountNumber = bankAccountNumber || user.bankAccountNumber;
-    user.bankName = bankName || user.bankName;
-
-    // Save the updated user to the database
-    await user.save();
-
-    res.status(200).json({ message: "User updated successfully", user });
-  } catch (error) {
-    console.error(error.message);
-    res.status(500).json({ message: "Error with updating user", error: error.message });
   }
 });
 

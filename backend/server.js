@@ -7,6 +7,10 @@ const app = express();
 require("dotenv").config();
 const leaveRoutes = require("./routes/adminLeave");
 
+const ticketEmailRoute = require("./routes/ticketEmail");
+const leaveEmailRoute = require("./routes/leaveEmail")
+
+
 const PORT = process.env.PORT || 8070;
 
 
@@ -56,12 +60,8 @@ app.use('/tickets',ticketRouter);
 const leaveRouter = require('./routes/leave');
 app.use('/leaves',leaveRouter);
 
-app.use("/tickets", leaveRoutes);
-
-
-const programRouter = require('./routes/programs');
-app.use('/programs',programRouter);
-
+app.use("/leaveEmail", leaveEmailRoute);
+app.use("/ticketEmail", ticketEmailRoute);
 
 app.listen(PORT, () => {
     console.log(`Server is up and running on port number: ${PORT}`);

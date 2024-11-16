@@ -1,13 +1,15 @@
-// /utils/emailService.js
 const nodemailer = require("nodemailer");
 require("dotenv").config(); // To load environment variables
 
-// Create a transporter using your email provider details (Gmail or SendGrid, etc.)
+// Create a transporter using your email provider details (Gmail or other)
 const transporter = nodemailer.createTransport({
-  service: "gmail", // You can use Gmail or another service like SendGrid or Mailgun
+  service: "gmail", // You can use Gmail or another service
   auth: {
     user: process.env.EMAIL_USER, // Your email
-    pass: process.env.EMAIL_PASS, // Your email password (use app-specific password if using Gmail)
+    pass: process.env.EMAIL_PASS, // Your email password or app-specific password if using Gmail
+  },
+  tls: {
+    rejectUnauthorized: false, // Ignore self-signed certificate issues (use only in development)
   },
 });
 

@@ -30,7 +30,7 @@ function LeavesTable() {
     try {
       // Call backend to approve leave (you can customize this endpoint)
       await axios.put(
-        `http://localhost:8070/leaves/update/${selectedLeave._id}`,
+        `http://localhost:8070/leaveemail/accept/${selectedLeave._id}`,
         {
           adminApproval: "Approved",
         }
@@ -47,7 +47,7 @@ function LeavesTable() {
     try {
       // Call backend to reject leave (you can customize this endpoint)
       await axios.put(
-        `http://localhost:8070/leaves/update/${selectedLeave._id}`,
+        `http://localhost:8070/leaveemail/reject/${selectedLeave._id}`,
         {
           adminApproval: "Rejected",
         }
