@@ -5,6 +5,7 @@ const cors = require("cors");
 const dotenv = require("dotenv");
 const app = express();
 require("dotenv").config();
+const leaveRoutes = require("./routes/adminLeave");
 
 const PORT = process.env.PORT || 8070;
 
@@ -54,6 +55,8 @@ app.use('/tickets',ticketRouter);
 //Leaves
 const leaveRouter = require('./routes/leave');
 app.use('/leaves',leaveRouter);
+
+app.use("/tickets", leaveRoutes);
 
 
 const programRouter = require('./routes/programs');
