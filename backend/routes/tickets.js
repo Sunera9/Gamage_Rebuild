@@ -27,11 +27,15 @@ router.route('/add').post(upload.single('file'), async (req, res) => {
   const { userID, description, status = 'in-progress', leaveType } = req.body;
 
   try {
-    let fileUrl = null;
+    let fileData = null;
 
     if (req.file) {
       const result = await uploadToCloudinary(req.file.buffer);
-      fileUrl = result.secure_url; // Get the URL of the uploaded file from Cloudinary
+      fileData = {
+        url: result.secure_url,
+        public_id: result.public_id, 
+        fileName: req.file.originalname,
+      } // Get the URL of the uploaded file from Cloudinary
     }
 
     const newTicket = new TicketModel({
@@ -39,7 +43,7 @@ router.route('/add').post(upload.single('file'), async (req, res) => {
       description,
       status,
       leaveType,
-      file: fileUrl ? { url: fileUrl, fileName: req.file.originalname } : null,
+      files: fileData,
     });
 
     const savedTicket = await newTicket.save();
