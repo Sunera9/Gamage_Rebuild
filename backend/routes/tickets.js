@@ -1,53 +1,52 @@
 const express = require('express');
 const router = express.Router();
 const TicketModel = require('../models/Ticket');
-const multer = require('multer');
-const path = require('path');
+const cloudinary = require('../config/cloudinaryConfig'); // Import Cloudinary config
+const upload = require('../config/multerConfig'); // Import Multer config
+const streamifier = require('streamifier');
 
-// Configure storage settings for Multer
-const storage = multer.memoryStorage();
-
-// Set up Multer for handling file uploads
-const upload = multer({
-  storage: storage,
-  limits: { fileSize: 5 * 1024 * 1024 }, // Limit file size to 5MB
-  fileFilter: (req, file, cb) => {
-    const fileTypes = /jpeg|jpg|png|pdf/;
-    const extname = fileTypes.test(path.extname(file.originalname).toLowerCase());
-    const mimetype = fileTypes.test(file.mimetype);
-
-    if (mimetype && extname) {
-      cb(null, true);
-    } else {
-      cb(new Error('Only .jpeg, .jpg, .png, and .pdf files are allowed!'));
-    }
-  }
-});
+// Helper function to upload file to Cloudinary
+const uploadToCloudinary = (buffer) => {
+  return new Promise((resolve, reject) => {
+    const uploadStream = cloudinary.uploader.upload_stream(
+      { folder: 'tickets' }, // Specify the folder name in Cloudinary
+      (error, result) => {
+        if (error) {
+          reject(error);
+        } else {
+          resolve(result);
+        }
+      }
+    );
+    streamifier.createReadStream(buffer).pipe(uploadStream);
+  });
+};
 
 // Create a ticket with file upload
 router.route('/add').post(upload.single('file'), async (req, res) => {
   const { userID, description, status = 'in-progress', leaveType } = req.body;
 
   try {
-    const fileData = req.file ? {
-      fileName: req.file.originalname,
-      filePath: req.file.buffer,
-      fileType: req.file.mimetype,
-      fileSize: req.file.size,
-    } : null;
+    let fileUrl = null;
+
+    if (req.file) {
+      const result = await uploadToCloudinary(req.file.buffer);
+      fileUrl = result.secure_url; // Get the URL of the uploaded file from Cloudinary
+    }
 
     const newTicket = new TicketModel({
       userID,
       description,
       status,
       leaveType,
-      file: fileData,
+      file: fileUrl ? { url: fileUrl, fileName: req.file.originalname } : null,
     });
 
     const savedTicket = await newTicket.save();
     res.status(201).json({ status: 'Ticket Created', ticket: savedTicket });
   } catch (error) {
-    res.status(400).json({ status: 'Error with creating ticket', error: error.message });
+    console.error('Error creating ticket:', error);
+    res.status(500).json({ status: 'Error with creating ticket', error: error.message });
   }
 });
 
@@ -77,17 +76,17 @@ router.route('/get/:id').get(async (req, res) => {
 // Update a ticket by ID
 router.route('/update/:id').put(upload.single('file'), async (req, res) => {
   const { userID, description, status, leaveType } = req.body;
-  const fileData = req.file ? {
-    fileName: req.file.originalname,
-    filePath: req.file.buffer,
-    fileType: req.file.mimetype,
-    fileSize: req.file.size,
-  } : null;
+  let fileUrl = null;
 
   try {
+    if (req.file) {
+      const result = await uploadToCloudinary(req.file.buffer);
+      fileUrl = result.secure_url; // Upload to Cloudinary and get URL
+    }
+
     const updatedTicket = await TicketModel.findByIdAndUpdate(
       req.params.id,
-      { userID, description, status, leaveType, file: fileData },
+      { userID, description, status, leaveType, file: fileUrl ? { url: fileUrl, fileName: req.file.originalname } : null },
       { new: true }
     );
 
