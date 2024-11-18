@@ -5,6 +5,7 @@ const cors = require("cors");
 const dotenv = require("dotenv");
 const app = express();
 require("dotenv").config();
+require("./cronJobs/attendanceCron");
 
 const PORT = process.env.PORT || 8070;
 
@@ -28,12 +29,14 @@ const salaryComponentRouter = require('./routes/salaryComponent');
 const salaryRouter = require('./routes/salary');
 const settingRouter = require('./routes/setting');
 const profileRouter = require('./routes/profile');
+const attendanceRouter = require('./routes/attendance');
 app.use('/users', userRouter);
 app.use('/jobPosition', jobPositionRouter);
 app.use('/salaryComponent', salaryComponentRouter);
 app.use('/salary', salaryRouter);
 app.use('/setting', settingRouter);
 app.use('/profile', profileRouter);
+app.use('/attendance',attendanceRouter);
 
 
 
