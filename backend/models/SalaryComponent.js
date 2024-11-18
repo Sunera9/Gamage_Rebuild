@@ -24,6 +24,10 @@ const salaryComponentSchema = new mongoose.Schema(
       default: 0,
     },
     // Allowance fields
+    standardAllowance: {
+      type: Number,
+      default: 0,
+    },
     medicalAllowance: {
       type: Number,
       default: 0,
