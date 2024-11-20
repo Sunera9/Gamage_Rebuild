@@ -25,6 +25,11 @@ const LeaveSchema = new mongoose.Schema(
       enum: ["Sick Leave", "Annual Leave", "Maternity Leave", "Personal Leave", "Common", "Paternity Leave"], 
       default: "Common"
     },
+    duration: { 
+      type: String,
+      enum: ["Half Day", "Full Day"],
+      required: true, 
+    },
     reason: {
       type: String,
       required: true,
