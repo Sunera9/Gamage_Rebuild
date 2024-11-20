@@ -5,8 +5,23 @@ const cors = require("cors");
 const dotenv = require("dotenv");
 const app = express();
 require("dotenv").config();
+const leaveRoutes = require("./routes/adminLeave");
+
+const ticketEmailRoute = require("./routes/ticketEmail");
+const leaveEmailRoute = require("./routes/leaveEmail")
+
 
 const PORT = process.env.PORT || 8070;
+
+
+const adminRoute = require("./routes/adminRoute");
+
+
+
+app.use("/api/admin",adminRoute);
+
+
+
 
 app.use(cors());
 app.use(bodyParser.json());
@@ -20,7 +35,7 @@ connection.once("open", () => {
     console.log("MongoDB connection successful");
 });
 
-//Backend Routes 
+
 
 //Users
 const userRouter = require('./routes/users'); 
@@ -45,10 +60,8 @@ app.use('/tickets',ticketRouter);
 const leaveRouter = require('./routes/leave');
 app.use('/leaves',leaveRouter);
 
-//MailStatus
-const emailRouter = require('./routes/mailStatus');
-app.use('/send-email', emailRouter);
-
+app.use("/leaveEmail", leaveEmailRoute);
+app.use("/ticketEmail", ticketEmailRoute);
 
 app.listen(PORT, () => {
     console.log(`Server is up and running on port number: ${PORT}`);

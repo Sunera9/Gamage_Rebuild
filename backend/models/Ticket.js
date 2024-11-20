@@ -19,14 +19,21 @@ const TicketSchema = new mongoose.Schema({
     required: true,
   },
   files: {
-    fileName: String,
-    filePath: String,
-    fileType: String,
-    fileSize: Number,
+    url: { // Cloudinary file URL
+      type: String,
+      required: false,
+    },
+    public_id: { // Cloudinary public ID for file management
+      type: String,
+      required: false,
+    },
+    fileName: { // Original file name (optional)
+      type: String,
+      required: false,
+    },
   },
-  fileType:{
-    type: String
-    
+  fileType: {
+    type: String,
   },
   createdAt: { 
     type: Date, 
