@@ -131,6 +131,7 @@ router.post("/register", async (req, res) => {
     const defaultJobPosition = null;
     const defaultBankName = "None";
     const defaultBankAccountNumber = "None";
+    const defaultRole = "visitor";
 
     // Create new user with default values for missing fields
     const newUser = new UserModel({
@@ -149,6 +150,7 @@ router.post("/register", async (req, res) => {
       endDate: defaultEndDate,
       bankAccountNumber: defaultBankAccountNumber,
       bankName: defaultBankName,
+      role: defaultRole, // Setting default role
     });
 
     await newUser.save();
@@ -171,12 +173,13 @@ router.post("/register", async (req, res) => {
   }
 });
 
+
 // Route to update a user by their ID
 router.put("/:id", async (req, res) => {
   const userId = req.params.id;
   const {
     nic, name, email, address, phone, dob, gender, jobPosition, jobCategory,
-    department, company, startDate, endDate, bankAccountNumber, bankName
+    department, company, startDate, endDate, bankAccountNumber, bankName, role
   } = req.body;
 
   try {
@@ -194,7 +197,7 @@ router.put("/:id", async (req, res) => {
     user.phone = phone || user.phone;
     user.dob = dob || user.dob;
     user.gender = gender || user.gender;
-    user.jobPosition = jobPosition || user.jobPosition; // Ensure valid JobPosition ID if provided
+    user.jobPosition = jobPosition || user.jobPosition;
     user.jobCategory = jobCategory || user.jobCategory;
     user.department = department || user.department;
     user.company = company || user.company;
@@ -202,6 +205,15 @@ router.put("/:id", async (req, res) => {
     user.endDate = endDate || user.endDate;
     user.bankAccountNumber = bankAccountNumber || user.bankAccountNumber;
     user.bankName = bankName || user.bankName;
+
+    // Update role only if provided
+    if (role) {
+      if (["visitor", "admin", "employee"].includes(role)) {
+        user.role = role;
+      } else {
+        return res.status(400).json({ message: "Invalid role value provided." });
+      }
+    }
 
     // Save the updated user to the database
     await user.save();
@@ -212,5 +224,6 @@ router.put("/:id", async (req, res) => {
     res.status(500).json({ message: "Error with updating user", error: error.message });
   }
 });
+
 
 module.exports = router;
