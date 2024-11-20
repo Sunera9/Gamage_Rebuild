@@ -7,7 +7,7 @@ const app = express();
 require("dotenv").config();
 require("./cronJobs/attendanceCron");
 
-const PORT = process.env.PORT || 8080;
+const PORT = process.env.PORT || 8070;
 
 app.use(cors());
 app.use(bodyParser.json());
