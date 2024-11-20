@@ -4,8 +4,8 @@ import "./manageTicket.css";
 
 function TicketsTable() {
   const [tickets, setTickets] = useState([]);
-  const [selectedTicket, setSelectedTicket] = useState(null); // Track selected ticket
-  const [showModal, setShowModal] = useState(false); // Control modal visibility
+  const [selectedTicket, setSelectedTicket] = useState(null);
+  const [showModal, setShowModal] = useState(false);
 
   useEffect(() => {
     const fetchTickets = async () => {
@@ -21,19 +21,32 @@ function TicketsTable() {
   }, []);
 
   const handleIdClick = (ticket) => {
-    setSelectedTicket(ticket); // Set selected ticket details
-    setShowModal(true); // Show the modal
+    setSelectedTicket(ticket);
+    setShowModal(true);
   };
 
   const handleAccept = () => {
     console.log(`Accepted ticket with ID: ${selectedTicket._id}`);
-    setShowModal(false); // Close the modal
+    setShowModal(false);
   };
 
   const handleReject = () => {
     console.log(`Rejected ticket with ID: ${selectedTicket._id}`);
-    setShowModal(false); // Close the modal
+    setShowModal(false);
   };
+
+const handleImageDownload = (fileUrl, fileName) => {
+  // Modify the URL to force download using Cloudinary's `fl_attachment` parameter
+  const downloadUrl = fileUrl.replace("/upload/", "/upload/fl_attachment/");
+  const link = document.createElement("a");
+  link.href = downloadUrl;
+  link.download = fileName || "downloaded_image.jpg";
+  link.target = "_blank"; // Opens the download in a new tab if needed
+  document.body.appendChild(link);
+  link.click();
+  document.body.removeChild(link);
+};
+
 
   return (
     <div className="tickets-table">
@@ -70,12 +83,7 @@ function TicketsTable() {
               <td>{ticket.leaveType}</td>
               <td>{new Date(ticket.createdAt).toLocaleDateString()}</td>
               <td>
-                <button
-                  // onClick={() => handleEmail(ticket._id)}
-                  title="Send Email"
-                >
-                  ✉️
-                </button>
+                <button title="Send Email">✉️</button>
               </td>
             </tr>
           ))}
@@ -102,6 +110,22 @@ function TicketsTable() {
               <strong>Date:</strong>{" "}
               {new Date(selectedTicket.createdAt).toLocaleDateString()}
             </p>
+
+            {/* Render download button if there's an image URL in files */}
+            {selectedTicket.files?.url && (
+              <button
+                onClick={() =>
+                  handleImageDownload(
+                    selectedTicket.files.url,
+                    selectedTicket.files.fileName
+                  )
+                }
+                className="download-button"
+              >
+                Download Attachment
+              </button>
+            )}
+
             <div className="modal-buttons">
               <button onClick={handleAccept} className="accept-button">
                 Accept
