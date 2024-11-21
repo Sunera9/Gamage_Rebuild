@@ -4,7 +4,7 @@ This project is an HR Management System built using React that enables administr
 
 ##### Features
 
-1.Dashboard: A comprehensive dashboard where admins can view an overview of the HR system's activity.
+1.Dashboard: A comprehensive dashboard where admins can view an overview of the HR system's activity.<br/>
 2.Job Management:
 	Add Jobs: Admins can post new job openings.
 	View Jobs: List of current job openings.
