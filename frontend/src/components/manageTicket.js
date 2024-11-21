@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import "./manageTicket.css";
+import "../styles/manageTicket.css";
 
 function TicketsTable() {
   const [tickets, setTickets] = useState([]);

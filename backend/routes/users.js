@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const UserModel = require("../models/User"); 
+const ProfileModel = require("../models/Profile");
 
 // Get all users
 router.route("/get").get(async (req, res) => {
@@ -28,37 +29,9 @@ router.route("/get/:id").get(async (req, res) => {
   }
 });
 
-// Add a new user
+// Add a new user (this functionality is now redundant in userroute.js since it's in auth.js)
 router.route("/add").post(async (req, res) => {
-  const {
-    nic,
-    name,
-    email,
-    address,
-    phone,
-    dob,
-    gender,
-    role
-  } = req.body;
-
-  try {
-    const newUser = new UserModel({
-      nic,
-      name,
-      email,
-      address,
-      phone,
-      dob,
-      gender,
-      role
-    });
-
-    await newUser.save();
-    res.json({ status: "User Added", user: newUser });
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ status: "Error with adding user", error: error.message });
-  }
+  res.status(400).json({ message: "User registration should be done via /register route in auth.js" });
 });
 
 // Delete a user by ID
@@ -76,33 +49,18 @@ router.route("/delete/:id").delete(async (req, res) => {
 // Update a user by ID
 router.route("/update/:id").put(async (req, res) => {
   const userId = req.params.id;
-  const {
-    nic,
-    name,
-    email,
-    address,
-    phone,
-    dob,
-    gender,
-    role
-  } = req.body;
+  const { nic, name, email, address, phone, dob, gender, jobPosition, jobCategory, department, company, startDate, endDate, bankAccountNumber, bankName, role } = req.body;
 
   try {
-    const updatedUser = {
-      nic,
-      name,
-      email,
-      address,
-      phone,
-      dob,
-      gender,
-      role
-    };
+    const updatedUser = await UserModel.findByIdAndUpdate(userId, {
+      nic, name, email, address, phone, dob, gender, jobPosition, jobCategory, department, company, startDate, endDate, bankAccountNumber, bankName, role
+    }, { new: true });
 
-    const user = await UserModel.findByIdAndUpdate(userId, updatedUser, {
-      new: true
-    });
-    res.status(200).json({ status: "User updated", user });
+    if (!updatedUser) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    res.status(200).json({ message: "User updated successfully", updatedUser });
   } catch (err) {
     console.error(err.message);
     res.status(500).json({ status: "Error with updating user", error: err.message });

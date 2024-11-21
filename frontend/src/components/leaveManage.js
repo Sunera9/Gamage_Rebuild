@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import "./manageLeave.css";
+import "../styles/manageLeave.css";
 
 function LeavesTable() {
   const [leaves, setLeaves] = useState([]);
