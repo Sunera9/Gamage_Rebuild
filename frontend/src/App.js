@@ -9,11 +9,12 @@ import CreateLeave from './components/CreateLeave';
 import Login from "./page/Login";
 import Register from "./page/Register";
 import Layout_1 from './layouts/Layout_1';
-import NewEmployee from './components/NewEmployee';
+import NewEmployee from './components/Application';
 import AllEmployee from './components/AllEmployee';
 import TicketsTable from './components/manageTicket';
 import LeavesTable from './components/leaveManage';
 import Program from './components/Program';
+import Application from "./components/Application";
 
 
 // Authentication wrapper component
@@ -52,7 +53,7 @@ function App() {
           <Route path="/programs" element={<Program />} />
           <Route path="/leaves" element={<CreateLeave />} />         
           <Route path="/tickets" element={<TicketForm />} />
-          <Route path="/addEmployee" element={<NewEmployee/>} />
+          <Route path="/applications" element={<Application/>} />
           <Route path="/employee" element={<AllEmployee />} />
         </Route>
 

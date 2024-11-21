@@ -2,19 +2,19 @@ import React, { useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 
-const NewEmployee = () => {
+const Application = () => {
   // Employee data
   const initialFormData = {
-    full_name: "",
-    nic: "",
-    email: "",
-    phone: "",
-    gender: "",
-    birthdate: "",
-    job_position: "",
-    company: "",
-    start_date: "",
-    end_date: "",
+    nic:"",
+    name:"",
+    email:"",
+    phone:"",
+    gender:"",
+    dob:"",
+    jobPosition:"",
+    company:"",
+    startDate:"",
+    endDate:""
   };
 
   // Error state
@@ -30,29 +30,48 @@ const NewEmployee = () => {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-
-    // Validate each field
+  
     const newErrors = {};
     for (const key in formData) {
       if (!formData[key]) {
         newErrors[key] = `${key.replace(/_/g, " ")} is required`;
       }
     }
-
+  
+    // Additional validation
+    if (formData.email && !formData.email.includes("@")) {
+      newErrors.email = "Invalid email format";
+    }
+    if (formData.phone && !/^\d+$/.test(formData.phone)) {
+      newErrors.phone = "Phone must contain only numbers";
+    }
+    if (formData.start_date && formData.end_date && new Date(formData.start_date) > new Date(formData.end_date)) {
+      newErrors.start_date = "Start date must be before end date";
+      newErrors.end_date = "End date must be after start date";
+    }
+  
     if (Object.keys(newErrors).length > 0) {
       setErrors(newErrors);
       return;
     }
+    
+    console.log("FormData before sending:", formData);
+
 
     try {
-      await axios.post("http://localhost:8070/users/add", formData);
+      await axios.post(
+        "http://localhost:8070/api/applications/add",
+        formData,
+        { headers: { "Content-Type": "application/json" } }
+      );
       alert("Employee added successfully");
       navigate("/employee");
     } catch (error) {
       alert("Failed to add employee");
-      console.error(error);
+      console.error("Error:", error.response?.data || error.message);
     }
   };
+  
 
   return (
     <div className="flex items-center justify-center my-10">
@@ -66,16 +85,16 @@ const NewEmployee = () => {
               <label>Full Name:</label>
               <input
                 type="text"
-                name="full_name"
-                value={formData.full_name}
+                name="name"
+                value={formData.name}
                 onChange={handleInputChange}
                 placeholder="Enter full name..."
                 className={`w-full p-2 border rounded ${
-                  errors.full_name ? "border-red-500" : ""
+                  errors.name ? "border-red-500" : ""
                 }`}
               />
-              {errors.full_name && (
-                <div className="text-red-700">{errors.full_name}</div>
+              {errors.name && (
+                <div className="text-red-700">{errors.name}</div>
               )}
             </div>
 
@@ -157,15 +176,15 @@ const NewEmployee = () => {
               <label>Birth Date:</label>
               <input
                 type="date"
-                name="birthdate"
+                name="dob"
                 className={`w-full p-2 border rounded ${
-                  errors.birthdate ? "border-red-500" : ""
+                  errors.dob ? "border-red-500" : ""
                 }`}
-                value={formData.birthdate}
+                value={formData.dob}
                 onChange={handleInputChange}
               />
-              {errors.birthdate && (
-                <div className="text-red-700">{errors.birthdate}</div>
+              {errors.dob && (
+                <div className="text-red-700">{errors.dob}</div>
               )}
             </div>
 
@@ -173,15 +192,15 @@ const NewEmployee = () => {
               <label>Job Position:</label>
               <input
                 type="text"
-                name="job_position"
+                name="jobPosition"
                 className={`w-full p-2 border rounded ${
-                  errors.job_position ? "border-red-500" : ""
+                  errors.jobPosition ? "border-red-500" : ""
                 }`}
-                value={formData.job_position}
+                value={formData.jobPosition}
                 onChange={handleInputChange}
               />
-              {errors.job_position && (
-                <div className="text-red-700">{errors.job_position}</div>
+              {errors.jobPosition && (
+                <div className="text-red-700">{errors.jobPosition}</div>
               )}
             </div>
 
@@ -207,29 +226,29 @@ const NewEmployee = () => {
                 <div>
                   <input
                     type="date"
-                    name="start_date"
+                    name="startDate"
                     className={`w-full p-2 border rounded ${
-                      errors.start_date ? "border-red-500" : ""
+                      errors.startDate ? "border-red-500" : ""
                     }`}
-                    value={formData.start_date}
+                    value={formData.startDate}
                     onChange={handleInputChange}
                   />
-                  {errors.start_date && (
-                    <div className="text-red-700">{errors.start_date}</div>
+                  {errors.startDate && (
+                    <div className="text-red-700">{errors.startDate}</div>
                   )}
                 </div>
                 <div>
                   <input
                     type="date"
-                    name="end_date"
+                    name="endDate"
                     className={`w-full p-2 border rounded ${
-                      errors.end_date ? "border-red-500" : ""
+                      errors.endDate ? "border-red-500" : ""
                     }`}
-                    value={formData.end_date}
+                    value={formData.endDate}
                     onChange={handleInputChange}
                   />
-                  {errors.end_date && (
-                    <div className="text-red-700">{errors.end_date}</div>
+                  {errors.endDate && (
+                    <div className="text-red-700">{errors.endDate}</div>
                   )}
                 </div>
               </div>
@@ -237,9 +256,6 @@ const NewEmployee = () => {
           </div>
 
           <div className="flex justify-between mt-6">
-            <button type="button" className="px-6 py-2 border rounded">
-              CANCEL
-            </button>
             <button type="submit" className="px-6 py-2 border rounded">
               SUBMIT
             </button>
@@ -250,4 +266,4 @@ const NewEmployee = () => {
   );
 };
 
-export default NewEmployee;
+export default Application;

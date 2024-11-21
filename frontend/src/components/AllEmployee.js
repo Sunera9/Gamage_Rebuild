@@ -1,31 +1,34 @@
 import React, { useEffect, useState } from "react";
 import { DataGrid, GridToolbar } from "@mui/x-data-grid";
 import axios from "axios";
-import "../styles/AllEmployee.css"
 
 const AllEmployee = () => {
   const [employeeData, setEmployeeData] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
+  const [pageSize, setPageSize] = useState(5); // Default page size
 
-  // Employee headers
   const employeeColumns = [
     { field: "id", headerName: "ID", width: 200 },
-
-    { field: "email", headerName: "Email", width: 400 },
-    { field: "phone", headerName: "Phone", width: 200 },
+    { field: "name", headerName: "Name", width: 300 },
+    { field: "email", headerName: "Email", width: 300 },
+    { field: "phone", headerName: "Phone", width: 150 },
+    { field: "startDate", headerName: "Start Date", width: 200 },
+    { field: "endDate", headerName: "End Date", width: 200 },
   ];
 
-  // Action column for update and delete buttons
+  
   const actionColumn = [
     {
       field: "action",
       headerName: "Action",
-      width: 300,
+      width: 200,
       renderCell: (params) => (
-        <div className="flex items-center justify-between">
-          <button className="bg-green-500 px-2 ">Update</button>
+        <div className="flex gap-4">
+          <button className="bg-green-600 text-white px-3 py-1 rounded hover:bg-green-700 transition">
+            Update
+          </button>
           <button
-            className=" bg-red-600 rounded-sm  px-2  flex items-center justify-center text-center"
+            className="bg-red-600 text-white px-3 py-1 rounded hover:bg-red-700 transition"
             onClick={() => handleDelete(params.row._id)}
           >
             Delete
@@ -35,7 +38,7 @@ const AllEmployee = () => {
     },
   ];
 
-  // Fetch all employee data
+  
   useEffect(() => {
     const fetchEmployeeData = async () => {
       try {
@@ -46,11 +49,10 @@ const AllEmployee = () => {
       }
     };
     fetchEmployeeData();
-  }, []);
+  }, []); // Initial data fetch
 
-  // Handle delete functionality
+  
   const handleDelete = async (_id) => {
-    console.log("user:", _id);
     try {
       await axios.delete(`http://localhost:8070/users/delete/${_id}`);
       setEmployeeData(employeeData.filter((emp) => emp._id !== _id));
@@ -61,40 +63,50 @@ const AllEmployee = () => {
     }
   };
 
-  // Filter data based on search query
+ 
   const filteredEmployeeData = employeeData.filter((employee) =>
-    ["_id", "full_name", "email", "phone"].some((field) =>
-      employee[field]
-        ?.toString()
-        .toLowerCase()
-        .includes(searchQuery.toLowerCase())
+    ["_id", "name", "email", "phone", "startDate", "endDate"].some((field) =>
+      employee[field]?.toString().toLowerCase().includes(searchQuery.toLowerCase()) // Making the search case-insensitive
     )
   );
 
+  
+  const formatDate = (date) => {
+    if (!date) return '';
+    const d = new Date(date);
+    return d.toLocaleDateString(); 
+  };
+
   return (
-    <div className="flex flex-col items-center justify-center mt-20  h-[500px] ">
-      <h1 className="mb-32"> Get all employees</h1>
-      <div>
-        {/* <input
+    <div className="flex flex-col items-center justify-center px-6 py-10">
+      <h1 className="text-3xl font-bold text-gray-800 mb-6">Employee Directory</h1>
+      <div className="w-full max-w-4xl mb-4">
+        <input
           type="text"
           placeholder="Search employees..."
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
-          className="searchInput"
-        /> */}
+          className="w-full p-3 border border-gray-300 rounded shadow focus:outline-none focus:ring-2 focus:ring-blue-500"
+        />
       </div>
-      <DataGrid
-        components={{ Toolbar: GridToolbar }}
-        className="w-full"
-        rows={filteredEmployeeData.map((row, index) => ({
-          ...row,
-          id: row._id, // Map MongoDB _id to the id field for DataGrid
-        }))}
-        columns={employeeColumns.concat(actionColumn)}
-        pageSize={10}
-        rowsPerPageOptions={[10]}
-        checkboxSelection
-      />
+      <div className="w-full max-w-6xl bg-white rounded shadow p-4">
+        <DataGrid
+          components={{ Toolbar: GridToolbar }}
+          className="h-[500px]"
+          rows={filteredEmployeeData.map((row) => ({
+            ...row,
+            id: row._id, 
+            startDate: formatDate(row.startDate), 
+            endDate: formatDate(row.endDate),
+          }))}
+          columns={employeeColumns.concat(actionColumn)}
+          pageSize={pageSize} 
+          rowsPerPageOptions={[5, 10, 15]} 
+          onPageSizeChange={(newPageSize) => setPageSize(newPageSize)} 
+          pagination
+          checkboxSelection
+        />
+      </div>
     </div>
   );
 };
