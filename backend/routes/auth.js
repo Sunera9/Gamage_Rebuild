@@ -1,6 +1,7 @@
 const express = require("express");
 const router = express.Router();
-const User = require("../models/User"); 
+const UserModel = require("../models/User"); 
+const ProfileModel = require("../models/Profile"); 
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 
@@ -134,7 +135,6 @@ router.post("/register", async (req, res) => {
     res.status(500).json({ message: "Error with registering user", error: error.message });
   }
 });
-
 
 // Login Route
 router.post("/login", async (req, res) => {
