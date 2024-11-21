@@ -15,7 +15,7 @@ const adminRoute = require("./routes/adminRoute");
 
 
 
-app.use("/api/admin",adminRoute);
+
 
 
 
@@ -45,10 +45,11 @@ const profileRouter = require('./routes/profile');
 const attendanceRouter = require('./routes/attendance');
 
 //admin
+app.use("/api/admin", adminRoute);
 const leaveRoutes = require("./routes/adminLeave");
 const ticketEmailRoute = require("./routes/ticketEmail");
 const leaveEmailRoute = require("./routes/leaveEmail")
-const adminRoute = require("./routes/adminRoute");
+
 
 
 app.use("/api/admin",adminRoute);
