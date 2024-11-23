@@ -103,17 +103,7 @@ router.route("/search").get(async (req, res) => {
         jobTitle: user.jobPosition?.title || "N/A",
         basicSalary: basicSalary,
         totalAllowances: totalAllowances,
-        bonuses: bonuses,
-        overtimeHours: overtimeHours,
-        overtimeEarnings: overtimeEarnings,
         totalDeductions: totalDeductions,
-        epfEmployee: epfEmployee,
-        epfEmployer: epfEmployer,
-        etfEmployer: etfEmployer,
-        workingDays: workingDays,
-        attendedDays: attendedDays,
-        leavesTaken: leavesTaken,
-        absentDays: workingDays - attendedDays - leavesTaken,
         netSalary: netSalary,
       };
     });
@@ -183,30 +173,46 @@ router.route("/sheet").get(async (req, res) => {
           totalPresent: 0,
           totalLeaves: 0,
           totalAbsent: 0,
+          totalOvertimeHours: 0, // Track overtime hours
         };
       }
-      if (record.status === "Present") attendanceMap[userId].totalPresent++;
-      else if (record.status === "Leave") attendanceMap[userId].totalLeaves++;
-      else if (record.status === "Absent") attendanceMap[userId].totalAbsent++;
+      if (record.status === "Present") {
+        attendanceMap[userId].totalPresent++;
+        attendanceMap[userId].totalOvertimeHours += record.overtimeHours || 0; // Add overtime hours for "Present" records
+      } else if (record.status === "Leave") {
+        attendanceMap[userId].totalLeaves++;
+      } else if (record.status === "Absent") {
+        attendanceMap[userId].totalAbsent++;
+      }
     });
 
     const totalDaysInMonth = new Date(year, month, 0).getDate();
     let workingDays = 0;
     for (let day = 1; day <= totalDaysInMonth; day++) {
       const date = new Date(year, month - 1, day);
-      if (date.getDay() !== 0 && date.getDay() !== 6) workingDays++;
+      if (date.getDay() !== 0 && date.getDay() !== 6) workingDays++; // Only count weekdays as working days
     }
 
     const bulkOps = [];
     for (const employee of employees) {
-      const { _id: userId, jobPosition } = employee;
+      const { _id: userId, jobPosition, startDate: employeeStartDate } = employee;
       if (!jobPosition) continue;
+
+      // Check if the employee was recruited before the requested month/year
+      const employeeStartMonth = new Date(employeeStartDate).getMonth() + 1; // Months are 0-indexed
+      const employeeStartYear = new Date(employeeStartDate).getFullYear();
+
+      if (employeeStartYear > year || (employeeStartYear === year && employeeStartMonth > month)) {
+        // Skip employees who started after the requested month/year
+        continue;
+      }
 
       const { basicSalary = 0, overTimePay = 0 } = jobPosition;
       const attendance = attendanceMap[userId.toString()] || {
         totalPresent: 0,
         totalLeaves: 0,
         totalAbsent: 0,
+        totalOvertimeHours: 0,
       };
 
       const allowances = {
@@ -236,7 +242,7 @@ router.route("/sheet").get(async (req, res) => {
         deductions.professionalTax;
 
       const bonuses = 0;
-      const overtimeHours = attendance.overtimeHours || 0;
+      const overtimeHours = attendance.totalOvertimeHours || 0; // Use total overtime hours
       const overtimeEarnings = overtimeHours * overTimePay;
       const grossSalary =
         basicSalary + totalAllowances + bonuses + overtimeEarnings;
@@ -320,18 +326,8 @@ router.route("/sheet").get(async (req, res) => {
         userName: user.name,
         jobTitle: user.jobPosition.title,
         basicSalary,
-        workingDays,
-        AttendedDays,
-        leavesTaken,
-        absentDays,
         totalAllowances,
-        bonuses,
-        overtimeHours,
-        overtimeEarnings,
         totalDeductions,
-        epfEmployee,
-        epfEmployer,
-        etfEmployer,
         netSalary,
       };
     });
