@@ -1,6 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const LeaveModel = require("../models/Leave");
+const UserModel = require("../models/User");
 const { sendEmail } = require("../utils/emailService");
 
 // Handle leave acceptance

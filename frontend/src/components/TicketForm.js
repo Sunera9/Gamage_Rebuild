@@ -25,7 +25,7 @@ export default function TicketForm() {
     }
 
     const formData = new FormData();
-    formData.append('userID', userID);
+    // formData.append('userID', userID);
     formData.append('description', description);
     formData.append('leaveType', leaveType);
     if (file) {

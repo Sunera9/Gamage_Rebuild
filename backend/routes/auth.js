@@ -1,8 +1,8 @@
 const express = require("express");
 const router = express.Router();
 const UserModel = require("../models/User"); 
-const ProfileModel = require("../models/Profile"); 
 const bcrypt = require("bcryptjs");
+const ProfileModel=require("../models/Profile");
 const jwt = require("jsonwebtoken");
 
 // Secret key for JWT token generation (make sure to store it securely)
@@ -136,12 +136,13 @@ router.post("/register", async (req, res) => {
   }
 });
 
+
 // Login Route
 router.post("/login", async (req, res) => {
   const { email, password } = req.body;
 
   try {
-    const user = await User.findOne({ email });
+    const user = await UserModel.findOne({ email });
     if (!user) {
       return res.status(404).json({ message: "User not found" });
     }

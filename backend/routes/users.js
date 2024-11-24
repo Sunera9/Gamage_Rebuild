@@ -3,6 +3,7 @@ const router = express.Router();
 const UserModel = require("../models/User"); 
 const ProfileModel = require("../models/Profile");
 
+
 // Get all users
 router.route("/get").get(async (req, res) => {
   try {

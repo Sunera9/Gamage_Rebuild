@@ -1,9 +1,34 @@
 const express = require('express');
 const router = express.Router();
 const TicketModel = require('../models/Ticket');
+const UserModel= require('../models/User')
 const cloudinary = require('../config/cloudinaryConfig'); // Import Cloudinary config
 const upload = require('../config/multerConfig'); // Import Multer config
 const streamifier = require('streamifier');
+
+//authenticate 
+
+
+const authenticate = async (req, res, next) => {
+  try {
+    const nic = req.headers["nic"]; // Replace with your actual NIC retrieval logic
+    if (!nic) {
+      return res
+        .status(401)
+        .json({ status: "Unauthorized", message: "NIC not provided" });
+    }
+    const user = await UserModel.findOne({ nic });
+    if (!user) {
+      return res
+        .status(404)
+        .json({ status: "Not Found", message: "User not found" });
+    }
+    req.user = user; // Attach the user to the request object
+    next();
+  } catch (error) {
+    res.status(500).json({ status: "Error", message: error.message });
+  }
+};
 
 // Helper function to upload file to Cloudinary
 const uploadToCloudinary = (buffer) => {
@@ -23,36 +48,44 @@ const uploadToCloudinary = (buffer) => {
 };
 
 // Create a ticket with file upload
-router.route('/add').post(upload.single('file'), async (req, res) => {
-  const { userID, description, status = 'in-progress', leaveType } = req.body;
+router
+  .route("/add")
+  .post(authenticate, upload.single("file"), async (req, res) => {
+    const { description, status = "in-progress", leaveType } = req.body;
 
-  try {
-    let fileData = null;
+    try {
+      let fileData = null;
 
-    if (req.file) {
-      const result = await uploadToCloudinary(req.file.buffer);
-      fileData = {
-        url: result.secure_url,
-        public_id: result.public_id, 
-        fileName: req.file.originalname,
-      } // Get the URL of the uploaded file from Cloudinary
+      if (req.file) {
+        const result = await uploadToCloudinary(req.file.buffer);
+        fileData = {
+          url: result.secure_url,
+          public_id: result.public_id,
+          fileName: req.file.originalname,
+        };
+      }
+
+      const { nic } = req.user; // Fetch the NIC from the authenticated user
+
+      // Create a new ticket
+      const newTicket = new TicketModel({
+        nic, // Store the NIC directly in the ticket
+        description,
+        status,
+        leaveType,
+        files: fileData,
+      });
+
+      const savedTicket = await newTicket.save();
+      res.status(201).json({ status: "Ticket Created", ticket: savedTicket });
+    } catch (error) {
+      console.error("Error creating ticket:", error);
+      res
+        .status(500)
+        .json({ status: "Error creating ticket", message: error.message });
     }
+  });
 
-    const newTicket = new TicketModel({
-      userID,
-      description,
-      status,
-      leaveType,
-      files: fileData,
-    });
-
-    const savedTicket = await newTicket.save();
-    res.status(201).json({ status: 'Ticket Created', ticket: savedTicket });
-  } catch (error) {
-    console.error('Error creating ticket:', error);
-    res.status(500).json({ status: 'Error with creating ticket', error: error.message });
-  }
-});
 
 // Get all tickets
 router.route('/get').get(async (req, res) => {
