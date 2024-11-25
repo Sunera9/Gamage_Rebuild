@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import axios from "axios";
 import { Link } from "react-router-dom";
+import Header from "../section/Header";
 
 const Salary = () => {
   const [searchMonth, setSearchMonth] = useState("");
@@ -54,6 +55,8 @@ const Salary = () => {
   };
 
   return (
+    <>
+    <Header/>
     <div className="min-h-screen bg-gray-100 flex items-center justify-center">
       <div className="max-w-4xl w-full bg-white shadow-lg rounded-lg p-6">
         <header className="text-center mb-8">
@@ -179,6 +182,7 @@ const Salary = () => {
         </section>
       </div>
     </div>
+    </>
   );
 };
 

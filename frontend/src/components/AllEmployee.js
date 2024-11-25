@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { DataGrid, GridToolbar } from "@mui/x-data-grid";
 import axios from "axios";
+import Header from "../section/Header";
 
 const AllEmployee = () => {
   const [employeeData, setEmployeeData] = useState([]);
@@ -78,6 +79,8 @@ const AllEmployee = () => {
   };
 
   return (
+    <>
+    <Header/>
     <div className="flex flex-col items-center justify-center px-6 py-10">
       <h1 className="text-3xl font-bold text-gray-800 mb-6">Employee Directory</h1>
       <div className="w-full max-w-4xl mb-4">
@@ -108,6 +111,7 @@ const AllEmployee = () => {
         />
       </div>
     </div>
+    </>
   );
 };
 

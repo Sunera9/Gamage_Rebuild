@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
+import Header from "../section/Header";
 
 const Profile = ({ userId }) => {
   const [profile, setProfile] = useState({
@@ -48,6 +49,8 @@ const Profile = ({ userId }) => {
   };
 
   return (
+    <>
+    <Header/>
     <div className="max-w-4xl mx-auto bg-white shadow-md rounded-lg p-8 mt-6">
       <h1 className="text-2xl font-bold text-center mb-6">User Profile</h1>
 
@@ -150,6 +153,7 @@ const Profile = ({ userId }) => {
         </form>
       )}
     </div>
+    </>
   );
 };
 

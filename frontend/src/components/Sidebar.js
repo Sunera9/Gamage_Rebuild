@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import '../styles/Sidebar.css';
 import gamgelogo from '../assest/img/brand/gamageLogo.jpg';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
@@ -10,12 +9,10 @@ import {
     faClipboardList,
     faUser,
     faDollarSign,
-    faUsers,
-    faFolder,
+    faTicketAlt,
     faSignOutAlt,
     faAngleLeft,
     faAngleRight,
-    faTicketAlt,
     faChevronDown,
 } from '@fortawesome/free-solid-svg-icons';
 
@@ -32,95 +29,133 @@ const Sidebar = () => {
     };
 
     return (
-        <div className={`sidebar ${isOpen ? '' : 'closed'}`}>
-            <div className="header">
-                <div className="logo-container">
-                    <img src={gamgelogo} alt="Gamage Recruiters" className="rounded-logo" />
-                    {isOpen && <h2 className="logo-text">Gamage Recruiters</h2>}
+        <div
+            className={`fixed top-0 left-0 h-full bg-white text-black p-10 transition-all duration-300 ease-in-out ${isOpen ? 'w-64' : 'w-16'}`}
+        >
+            <div className="flex flex-col justify-between h-full">
+                <div>
+                    <div className="flex justify-between items-center mb-12"></div>                    
+                    <ul className="space-y-10">
+                        <li>
+                            <Link
+                                to="/dashboard"
+                                className="flex items-center text-lg font-bold text-black hover:text-yellow-400"
+                            >
+                                
+                                <FontAwesomeIcon icon={faHome} className="mr-3 text-blue-500" />
+                                {isOpen && 'Dashboard'}
+                                <button
+                                    onClick={toggleSidebar}
+                                    className="w-9 h-9 bg-yellow-400 rounded-full flex justify-center items-center ml-3"
+                                >
+                            <FontAwesomeIcon icon={isOpen ? faAngleLeft : faAngleRight} className="text-white" />
+                        </button>
+                            </Link>
+                        </li>
+                        <li>
+                            <Link
+                                to="/leaves"
+                                className="flex items-center text-lg font-bold text-black hover:text-yellow-400"
+                            >
+                                <FontAwesomeIcon icon={faFile} className="mr-3 text-orange-500" />
+                                {isOpen && 'Leaves'}
+                            </Link>
+                        </li>
+                        <li>
+                            <Link
+                                to="/jobs"
+                                className="flex items-center text-lg font-bold text-black hover:text-yellow-400"
+                            >
+                                <FontAwesomeIcon icon={faBriefcase} className="mr-3 text-blue-500" />
+                                {isOpen && 'Jobs'}
+                            </Link>
+                        </li>
+                        <li>
+                            <Link
+                                to="/applications"
+                                className="flex items-center text-lg font-bold text-black hover:text-yellow-400"
+                            >
+                                <FontAwesomeIcon icon={faClipboardList} className="mr-3 text-gray-500" />
+                                {isOpen && 'Applications'}
+                            </Link>
+                        </li>
+                        <li>
+                            <Link
+                                to="/employee"
+                                className="flex items-center text-lg font-bold text-black hover:text-yellow-400"
+                            >
+                                <FontAwesomeIcon icon={faUser} className="mr-3 text-sky-500" />
+                                {isOpen && 'Employee'}
+                            </Link>
+                        </li>
+                        {/* Salary Dropdown */}
+                        <li>
+                            <div
+                                onClick={toggleSalaryMenu}
+                                className="flex items-center cursor-pointer text-lg font-bold text-black hover:text-yellow-400"
+                            >
+                                <FontAwesomeIcon icon={faDollarSign} className="mr-3 text-green-500" />
+                                {isOpen && <p>Salary</p>}
+                                {isOpen && (
+                                    <FontAwesomeIcon
+                                        icon={faChevronDown}
+                                        className={`ml-auto transition-transform ${isSalaryOpen ? 'rotate-180' : ''}`}
+                                    />
+                                )}
+                            </div>
+                            {isSalaryOpen && (
+                                <ul className="ml-6 space-y-2 mt-2">
+                                    <li>
+                                        <Link
+                                            to="/salary/sheet"
+                                            className="text-lg font-bold text-black hover:text-yellow-400"
+                                        >
+                                            {isOpen && 'Salary Sheet'}
+                                        </Link>
+                                    </li>
+                                    <li>
+                                        <Link
+                                            to="/salary/settings"
+                                            className="text-lg font-bold text-black hover:text-yellow-400"
+                                        >
+                                            {isOpen && 'Salary Settings'}
+                                        </Link>
+                                    </li>
+                                </ul>
+                            )}
+                        </li>
+                        <li>
+                            <Link
+                                to="/tickets"
+                                className="flex items-center text-lg font-bold text-black hover:text-yellow-400"
+                            >
+                                <FontAwesomeIcon icon={faTicketAlt} className="mr-3 text-blue-500" />
+                                {isOpen && 'Tickets'}
+                            </Link>
+                        </li>
+                        <li>
+                            <Link
+                                to="/profile"
+                                className="flex items-center text-lg font-bold text-black hover:text-yellow-400"
+                            >
+                                <FontAwesomeIcon icon={faUser} className="mr-3 text-blue-500" />
+                                {isOpen && 'Profile'}
+                            </Link>
+                        </li>
+                        <li>
+                            <Link
+                                to="/logout"
+                                className="flex items-center text-lg font-bold text-black hover:text-yellow-400"
+                            >
+                                <FontAwesomeIcon icon={faSignOutAlt} className="mr-3 text-red-500" />
+                                {isOpen && 'Logout'}
+                            </Link>
+                        </li>
+                    </ul>
                 </div>
-                <button className="toggle-button" onClick={toggleSidebar}>
-                    <div className="circle-icon">
-                        {isOpen ? (
-                            <FontAwesomeIcon icon={faAngleLeft} className="arrow-icon" />
-                        ) : (
-                            <FontAwesomeIcon icon={faAngleRight} className="arrow-icon" />
-                        )}
-                    </div>
-                </button>
+                {/* Placeholder for footer or other content if needed */}
+                <div className="mt-auto"></div>
             </div>
-            <ul>
-                <li>
-                    <Link to="/dashboard" className="link-text">
-                        <FontAwesomeIcon icon={faHome} className="icon" style={{ color: 'blue' }} />
-                        {isOpen && 'Dashboard'}
-                    </Link>
-                </li>
-                <li>
-                    <Link to="/leaves" className="link-text">
-                        <FontAwesomeIcon icon={faFile} className="icon" style={{ color: 'orange' }} />
-                        {isOpen && 'Leaves'}
-                    </Link>
-                </li>
-                <li>
-                    <Link to="/jobs" className="link-text">
-                        <FontAwesomeIcon icon={faBriefcase} className="icon" style={{ color: 'blue' }} />
-                        {isOpen && 'Jobs'}
-                    </Link>
-                </li>
-                <li>
-                    <Link to="/applications" className="link-text">
-                        <FontAwesomeIcon icon={faClipboardList} className="icon" style={{ color: 'gray' }} />
-                        {isOpen && 'Applications'}
-                    </Link>
-                </li>
-                <li>
-                    <Link to="/employee" className="link-text">
-                        <FontAwesomeIcon icon={faUser} className="icon" style={{ color: 'skyblue' }} />
-                        {isOpen && 'Employee'}
-                    </Link>
-                </li>
-                {/* Salary Dropdown */}
-                <li>
-                    <div className="dropdown-link" onClick={toggleSalaryMenu}>
-                        <FontAwesomeIcon icon={faDollarSign} className="icon" style={{ color: 'darkgreen' }} />
-                        {isOpen && (
-                            <>
-                                <b>Salary</b>
-                                <FontAwesomeIcon 
-                                    icon={faChevronDown}
-                                    className={`dropdown-icon ${isSalaryOpen ? 'rotate' : ''}`}
-                                />
-                            </>
-                        )}
-                    </div>
-                    {isSalaryOpen && (
-                        <ul className="sub-menu">
-                            <li>
-                                <Link to="/salary/sheet" className="link-text">
-                                    {isOpen && 'Salary Sheet'}
-                                </Link>
-                            </li>
-                            <li>
-                                <Link to="/salary/settings" className="link-text">
-                                    {isOpen && 'Salary Settings'}
-                                </Link>
-                            </li>
-                        </ul>
-                    )}
-                </li>
-                <li>
-                    <Link to="/tickets" className="link-text">
-                        <FontAwesomeIcon icon={faTicketAlt} className="icon" style={{ color: 'blue' }} />
-                        {isOpen && 'Tickets'}
-                    </Link>
-                </li>
-                <li>
-                    <Link to="/logout" className="link-text">
-                        <FontAwesomeIcon icon={faSignOutAlt} className="icon" style={{ color: 'red' }} />
-                        {isOpen && 'Logout'}
-                    </Link>
-                </li>
-            </ul>
         </div>
     );
 };

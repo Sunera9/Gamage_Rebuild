@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import axios from "axios";
+import Header from "../section/Header";
 
 const SalarySlip = () => {
   const { userId, month, year } = useParams();  // Correctly fetching params from URL
@@ -44,6 +45,8 @@ const SalarySlip = () => {
   if (error) return <p className="text-red-500">{error}</p>;
 
   return (
+    <>
+    <Header/>
     <div className="min-h-screen flex items-center justify-center bg-gray-100">
       <div className="bg-white shadow-lg rounded-lg p-6 w-full max-w-3xl">
         <header className="text-center mb-6">
@@ -93,6 +96,7 @@ const SalarySlip = () => {
         )}
       </div>
     </div>
+    </>
   );
 };
 

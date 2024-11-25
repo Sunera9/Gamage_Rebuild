@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import axios from "axios";
+import Header from "../section/Header";
 
 const SettingsPage = () => {
   const [settings, setSettings] = useState({
@@ -57,6 +58,8 @@ const SettingsPage = () => {
   };
 
   return (
+    <>
+    <Header/>
     <div style={{ maxWidth: "600px", margin: "0 auto", padding: "20px" }}>
       <h2 style={{ textAlign: "center" }}>Settings</h2>
       {error && (
@@ -110,6 +113,7 @@ const SettingsPage = () => {
         </button>
       </form>
     </div>
+    </>
   );
 };
 
