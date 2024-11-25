@@ -56,7 +56,7 @@ const Sidebar = () => {
                     </Link>
                 </li>
                 <li>
-                    <Link to="/jobs" className="link-text">
+                    <Link to="/joblist" className="link-text">
                         <FontAwesomeIcon icon={faBriefcase} className="icon" style={{ color: 'blue' }}/>
                         {isOpen && 'Jobs'}
                     </Link>

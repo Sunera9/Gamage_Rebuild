@@ -49,6 +49,10 @@ app.use('/leaves',leaveRouter);
 const emailRouter = require('./routes/mailStatus');
 app.use('/send-email', emailRouter);
 
+//Jobs 
+const jobRoutes = require("./routes/jobs");
+app.use("/api", jobRoutes);
+
 
 app.listen(PORT, () => {
     console.log(`Server is up and running on port number: ${PORT}`);

@@ -5,6 +5,8 @@ import AddUser from './components/AddUser';
 import Dashboard from './page/Dashboard';
 import TicketForm from './components/TicketForm';
 import Program from './components/Program';
+import AddJob from './components/AddJob';
+import JobList from './components/JobList';
 
 function App() {
   return (
@@ -21,7 +23,9 @@ function App() {
 
           <Route path="/programs" element={<Program/>}/>
 
+          <Route path="/addjob" element={<AddJob/>}/>
 
+          <Route path="/joblist" element={<JobList/>}/>
 
         </Routes>
       </div>

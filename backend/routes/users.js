@@ -5,7 +5,8 @@ const UserModel = require("../models/User");
 // Get all users
 router.route("/get").get(async (req, res) => {
   try {
-    const users = await UserModel.find();
+    const users = await UserModel.find().populate('jobPosition');
+
     res.json(users);
   } catch (err) {
     console.error(err.message);
