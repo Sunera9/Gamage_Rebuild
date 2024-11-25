@@ -15,14 +15,20 @@ import {
     faSignOutAlt,
     faAngleLeft,
     faAngleRight,
-    faTicketAlt
+    faTicketAlt,
+    faChevronDown,
 } from '@fortawesome/free-solid-svg-icons';
 
 const Sidebar = () => {
     const [isOpen, setIsOpen] = useState(true);
+    const [isSalaryOpen, setIsSalaryOpen] = useState(false);
 
     const toggleSidebar = () => {
         setIsOpen(!isOpen);
+    };
+
+    const toggleSalaryMenu = () => {
+        setIsSalaryOpen(!isSalaryOpen);
     };
 
     return (
@@ -45,67 +51,72 @@ const Sidebar = () => {
             <ul>
                 <li>
                     <Link to="/dashboard" className="link-text">
-                        <FontAwesomeIcon icon={faHome} className="icon" style={{ color: 'blue' }}/>
+                        <FontAwesomeIcon icon={faHome} className="icon" style={{ color: 'blue' }} />
                         {isOpen && 'Dashboard'}
                     </Link>
                 </li>
                 <li>
                     <Link to="/leaves" className="link-text">
-                        <FontAwesomeIcon icon={faFile} className="icon" style={{ color: 'orange' }}/>
+                        <FontAwesomeIcon icon={faFile} className="icon" style={{ color: 'orange' }} />
                         {isOpen && 'Leaves'}
                     </Link>
                 </li>
                 <li>
                     <Link to="/jobs" className="link-text">
-                        <FontAwesomeIcon icon={faBriefcase} className="icon" style={{ color: 'blue' }}/>
+                        <FontAwesomeIcon icon={faBriefcase} className="icon" style={{ color: 'blue' }} />
                         {isOpen && 'Jobs'}
                     </Link>
                 </li>
                 <li>
                     <Link to="/applications" className="link-text">
-                        <FontAwesomeIcon icon={faClipboardList} className="icon" style={{ color: 'gray' }}/>
+                        <FontAwesomeIcon icon={faClipboardList} className="icon" style={{ color: 'gray' }} />
                         {isOpen && 'Applications'}
                     </Link>
                 </li>
                 <li>
                     <Link to="/employee" className="link-text">
-                        <FontAwesomeIcon icon={faUser} className="icon" style={{ color: 'skyblue' }}/>
+                        <FontAwesomeIcon icon={faUser} className="icon" style={{ color: 'skyblue' }} />
                         {isOpen && 'Employee'}
                     </Link>
                 </li>
+                {/* Salary Dropdown */}
                 <li>
-                    <Link to="/salary" className="link-text">
-                        <FontAwesomeIcon icon={faDollarSign} className="icon" style={{ color: 'darkgreen' }}/>
-                        {isOpen && 'Salary'}
-                    </Link>
-                </li>
-                <li>
-                    <Link to="/programs" className="link-text">
-                        <FontAwesomeIcon icon={faFolder} className="icon" style={{ color: 'maroon' }}/>
-                        {isOpen && 'Programs'}
-                    </Link>
+                    <div className="dropdown-link" onClick={toggleSalaryMenu}>
+                        <FontAwesomeIcon icon={faDollarSign} className="icon" style={{ color: 'darkgreen' }} />
+                        {isOpen && (
+                            <>
+                                <b>Salary</b>
+                                <FontAwesomeIcon 
+                                    icon={faChevronDown}
+                                    className={`dropdown-icon ${isSalaryOpen ? 'rotate' : ''}`}
+                                />
+                            </>
+                        )}
+                    </div>
+                    {isSalaryOpen && (
+                        <ul className="sub-menu">
+                            <li>
+                                <Link to="/salary/sheet" className="link-text">
+                                    {isOpen && 'Salary Sheet'}
+                                </Link>
+                            </li>
+                            <li>
+                                <Link to="/salary/settings" className="link-text">
+                                    {isOpen && 'Salary Settings'}
+                                </Link>
+                            </li>
+                        </ul>
+                    )}
                 </li>
                 <li>
                     <Link to="/tickets" className="link-text">
-                        <FontAwesomeIcon icon={faTicketAlt} className="icon" style={{ color: 'ace' }}/>
+                        <FontAwesomeIcon icon={faTicketAlt} className="icon" style={{ color: 'blue' }} />
                         {isOpen && 'Tickets'}
                     </Link>
                 </li>
                 <li>
-                    <Link to="/clients" className="link-text">
-                        <FontAwesomeIcon icon={faUsers} className="icon" style={{ color: 'darkblue' }}/>
-                        {isOpen && 'Clients'}
-                    </Link>
-                </li>
-                <li>
-                    <Link to="/adduser" className="link-text">
-                        <FontAwesomeIcon icon={faUser} className="icon" style={{ color: 'magenta' }}/>
-                        {isOpen && 'Profile'}
-                    </Link>
-                </li>
-                <li>
                     <Link to="/logout" className="link-text">
-                        <FontAwesomeIcon icon={faSignOutAlt} className="icon" style={{ color: 'red' }}/>
+                        <FontAwesomeIcon icon={faSignOutAlt} className="icon" style={{ color: 'red' }} />
                         {isOpen && 'Logout'}
                     </Link>
                 </li>
