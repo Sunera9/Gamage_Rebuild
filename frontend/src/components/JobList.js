@@ -1,11 +1,23 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import './JobList.css'
+import { useNavigate } from "react-router-dom";
+import {
+  Container,
+  Grid,
+  Card,
+  CardContent,
+  CardActions,
+  Typography,
+  Button,
+  CircularProgress,
+  Alert,
+} from "@mui/material";
 
 const JobList = () => {
   const [jobs, setJobs] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
+  const navigate = useNavigate();
 
   // Fetch jobs from the backend
   useEffect(() => {
@@ -23,33 +35,120 @@ const JobList = () => {
   }, []);
 
   // Handle Apply button click
-  const handleApply = (jobId) => {
-    alert(`You applied for job ID: ${jobId}`);
-    // You can expand this function to handle actual application logic.
+  const handleApply = async (jobId, jobName) => {
+    try {
+      const userEmail = localStorage.getItem("userEmail");
+
+      if (!userEmail) {
+        console.error("User is not logged in.");
+        return;
+      }
+
+      const userResponse = await axios.get(
+        `http://localhost:8070/users/getByEmail/${userEmail}`
+      );
+      const userData = userResponse.data;
+
+      navigate(`/apply/${jobId}`, {
+        state: {
+          userName: userData.user.name,
+          userNIC: userData.user.nic,
+          userEmail: userData.user.email,
+          contactNumber: userData.user.phone,
+          userAddress: userData.user.address,
+          jobId: jobId,
+          jobName: jobName,
+        },
+      });
+    } catch (err) {
+      console.error("Error fetching user data:", err);
+    }
   };
 
   return (
-    <div className="job-list-container">
-      <h1>Available Jobs</h1>
-      {loading && <p>Loading jobs...</p>}
-      {error && <p style={{ color: "red" }}>{error}</p>}
-      {!loading && !error && jobs.length === 0 && <p>No jobs available.</p>}
-      {!loading && jobs.length > 0 && (
-        <div className="job-cards">
-          {jobs.map((job) => (
-            <div key={job._id} className="job-card">
-              <h2>{job.jobTitle}</h2>
-              <p><strong>Company:</strong> {job.companyName}</p>
-              <p><strong>Location:</strong> {job.location}</p>
-              <p><strong>Description:</strong> {job.jobDescription}</p>
-              <p><strong>Requirements:</strong> {job.requirements.join(", ")}</p>
-              <p><strong>Type:</strong> {job.jobType}</p>
-              <button onClick={() => handleApply(job._id)}>Apply</button>
-            </div>
-          ))}
-        </div>
+    <Container sx={{ marginTop: 5 }}>
+      <Typography variant="h4" gutterBottom align="center">
+        Available Jobs
+      </Typography>
+      {loading && (
+        <Grid container justifyContent="center" sx={{ marginTop: 3 }}>
+          <CircularProgress />
+        </Grid>
       )}
-    </div>
+      {error && (
+        <Alert severity="error" sx={{ marginTop: 3 }}>
+          {error}
+        </Alert>
+      )}
+      {!loading && !error && jobs.length === 0 && (
+        <Typography variant="h6" align="center" sx={{ marginTop: 3 }}>
+          No jobs available at the moment.
+        </Typography>
+      )}
+      {!loading && jobs.length > 0 && (
+        <Grid container spacing={3} sx={{ marginTop: 3 }}>
+          {jobs.map((job) => (
+            <Grid item xs={12} sm={6} md={4} key={job._id}>
+              <Card
+                sx={{
+                  height: "100%",
+                  display: "flex",
+                  flexDirection: "column",
+                  justifyContent: "space-between", // Ensure content is spaced
+                  "&:hover": {
+                    boxShadow: 6,
+                  },
+                }}
+              >
+                <CardContent sx={{ flexGrow: 1 }}>
+                  <Typography variant="h6" gutterBottom>
+                    {job.jobTitle}
+                  </Typography>
+                  <Typography variant="body2" color="textSecondary">
+                    <strong>Company:</strong> {job.companyName}
+                  </Typography>
+                  <Typography variant="body2" color="textSecondary">
+                    <strong>Location:</strong> {job.location}
+                  </Typography>
+                  <Typography
+                    variant="body2"
+                    color="textSecondary"
+                    sx={{ marginTop: 1 }}
+                  >
+                    <strong>Description:</strong> {job.jobDescription}
+                  </Typography>
+                  <Typography
+                    variant="body2"
+                    color="textSecondary"
+                    sx={{ marginTop: 1 }}
+                  >
+                    <strong>Requirements:</strong> {job.requirements.join(", ")}
+                  </Typography>
+                  <Typography
+                    variant="body2"
+                    color="textSecondary"
+                    sx={{ marginTop: 1 }}
+                  >
+                    <strong>Type:</strong> {job.jobType}
+                  </Typography>
+                </CardContent>
+                <CardActions sx={{ justifyContent: "center", paddingBottom: 2 }}>
+                  <Button
+                    size="small"
+                    variant="contained"
+                    color="primary"
+                    fullWidth
+                    onClick={() => handleApply(job._id, job.jobTitle)}
+                  >
+                    Apply
+                  </Button>
+                </CardActions>
+              </Card>
+            </Grid>
+          ))}
+        </Grid>
+      )}
+    </Container>
   );
 };
 

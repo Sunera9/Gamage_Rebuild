@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import './Program.css';
+import '../styles/Program.css';
 
 function InternshipProgram() {
   const [users, setUsers] = useState([]);
