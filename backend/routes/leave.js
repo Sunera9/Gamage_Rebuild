@@ -1,36 +1,59 @@
 const express = require('express');
 const router = express.Router();
 const LeaveModel = require('../models/Leave');
+const UserModel = require('../models/User'); // Import the User model
+const authMiddleware = require("../middlewares/authMiddleware"); // Import your auth middleware
 
 // Create a new leave application
-router.route("/add").post(async (req, res) => {
+router.post("/add", authMiddleware, async (req, res) => {
   try {
     const { duration, ...rest } = req.body;
 
     // Validate duration
-    if (!['Half Day', 'Full Day'].includes(duration)) {
-      return res.status(400).json({ status: "Invalid duration value. It must be 'Half Day' or 'Full Day'" });
+    if (!["Half Day", "Full Day"].includes(duration)) {
+      return res
+        .status(400)
+        .json({
+          status: "Invalid duration value. It must be 'Half Day' or 'Full Day'",
+        });
     }
 
-    const leave = new LeaveModel({ ...rest, duration });
+    // Get user details (name and email) from the User model
+    const user = await UserModel.findById(req.body.userId); // Assuming userId is passed in the request body
+
+    if (!user) {
+      return res.status(404).json({ status: "User not found" });
+    }
+
+    const leave = new LeaveModel({
+      ...rest,
+      duration,
+      User: req.body.userId,// Save the user's ID
+    });
     await leave.save();
-    res.status(201).json({ status: "Leave application created successfully", leave });
+
+    res.status(201).json({
+      status: "Leave application created successfully",
+      leave,
+      userName: user.name,
+      userEmail: user.email,
+    });
   } catch (error) {
     console.error(error.message);
     res.status(400).json({ status: "Error creating leave application", error: error.message });
   }
 });
-
 // Get all leave applications with populated user details
-router.route("/get").get(async (req, res) => {
+router.get("/get", async (req, res) => {
   try {
-    const leaves = await LeaveModel.find().populate('userId', 'name email');
+    const leaves = await LeaveModel.find().populate('User', 'name email');
     res.status(200).json(leaves);
   } catch (error) {
     console.error(error.message);
     res.status(500).json({ status: "Error fetching leave applications", error: error.message });
   }
 });
+
 
 // Get a specific leave application by ID with populated user details
 router.route("/get/:id").get(async (req, res) => {

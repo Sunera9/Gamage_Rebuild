@@ -16,6 +16,7 @@
     "axios": "^1.7.7",
     "chart.js": "^4.4.6",
     "cloudinary": "^1.41.3",
+    "cors": "^2.8.5",
     "frontend": "file:",
     "multer": "^1.4.5-lts.1",
     "multer-storage-cloudinary": "^4.0.0",

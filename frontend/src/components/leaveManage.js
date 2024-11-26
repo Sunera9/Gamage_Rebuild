@@ -8,18 +8,18 @@ function LeavesTable() {
   const [showModal, setShowModal] = useState(false); // Control modal visibility
 
   useEffect(() => {
-    const fetchLeaves = async () => {
-      try {
-        const response = await axios.get("http://localhost:8070/leaves/get");
-        setLeaves(response.data || []); // Ensure leaves is an array
-      } catch (error) {
-        console.error("Error fetching leaves:", error);
-        setLeaves([]); // Set leaves to an empty array if there's an error
-      }
-    };
-
     fetchLeaves();
   }, []);
+
+  const fetchLeaves = async () => {
+    try {
+      const response = await axios.get("http://localhost:8070/leaves/get");
+      setLeaves(response.data || []); // Ensure leaves is an array
+    } catch (error) {
+      console.error("Error fetching leaves:", error);
+      setLeaves([]); // Set leaves to an empty array if there's an error
+    }
+  };
 
   const handleIdClick = (leave) => {
     setSelectedLeave(leave); // Set selected leave details
@@ -28,15 +28,13 @@ function LeavesTable() {
 
   const handleApprove = async () => {
     try {
-      // Call backend to approve leave (you can customize this endpoint)
       await axios.put(
         `http://localhost:8070/leaveemail/accept/${selectedLeave._id}`,
-        {
-          adminApproval: "Approved",
-        }
+        { adminApproval: "Approved" }
       );
       setShowModal(false); // Close the modal
       alert("Leave approved successfully");
+      fetchLeaves(); // Refresh leaves data
     } catch (error) {
       console.error("Error approving leave:", error);
       alert("Error approving leave");
@@ -45,20 +43,19 @@ function LeavesTable() {
 
   const handleReject = async () => {
     try {
-      // Call backend to reject leave (you can customize this endpoint)
       await axios.put(
         `http://localhost:8070/leaveemail/reject/${selectedLeave._id}`,
-        {
-          adminApproval: "Rejected",
-        }
+        { adminApproval: "Rejected" }
       );
       setShowModal(false); // Close the modal
       alert("Leave rejected successfully");
+      fetchLeaves(); // Refresh leaves data
     } catch (error) {
       console.error("Error rejecting leave:", error);
       alert("Error rejecting leave");
     }
   };
+
 
   return (
     <div className="leaves-table">
@@ -69,7 +66,8 @@ function LeavesTable() {
       <table className="leaves-table">
         <thead>
           <tr>
-            <th>User ID</th>
+            <th>User name</th>
+            <th>User Email</th>
             <th>Start Date</th>
             <th>End Date</th>
             <th>Leave Type</th>
@@ -90,8 +88,9 @@ function LeavesTable() {
                     textDecoration: "underline",
                   }}
                 >
-                  {leave._id}
+                  {leave.User?.name || "N/A"}
                 </td>
+                <td>{leave.User?.email || "N/A"}</td>
                 <td>{leave.startDate}</td>
                 <td>{leave.endDate}</td>
                 <td>{leave.type}</td>

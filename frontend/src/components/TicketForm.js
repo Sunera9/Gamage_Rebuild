@@ -86,7 +86,7 @@ export default function TicketForm() {
               <form onSubmit={handleSubmit}>
                 <h2 className="text-2xl font-semibold text-gray-700 mb-5">Create a Ticket</h2>
 
-                <div className="mb-3">
+                {/* <div className="mb-3">
                   <label className="form-label">User ID:</label>
                   <input
                     type="text"
@@ -96,7 +96,7 @@ export default function TicketForm() {
                     className="form-control"
                     placeholder="Enter User ID"
                   />
-                </div>
+                </div> */}
 
                 <div className="mb-3">
                   <label className="form-label">Description:</label>

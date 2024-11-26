@@ -6,8 +6,7 @@ const dotenv = require("dotenv");
 const app = express();
 require("dotenv").config();
 require("./cronJobs/attendanceCron");
-
-
+require("dotenv").config();
 const PORT = process.env.PORT || 8070;
 
 
@@ -74,7 +73,7 @@ app.use('/tickets',ticketRouter);
 const leaveRouter = require('./routes/leave');
 app.use('/leaves',leaveRouter);
 
-
+//
 
 app.listen(PORT, () => {
     console.log(`Server is up and running on port number: ${PORT}`);
