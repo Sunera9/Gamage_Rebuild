@@ -7,13 +7,11 @@ const app = express();
 require("dotenv").config();
 require("./cronJobs/attendanceCron");
 
-
 const PORT = process.env.PORT || 8070;
 
 app.use(cors());
 app.use(bodyParser.json());
 app.use(express.json());
-
 
 const URL = process.env.MONGODB_URL;
 
@@ -34,6 +32,7 @@ const settingRouter = require('./routes/setting');
 const profileRouter = require('./routes/profile');
 const attendanceRouter = require('./routes/attendance');
 
+
 //admin
 const leaveRoutes = require("./routes/adminLeave");
 const ticketEmailRoute = require("./routes/ticketEmail");
@@ -50,7 +49,6 @@ app.use('/setting', settingRouter);
 app.use('/profile', profileRouter);
 app.use('/attendance',attendanceRouter);
 app.use("/auth", authRouter);
-
 app.use("/leaveEmail", leaveEmailRoute);
 app.use("/ticketEmail", ticketEmailRoute);
 

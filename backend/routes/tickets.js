@@ -5,6 +5,32 @@ const cloudinary = require('../config/cloudinaryConfig'); // Import Cloudinary c
 const upload = require('../config/multerConfig'); // Import Multer config
 const streamifier = require('streamifier');
 
+// Helper function to upload to Cloudinary
+const uploadToCloudinary = (buffer, mimeType, fileName) => {
+  return new Promise((resolve, reject) => {
+    const uploadOptions = {
+      folder: 'tickets',
+      public_id: fileName,
+    };
+
+    // If the file is a PDF, set the resource type to 'raw'
+    if (mimeType === 'application/pdf') {
+      uploadOptions.resource_type = 'raw';
+    }
+
+    const uploadStream = cloudinary.uploader.upload_stream(uploadOptions, (error, result) => {
+      if (error) {
+        reject(error);
+      } else {
+        resolve(result);
+      }
+      
+    });
+    
+
+    streamifier.createReadStream(buffer).pipe(uploadStream);
+  });
+
 // Helper function to upload file to Cloudinary
 const uploadToCloudinary = (buffer) => {
   return new Promise((resolve, reject) => {
@@ -30,6 +56,13 @@ router.route('/add').post(upload.single('file'), async (req, res) => {
     let fileData = null;
 
     if (req.file) {
+      const result = await uploadToCloudinary(req.file.buffer, req.file.mimetype, req.file.originalname);
+      fileData = {
+        url: result.secure_url,
+        public_id: result.public_id,
+        fileName: req.file.originalname,
+        fileType: req.file.mimetype, // Save mimetype (e.g., application/pdf, image/png)
+      };
       const result = await uploadToCloudinary(req.file.buffer);
       fileData = {
         url: result.secure_url,
@@ -80,6 +113,17 @@ router.route('/get/:id').get(async (req, res) => {
 // Update a ticket by ID
 router.route('/update/:id').put(upload.single('file'), async (req, res) => {
   const { userID, description, status, leaveType } = req.body;
+  let fileData = null;
+
+  try {
+    if (req.file) {
+      const result = await uploadToCloudinary(req.file.buffer, req.file.mimetype, req.file.originalname);
+      fileData = {
+        url: result.secure_url,
+        public_id: result.public_id,
+        fileName: req.file.originalname,
+        fileType: req.file.mimetype,
+      };
   let fileUrl = null;
 
   try {
@@ -90,6 +134,13 @@ router.route('/update/:id').put(upload.single('file'), async (req, res) => {
 
     const updatedTicket = await TicketModel.findByIdAndUpdate(
       req.params.id,
+      {
+        userID,
+        description,
+        status,
+        leaveType,
+        files: fileData || undefined, // Only update if new file is uploaded
+      },
       { userID, description, status, leaveType, file: fileUrl ? { url: fileUrl, fileName: req.file.originalname } : null },
       { new: true }
     );
