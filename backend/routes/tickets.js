@@ -31,7 +31,21 @@ const uploadToCloudinary = (buffer, mimeType, fileName) => {
     streamifier.createReadStream(buffer).pipe(uploadStream);
   });
 
-  
+// Helper function to upload file to Cloudinary
+const uploadToCloudinary = (buffer) => {
+  return new Promise((resolve, reject) => {
+    const uploadStream = cloudinary.uploader.upload_stream(
+      { folder: 'tickets' }, // Specify the folder name in Cloudinary
+      (error, result) => {
+        if (error) {
+          reject(error);
+        } else {
+          resolve(result);
+        }
+      }
+    );
+    streamifier.createReadStream(buffer).pipe(uploadStream);
+  });
 };
 
 // Create a ticket with file upload
@@ -49,6 +63,12 @@ router.route('/add').post(upload.single('file'), async (req, res) => {
         fileName: req.file.originalname,
         fileType: req.file.mimetype, // Save mimetype (e.g., application/pdf, image/png)
       };
+      const result = await uploadToCloudinary(req.file.buffer);
+      fileData = {
+        url: result.secure_url,
+        public_id: result.public_id, 
+        fileName: req.file.originalname,
+      } // Get the URL of the uploaded file from Cloudinary
     }
 
     const newTicket = new TicketModel({
@@ -104,6 +124,12 @@ router.route('/update/:id').put(upload.single('file'), async (req, res) => {
         fileName: req.file.originalname,
         fileType: req.file.mimetype,
       };
+  let fileUrl = null;
+
+  try {
+    if (req.file) {
+      const result = await uploadToCloudinary(req.file.buffer);
+      fileUrl = result.secure_url; // Upload to Cloudinary and get URL
     }
 
     const updatedTicket = await TicketModel.findByIdAndUpdate(
@@ -115,6 +141,7 @@ router.route('/update/:id').put(upload.single('file'), async (req, res) => {
         leaveType,
         files: fileData || undefined, // Only update if new file is uploaded
       },
+      { userID, description, status, leaveType, file: fileUrl ? { url: fileUrl, fileName: req.file.originalname } : null },
       { new: true }
     );
 

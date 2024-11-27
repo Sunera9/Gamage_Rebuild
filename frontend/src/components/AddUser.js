@@ -205,7 +205,7 @@
 import React, { useState } from "react";
 import axios from "axios";
 import { Link } from "react-router-dom";
-import './AddUser.css';
+import '../styles/AddUser.css';
 
 
 export default function AddUser() {

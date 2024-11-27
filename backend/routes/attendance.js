@@ -94,6 +94,18 @@ router.post("/exit", async (req, res) => {
 
     attendance.exitTime = time;
     attendance.workHours = workHours > 0 ? workHours : 0; // Ensure non-negative
+
+    const standardWorkHours = 8;
+
+    attendance.exitTime = time;
+    attendance.workHours = workHours > 0 ? workHours : 0; // Ensure non-negative
+
+    // Calculate overtime hours (if any)
+    const overtimeHours = workHours > standardWorkHours ? workHours - standardWorkHours : 0;
+
+    // Save overtime hours in the attendance record
+    attendance.overtimeHours = overtimeHours;
+
     await attendance.save();
 
     res

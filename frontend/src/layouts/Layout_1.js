@@ -3,6 +3,7 @@ import { Outlet } from "react-router-dom";
 import Sidebar from "../components/Sidebar";
 import Dashboard from "../page/Dashboard";
 
+
 const Layout_1 = () => {
   return (
     <div className="">

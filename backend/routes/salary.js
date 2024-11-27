@@ -9,6 +9,7 @@ const AttendanceModel = require("../models/Attendance");
 // Route to search salary records by month, year, and either userId or userName
 router.route("/search").get(async (req, res) => {
   const { month, year, userQuery } = req.query;
+  const { month, year, userId } = req.query;
 
   try {
     // Validate required parameters
@@ -34,6 +35,19 @@ router.route("/search").get(async (req, res) => {
           "_id"
         );
         if (usersByName.length === 0) {
+    if (userId) {
+      // Check if userId is a valid ObjectId
+      if (mongoose.Types.ObjectId.isValid(userId)) {
+        const userById = await UserModel.findById(userId).select("_id");
+        if (userById) searchCriteria.user = userById._id;
+      } else {
+        // Otherwise, search by name
+        const usersByName = await UserModel.find({ name: userId }).select(
+          "_id"
+        );
+        if (usersByName.length > 0) {
+          searchCriteria.user = { $in: usersByName.map((user) => user._id) };
+        } else {
           return res
             .status(404)
             .json({ message: "No user found with the specified ID or name." });
@@ -45,6 +59,10 @@ router.route("/search").get(async (req, res) => {
     }
 
     // Fetch salary components using the search criteria
+      }
+    }
+
+    // Fetch salary components based on criteria
     const salaryComponents = await SalaryComponentModel.find(searchCriteria)
       .populate({
         path: "user",
@@ -84,6 +102,35 @@ router.route("/search").get(async (req, res) => {
       const overTimePay = user.jobPosition.overTimePay || 0;
 
       // Calculate totals
+    if (salaryComponents.length === 0) {
+      return res.status(404).json({
+        message: "No salary records found for the specified criteria.",
+      });
+    }
+
+    // Map and calculate salary details
+    const salaryRecords = salaryComponents.map((component, index) => {
+      const {
+        user,
+        overtimeHours = 0,
+        bonuses = 0,
+        standardAllowance = 0,
+        medicalAllowance = 0,
+        dearnessAllowance = 0,
+        conveyanceAllowance = 0,
+        epfEmployee = 0,
+        epfEmployer = 0,
+        etfEmployer = 0,
+        healthInsurance = 0,
+        professionalTax = 0,
+        workingDays = 0,
+        attendedDays = 0,
+        leavesTaken = 0,
+      } = component;
+
+      const basicSalary = user.jobPosition?.basicSalary || 0;
+      const overTimePay = user.jobPosition?.overTimePay || 0;
+
       const totalAllowances =
         standardAllowance +
         medicalAllowance +
@@ -94,12 +141,19 @@ router.route("/search").get(async (req, res) => {
         epfEmployee + healthInsurance + professionalTax;
 
       const overtimeEarnings = overtimeHours * overTimePay;
+
+      const totalDeductions = epfEmployee + healthInsurance + professionalTax;
+
+      const overtimeEarnings = overtimeHours * overTimePay;
+
+
       const netSalary =
         basicSalary +
         totalAllowances +
         bonuses +
         overtimeEarnings -
         totalDeductions;
+
 
       // Return mapped result
       return {
@@ -119,23 +173,40 @@ router.route("/search").get(async (req, res) => {
         attendedDays: attendedDays,
         leavesTaken: leavesTaken,
         absentDays: absentDays,
+      return {
+        srNo: index + 1,
+        userName: user.name || "N/A",
+        jobTitle: user.jobPosition?.title || "N/A",
+        basicSalary: basicSalary,
+        totalAllowances: totalAllowances,
+        totalDeductions: totalDeductions,
+
         netSalary: netSalary,
       };
     });
 
     // Respond with the salary records
+    // Return the salary records
+
     res.status(200).json({
       message: "Salary records found.",
       salaryRecords,
     });
   } catch (error) {
+
     console.error(error.message);
     res.status(500).json({
       message: "Failed to search salary records",
+
+    console.error("Error:", error.message);
+    res.status(500).json({
+      message: "Failed to search salary records.",
+
       error: error.message,
     });
   }
 });
+
 
 
 router.route("/sheet").get(async (req, res) => {
@@ -146,16 +217,31 @@ router.route("/sheet").get(async (req, res) => {
     // Get the current month and year as fallback defaults
     const currentDate = new Date();
     const currentMonth = currentDate.getMonth() + 1; // Months are 0-indexed in JavaScript
+
+// Route to get salary sheet by month and year
+router.route("/sheet").get(async (req, res) => {
+  try {
+    let { month, year } = req.query;
+
+    // Get current month and year as fallback defaults
+    const currentDate = new Date();
+    const currentMonth = currentDate.getMonth() + 1; // Months are 0-indexed
+
     const currentYear = currentDate.getFullYear();
 
     // Validate and fallback to current month and year
     month = parseInt(month, 10) || currentMonth;
     year = parseInt(year, 10) || currentYear;
 
+
     // Ensure the month is in the correct range (1-12)
+
+    // Ensure valid month range
+
     if (month < 1 || month > 12) {
       return res.status(400).json({ message: "Invalid month provided." });
     }
+
 
     // Check if the requested month and year match the current month and year
     const isCurrentMonth = month === currentMonth && year === currentYear;
@@ -172,16 +258,30 @@ router.route("/sheet").get(async (req, res) => {
     }
 
     // Fetch all settings for allowances and deductions
+    // Check if the requested month/year matches the current
+    const isCurrentMonth = month === currentMonth && year === currentYear;
+
+    const startDate = new Date(year, month - 1, 1); // First day of the month
+    const endDate = new Date(year, month, 0); // Last day of the month
+
+    if (isNaN(startDate.getTime()) || isNaN(endDate.getTime())) {
+      throw new Error("Invalid date range for the query.");
+    }
+
+
     const settings = await SettingModel.find();
     const settingsMap = settings.reduce((map, setting) => {
       map[setting.name] = setting.value;
       return map;
     }, {});
 
+
     // Fetch all users with the role "employee"
+
     const employees = await UserModel.find({ role: "employee" })
       .populate("jobPosition")
       .lean();
+
 
     // Fetch attendance for all employees for the given month and year
     const attendanceRecords = await AttendanceModel.find({
@@ -192,6 +292,12 @@ router.route("/sheet").get(async (req, res) => {
     }).lean();
 
     // Organize attendance data by user
+
+    const attendanceRecords = await AttendanceModel.find({
+      date: { $gte: startDate, $lt: endDate },
+    }).lean();
+
+
     const attendanceMap = {};
     attendanceRecords.forEach((record) => {
       const userId = record.user.toString();
@@ -205,12 +311,21 @@ router.route("/sheet").get(async (req, res) => {
 
       if (record.status === "Present") {
         attendanceMap[userId].totalPresent++;
+
+          totalOvertimeHours: 0, // Track overtime hours
+        };
+      }
+      if (record.status === "Present") {
+        attendanceMap[userId].totalPresent++;
+        attendanceMap[userId].totalOvertimeHours += record.overtimeHours || 0; // Add overtime hours for "Present" records
+
       } else if (record.status === "Leave") {
         attendanceMap[userId].totalLeaves++;
       } else if (record.status === "Absent") {
         attendanceMap[userId].totalAbsent++;
       }
     });
+
 
     // Calculate total working days in the month (excluding weekends)
     const totalDaysInMonth = new Date(year, month, 0).getDate();
@@ -305,6 +420,105 @@ router.route("/sheet").get(async (req, res) => {
       .filter((op) => op !== null); // Remove null entries for previous months
 
     // Execute bulk operations for the current month only
+
+    const totalDaysInMonth = new Date(year, month, 0).getDate();
+    let workingDays = 0;
+    for (let day = 1; day <= totalDaysInMonth; day++) {
+      const date = new Date(year, month - 1, day);
+      if (date.getDay() !== 0 && date.getDay() !== 6) workingDays++; // Only count weekdays as working days
+    }
+
+    const bulkOps = [];
+    for (const employee of employees) {
+      const {
+        _id: userId,
+        jobPosition,
+        startDate: employeeStartDate,
+      } = employee;
+      if (!jobPosition) continue;
+
+      // Check if the employee was recruited before the requested month/year
+      const employeeStartMonth = new Date(employeeStartDate).getMonth() + 1; // Months are 0-indexed
+      const employeeStartYear = new Date(employeeStartDate).getFullYear();
+
+      if (
+        employeeStartYear > year ||
+        (employeeStartYear === year && employeeStartMonth > month)
+      ) {
+        // Skip employees who started after the requested month/year
+        continue;
+      }
+
+      const { basicSalary = 0, overTimePay = 0 } = jobPosition;
+      const attendance = attendanceMap[userId.toString()] || {
+        totalPresent: 0,
+        totalLeaves: 0,
+        totalAbsent: 0,
+        totalOvertimeHours: 0,
+      };
+
+      const allowances = {
+        medicalAllowance: settingsMap["Medical Allowance"] || 0,
+        dearnessAllowance: settingsMap["Dearness Allowance"] || 0,
+        conveyanceAllowance: settingsMap["Conveyance Allowance"] || 0,
+        standardAllowance: settingsMap["Standard Allowance"] || 0,
+      };
+
+      const deductions = {
+        epfEmployee: basicSalary * (settingsMap["EPF Employee"] / 100 || 0),
+        epfEmployer: basicSalary * (settingsMap["EPF Employer"] / 100 || 0),
+        etfEmployer: basicSalary * (settingsMap["ETF Employer"] / 100 || 0),
+        healthInsurance: settingsMap["Health Insurance Deduction"] || 0,
+        professionalTax: settingsMap["Professional Tax"] || 0,
+      };
+
+      const totalAllowances =
+        allowances.medicalAllowance +
+        allowances.dearnessAllowance +
+        allowances.conveyanceAllowance +
+        allowances.standardAllowance;
+
+      const totalDeductions =
+        deductions.epfEmployee +
+        deductions.healthInsurance +
+        deductions.professionalTax;
+
+      const bonuses = 0;
+      const overtimeHours = attendance.totalOvertimeHours || 0; // Use total overtime hours
+      const overtimeEarnings = overtimeHours * overTimePay;
+      const grossSalary =
+        basicSalary + totalAllowances + bonuses + overtimeEarnings;
+      const netSalary = grossSalary - totalDeductions;
+
+      const existingComponent = await SalaryComponentModel.findOne({
+        user: userId,
+        month,
+        year,
+      });
+
+      if (isCurrentMonth || !existingComponent) {
+        bulkOps.push({
+          updateOne: {
+            filter: { user: userId, month, year },
+            update: {
+              user: userId,
+              month,
+              year,
+              workingDays,
+              AttendedDays: attendance.totalPresent + attendance.totalLeaves,
+              leavesTaken: attendance.totalLeaves,
+              absentDays: attendance.totalAbsent,
+              overtimeHours,
+              bonuses,
+              ...allowances,
+              ...deductions,
+            },
+            upsert: true,
+          },
+        });
+      }
+    }
+
     if (bulkOps.length > 0) {
       await SalaryComponentModel.bulkWrite(bulkOps);
     }
@@ -354,6 +568,16 @@ router.route("/sheet").get(async (req, res) => {
 
       const totalDeductions =
         (epfEmployee || 0) + (healthInsurance || 0) + (professionalTax || 0);
+      const overtimeEarnings =
+        overtimeHours * (user.jobPosition.overTimePay || 0);
+
+      const totalAllowances =
+        medicalAllowance +
+        dearnessAllowance +
+        conveyanceAllowance +
+        standardAllowance;
+
+      const totalDeductions = epfEmployee + healthInsurance + professionalTax;
 
       const netSalary =
         basicSalary +
@@ -380,6 +604,10 @@ router.route("/sheet").get(async (req, res) => {
         epfEmployer,
         etfEmployer,
         netSalary,
+        totalAllowances,
+        totalDeductions,
+        netSalary,
+        salaryComponentId: component._id,
       };
     });
 

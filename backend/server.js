@@ -23,7 +23,6 @@ connection.once("open", () => {
 });
 
 //Backend Routes 
-
 const userRouter = require('./routes/users'); 
 const authRouter = require("./routes/auth");
 const jobPositionRouter = require('./routes/jobPosition');
@@ -32,6 +31,16 @@ const salaryRouter = require('./routes/salary');
 const settingRouter = require('./routes/setting');
 const profileRouter = require('./routes/profile');
 const attendanceRouter = require('./routes/attendance');
+
+
+//admin
+const leaveRoutes = require("./routes/adminLeave");
+const ticketEmailRoute = require("./routes/ticketEmail");
+const leaveEmailRoute = require("./routes/leaveEmail")
+const adminRoute = require("./routes/adminRoute");
+
+
+app.use("/api/admin",adminRoute);
 app.use('/users', userRouter);
 app.use('/jobPosition', jobPositionRouter);
 app.use('/salaryComponent', salaryComponentRouter);
@@ -40,6 +49,9 @@ app.use('/setting', settingRouter);
 app.use('/profile', profileRouter);
 app.use('/attendance',attendanceRouter);
 app.use("/auth", authRouter);
+app.use("/leaveEmail", leaveEmailRoute);
+app.use("/ticketEmail", ticketEmailRoute);
+
 
 //Tickets
 const ticketRouter = require('./routes/tickets');
@@ -48,6 +60,8 @@ app.use('/tickets',ticketRouter);
 //Leaves
 const leaveRouter = require('./routes/leave');
 app.use('/leaves',leaveRouter);
+
+
 
 app.listen(PORT, () => {
     console.log(`Server is up and running on port number: ${PORT}`);
