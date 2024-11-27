@@ -206,6 +206,7 @@ import React, { useState } from "react";
 import axios from "axios";
 import { Link } from "react-router-dom";
 import '../styles/AddUser.css';
+import Header from "../section/Header";
 
 
 export default function AddUser() {
@@ -264,6 +265,7 @@ export default function AddUser() {
 
   return (
     <div className="container">
+      <Header/>
       <div className="row justify-content-center">
         <div className="col-lg-8">
           <div className="card">

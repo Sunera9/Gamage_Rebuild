@@ -6,7 +6,7 @@ const SettingModel = require("../models/Setting");
 
 
 // Add Salary Component
-router.post("/", async (req, res) => {
+router.post("/post", async (req, res) => {
     const { userId, month, year, overtimeHours, bonuses } = req.body;
 
     try {

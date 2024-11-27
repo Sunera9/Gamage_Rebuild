@@ -1,6 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const LeaveModel = require("../models/Leave");
+const UserModel = require("../models/User");
 const { sendEmail } = require("../utils/emailService");
 
 // Handle leave acceptance
@@ -10,7 +11,7 @@ router.put("/accept/:id", async (req, res) => {
       req.params.id,
       { adminApproval: "Approved" },
       { new: true }
-    );
+    ).populate("User");
 
     if (!leave) {
       return res.status(404).json({ status: "Leave application not found" });
@@ -18,7 +19,7 @@ router.put("/accept/:id", async (req, res) => {
 
     // Send approval email
     await sendEmail(
-      leave.email, // Assuming userId is the user's email
+      leave.User.email, // Assuming userId is the user's email
       "Leave Application Approved",
       "Your leave application has been approved."
     );
@@ -43,7 +44,7 @@ router.put("/reject/:id", async (req, res) => {
       req.params.id,
       { adminApproval: "Rejected" },
       { new: true }
-    );
+    ).populate("User");
 
     if (!leave) {
       return res.status(404).json({ status: "Leave application not found" });
@@ -51,7 +52,7 @@ router.put("/reject/:id", async (req, res) => {
 
     // Send rejection email
     await sendEmail(
-      leave.email, // Assuming userId is the user's email
+      leave.User.email, // Assuming userId is the user's email
       "Leave Application Rejected",
       "Your leave application has been rejected."
     );

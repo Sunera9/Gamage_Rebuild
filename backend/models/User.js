@@ -31,6 +31,11 @@ const UserSchema = new mongoose.Schema(
       enum: ["Male", "Female"],
       required: true,
     },
+    password: {
+      type: String,
+      required: true,
+    },
+
     jobPosition: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "JobPosition",
@@ -59,25 +64,22 @@ const UserSchema = new mongoose.Schema(
       type: String,
       required: false,
     },
-    password: {
-      type: String,
-      required: true,
-    },
+
     startDate: {
       type: Date,
       required: false,
     },
     endDate: {
       type: Date,
-      required:false,
+      required: false,
     },
     bankAccountNumber: {
       type: String,
-      required: false,
+      required: true,
     },
     bankName: {
       type: String,
-      required: false,
+      required: true,
     },
     role: {
       type: String,

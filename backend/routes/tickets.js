@@ -1,9 +1,12 @@
 const express = require('express');
 const router = express.Router();
 const TicketModel = require('../models/Ticket');
+const UserModel= require('../models/User')
 const cloudinary = require('../config/cloudinaryConfig'); // Import Cloudinary config
 const upload = require('../config/multerConfig'); // Import Multer config
 const streamifier = require('streamifier');
+const authMiddleware = require("../middlewares/authMiddleware");
+
 
 // Helper function to upload to Cloudinary
 const uploadToCloudinary = (buffer, mimeType, fileName) => {
@@ -31,6 +34,7 @@ const uploadToCloudinary = (buffer, mimeType, fileName) => {
     streamifier.createReadStream(buffer).pipe(uploadStream);
   });
 
+
 // Helper function to upload file to Cloudinary
 const uploadToCloudinary = (buffer) => {
   return new Promise((resolve, reject) => {
@@ -48,12 +52,20 @@ const uploadToCloudinary = (buffer) => {
   });
 };
 
-// Create a ticket with file upload
-router.route('/add').post(upload.single('file'), async (req, res) => {
-  const { userID, description, status = 'in-progress', leaveType } = req.body;
+//Crate a ticket with file upload 
 
+router.post("/create-ticket", authMiddleware, async (req, res) => {
   try {
-    let fileData = null;
+    // Extract data from the request body
+    const { description, leaveType, files, fileType } = req.body;
+
+
+    // Validate required fields
+    if (!description || !leaveType) {
+      return res.status(400).send({
+        message: "Description and leaveType are required.",
+        success: false,
+      });
 
     if (req.file) {
       const result = await uploadToCloudinary(req.file.buffer, req.file.mimetype, req.file.originalname);
@@ -69,28 +81,52 @@ router.route('/add').post(upload.single('file'), async (req, res) => {
         public_id: result.public_id, 
         fileName: req.file.originalname,
       } // Get the URL of the uploaded file from Cloudinary
-    }
 
+    }
+    // Get user details (name and email) from the User model
+    const user = await UserModel.findById(req.body.userId); // Assuming userId is passed in the request body
+
+    if (!user) {
+      return res.status(404).send({
+        message: "User not found.",
+        success: false,
+      });
+    }
+    // Create the ticket
     const newTicket = new TicketModel({
-      userID,
+      User: req.body.userId, // Set from the authMiddleware
       description,
-      status,
       leaveType,
-      files: fileData,
+      files: files || {}, // Optional files object
+      fileType: fileType || "N/A",
     });
 
+    // Save the ticket to the database
     const savedTicket = await newTicket.save();
-    res.status(201).json({ status: 'Ticket Created', ticket: savedTicket });
+
+    // Send a success response
+    res.status(201).send({
+      message: "Ticket created successfully.",
+      success: true,
+      data: savedTicket,
+      userName: user.name,
+      userEmail: user.email,
+    });
   } catch (error) {
-    console.error('Error creating ticket:', error);
-    res.status(500).json({ status: 'Error with creating ticket', error: error.message });
+    res.status(500).send({
+      message: "An error occurred while creating the ticket.",
+      success: false,
+      error: error.message,
+    });
   }
 });
+
 
 // Get all tickets
 router.route('/get').get(async (req, res) => {
   try {
-    const tickets = await TicketModel.find();
+    const tickets = await TicketModel.find()
+    .populate('User', 'name email');
     res.status(200).json({ status: 'Tickets fetched', tickets });
   } catch (error) {
     res.status(500).json({ status: 'Error with fetching tickets', error: error.message });

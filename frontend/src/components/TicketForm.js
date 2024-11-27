@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import axios from 'axios';
 import { Link } from 'react-router-dom';
 import '../styles/Ticket.css';
+import Header from '../section/Header';
 
 export default function TicketForm() {
   const [userID, setUserID] = useState('');
@@ -34,13 +35,16 @@ export default function TicketForm() {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
+
+    // Ensure that a file is selected if it's required based on leave type
+
     if ((leaveType === 'Educational' || leaveType === 'Medical') && !file) {
       alert('Please upload a file for the selected leave type.');
       return;
     }
 
     const formData = new FormData();
-    formData.append('userID', userID);
+    // formData.append('userID', userID);
     formData.append('description', description);
     formData.append('leaveType', leaveType);
     if (file) {
@@ -54,7 +58,9 @@ export default function TicketForm() {
           'Content-Type': 'multipart/form-data',
         },
       });
+
       setTicketID(response.data.ticket._id); // Capture ticket ID from response
+
       setShowModal(true); // Show success modal
       resetForm(); // Reset the form fields
     } catch (error) {
@@ -77,6 +83,8 @@ export default function TicketForm() {
   };
 
   return (
+    <>
+    <Header/>
     <div className="container-ticket">
       <div className="row justify-content-center">
         <div className="col-lg-8">
@@ -106,7 +114,7 @@ export default function TicketForm() {
               <form onSubmit={handleSubmit}>
                 <h2 className="text-2xl font-semibold text-gray-700 mb-5">Create a Ticket</h2>
 
-                <div className="mb-3">
+                {/* <div className="mb-3">
                   <label className="form-label">User ID:</label>
                   <input
                     type="text"
@@ -116,7 +124,7 @@ export default function TicketForm() {
                     className="form-control"
                     placeholder="Enter User ID"
                   />
-                </div>
+                </div> */}
 
                 <div className="mb-3">
                   <label className="form-label">Description:</label>
@@ -174,5 +182,10 @@ export default function TicketForm() {
         </div>
       </div>
     </div>
+    </>
   );
+
+};
+
 }
+

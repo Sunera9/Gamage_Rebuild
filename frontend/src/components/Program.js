@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import '../styles/Program.css';
+import Header from '../section/Header';
 
 function InternshipProgram() {
   const [users, setUsers] = useState([]);
-  const [showModal, setShowModal] = useState(false); // State to control the modal visibility
-  const [modalMessage, setModalMessage] = useState(''); // State to store modal message
+  const [showModal, setShowModal] = useState(false); 
+  const [modalMessage, setModalMessage] = useState(''); 
 
   useEffect(() => {
     const fetchUsers = async () => {
@@ -21,29 +22,41 @@ function InternshipProgram() {
     fetchUsers();
   }, []);
 
-  const handleEmail = async (user) => {
+  const handleEmail = async (userId) => {
     try {
       // Check if the user already received an email
-      const statusResponse = await axios.get(`http://localhost:8070/send-email/check-status/${user._id}`);
-
+      const statusResponse = await axios.get(`http://localhost:8070/send-email/check-status/${userId}`);
+  
       if (statusResponse.data.emailSent) {
-        setModalMessage(`Email already sent to ${user.name}`);
-        setShowModal(true); // Show the modal if email has been sent
+        setModalMessage(`Email already sent to this user`); // Message for already sent email
+        setShowModal(true);
       } else {
         // Send the email if it hasn't been sent before
-        const sendResponse = await axios.post('http://localhost:8070/send-email', { userId: user._id });
-        console.log(`Email sent successfully to ${user.name}`);
+        const sendResponse = await axios.post('http://localhost:8070/send-email', { userId });
+  
+        if (sendResponse.data.success) {
+          setModalMessage(`Email sent successfully to ${sendResponse.data.userName}`); // Success message
+          setShowModal(true);
+        } else {
+          setModalMessage('Failed to send the email. Please try again.'); // Failure case
+          setShowModal(true);
+        }
       }
     } catch (error) {
-      console.error(`Error handling email for user ${user.name}`, error);
+      console.error(`Error handling email for user with ID: ${userId}`, error);
+      setModalMessage('An error occurred while sending the email. Please try again.'); // Error case
+      setShowModal(true);
     }
   };
+  
 
   const closeModal = () => {
     setShowModal(false); // Close the modal
   };
 
   return (
+    <>
+    <Header/>
     <div className="internship-program">
       <div className="title">
         <h2>Internship Program</h2>
@@ -61,7 +74,10 @@ function InternshipProgram() {
           </tr>
         </thead>
         <tbody>
-          {users.map((user) => (
+          {users.map((user) => {
+
+              console.log('User Data',user);
+            return(
             <tr key={user._id}>
               <td>{user.nic}</td>
               <td>{user.name}</td>
@@ -69,12 +85,13 @@ function InternshipProgram() {
               <td>{user.startDate ? new Date(user.startDate).toLocaleDateString() : 'N/A'}</td>
               <td>{user.endDate ? new Date(user.endDate).toLocaleDateString() : 'N/A'}</td>
               <td>
-                <button onClick={() => handleEmail(user)} title="Send Email">
+                <button onClick={() => handleEmail(user._id)} title="Send Email">
                   ✉️ {/* or use an icon library here */}
                 </button>
               </td>
             </tr>
-          ))}
+          );
+            })}
         </tbody>
       </table>
 
@@ -88,6 +105,7 @@ function InternshipProgram() {
         </div>
       )}
     </div>
+    </>
   );
 }
 

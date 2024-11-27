@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import "../styles/manageTicket.css";
+import Header from "../section/Header";
 
 function TicketsTable() {
   const [tickets, setTickets] = useState([]);
@@ -25,30 +26,58 @@ function TicketsTable() {
     setShowModal(true);
   };
 
-  const handleAccept = () => {
-    console.log(`Accepted ticket with ID: ${selectedTicket._id}`);
-    setShowModal(false);
+  const handleAccept = async () => {
+    try {
+      const response = await axios.put(
+        `http://localhost:8070/ticketEmail/accept/${selectedTicket._id}`
+      );
+      console.log("Ticket accepted:", response.data);
+      setShowModal(false);
+      setTickets(
+        tickets.map((ticket) =>
+          ticket._id === selectedTicket._id
+            ? { ...ticket, status: "Accepted" }
+            : ticket
+        )
+      );
+    } catch (error) {
+      console.error("Error accepting ticket:", error);
+    }
   };
 
-  const handleReject = () => {
-    console.log(`Rejected ticket with ID: ${selectedTicket._id}`);
-    setShowModal(false);
+  const handleReject = async () => {
+    try {
+      const response = await axios.put(
+        `http://localhost:8070/ticketEmail/reject/${selectedTicket._id}`
+      );
+      console.log("Ticket rejected:", response.data);
+      setShowModal(false);
+      setTickets(
+        tickets.map((ticket) =>
+          ticket._id === selectedTicket._id
+            ? { ...ticket, status: "Rejected" }
+            : ticket
+        )
+      );
+    } catch (error) {
+      console.error("Error rejecting ticket:", error);
+    }
   };
 
-const handleImageDownload = (fileUrl, fileName) => {
-  // Modify the URL to force download using Cloudinary's `fl_attachment` parameter
-  const downloadUrl = fileUrl.replace("/upload/", "/upload/fl_attachment/");
-  const link = document.createElement("a");
-  link.href = downloadUrl;
-  link.download = fileName || "downloaded_image.jpg";
-  link.target = "_blank"; // Opens the download in a new tab if needed
-  document.body.appendChild(link);
-  link.click();
-  document.body.removeChild(link);
-};
-
+  const handleImageDownload = (fileUrl, fileName) => {
+    const downloadUrl = fileUrl.replace("/upload/", "/upload/fl_attachment/");
+    const link = document.createElement("a");
+    link.href = downloadUrl;
+    link.download = fileName || "downloaded_image.jpg";
+    link.target = "_blank";
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  };
 
   return (
+    <>
+    <Header/>
     <div className="tickets-table">
       <div className="title">
         <h2>Tickets</h2>
@@ -57,7 +86,8 @@ const handleImageDownload = (fileUrl, fileName) => {
       <table className="tickets-table">
         <thead>
           <tr>
-            <th>User ID</th>
+            <th>User Name</th>
+            <th>User Email</th>
             <th>Description</th>
             <th>Status</th>
             <th>Leave Type</th>
@@ -76,8 +106,9 @@ const handleImageDownload = (fileUrl, fileName) => {
                   textDecoration: "underline",
                 }}
               >
-                {ticket._id}
+                {ticket.User?.name || "N/A"}
               </td>
+              <td>{ticket.User?.email || "N/A"}</td>
               <td>{ticket.description}</td>
               <td>{ticket.status}</td>
               <td>{ticket.leaveType}</td>
@@ -111,7 +142,6 @@ const handleImageDownload = (fileUrl, fileName) => {
               {new Date(selectedTicket.createdAt).toLocaleDateString()}
             </p>
 
-            {/* Render download button if there's an image URL in files */}
             {selectedTicket.files?.url && (
               <button
                 onClick={() =>
@@ -138,6 +168,7 @@ const handleImageDownload = (fileUrl, fileName) => {
         </div>
       )}
     </div>
+    </>
   );
 }
 

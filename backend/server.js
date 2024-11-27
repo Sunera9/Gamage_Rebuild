@@ -6,8 +6,19 @@ const dotenv = require("dotenv");
 const app = express();
 require("dotenv").config();
 require("./cronJobs/attendanceCron");
+require("dotenv").config();
+const PORT = process.env.PORT || 8070;
+
+
+const adminRoute = require("./routes/adminRoute");
+
+
+
+
+
 
 const PORT = process.env.PORT || 8070;
+
 
 app.use(cors());
 app.use(bodyParser.json());
@@ -31,24 +42,28 @@ const salaryRouter = require('./routes/salary');
 const settingRouter = require('./routes/setting');
 const profileRouter = require('./routes/profile');
 const attendanceRouter = require('./routes/attendance');
+const applicationRouter =require('./routes/applications');
 
 
 //admin
+app.use("/api/admin", adminRoute);
 const leaveRoutes = require("./routes/adminLeave");
 const ticketEmailRoute = require("./routes/ticketEmail");
 const leaveEmailRoute = require("./routes/leaveEmail")
-const adminRoute = require("./routes/adminRoute");
+
+
 
 
 app.use("/api/admin",adminRoute);
 app.use('/users', userRouter);
 app.use('/jobPosition', jobPositionRouter);
 app.use('/salaryComponent', salaryComponentRouter);
-app.use('/salary', salaryRouter);
+app.use('/api/salary', salaryRouter);
 app.use('/setting', settingRouter);
 app.use('/profile', profileRouter);
 app.use('/attendance',attendanceRouter);
 app.use("/auth", authRouter);
+app.use('/api/applications',applicationRouter);
 app.use("/leaveEmail", leaveEmailRoute);
 app.use("/ticketEmail", ticketEmailRoute);
 
@@ -61,6 +76,14 @@ app.use('/tickets',ticketRouter);
 const leaveRouter = require('./routes/leave');
 app.use('/leaves',leaveRouter);
 
+
+//Jobs 
+const jobRoutes = require("./routes/jobs");
+app.use("/api", jobRoutes);
+
+//Application
+const applicationForms = require('./routes/applicationForms');
+app.use('/api/applications', applicationForms);
 
 
 app.listen(PORT, () => {
