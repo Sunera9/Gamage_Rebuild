@@ -7,17 +7,11 @@ const app = express();
 require("dotenv").config();
 require("./cronJobs/attendanceCron");
 require("dotenv").config();
+
 const PORT = process.env.PORT || 8070;
 
 
 const adminRoute = require("./routes/adminRoute");
-
-
-
-
-
-
-const PORT = process.env.PORT || 8070;
 
 
 app.use(cors());
