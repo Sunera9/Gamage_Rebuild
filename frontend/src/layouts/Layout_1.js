@@ -1,16 +1,18 @@
 import React from "react";
 import { Outlet } from "react-router-dom";
 import Sidebar from "../components/Sidebar";
-import Dashboard from "../page/Dashboard";
+import Header from "../section/Header";
 
 
 const Layout_1 = () => {
   return (
     <div className="">
       <div className="flex ">
+        <Header/>
         <Sidebar className="" />
         <div className="flex-grow justify-center items-center mt-10">
           <Outlet />
+
         </div>
       </div>
     </div>
