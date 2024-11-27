@@ -1,0 +1,101 @@
+/* Login.css */
+
+/* Container for the Login Form */
+.container-login {
+  padding: 40px;
+  margin: 50px auto;
+  max-width: 400px;
+  background-color: #f9f9f9;
+  border-radius: 8px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+/* Form Styles */
+.container-login form {
+  background-color: #ffffff;
+  padding: 30px;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Heading in the Login Form */
+.container-login h2 {
+  color: #4a5568;
+  font-size: 1.75rem;
+  margin-bottom: 1.5rem;
+  text-align: center;
+  font-weight: 600;
+}
+
+/* Label Styles */
+.container-login label {
+  display: block;
+  margin-top: 15px;
+  color: #4a5568;
+  font-weight: 500;
+  margin-bottom: 0.5rem;
+}
+
+/* Input Fields */
+.container-login input[type="text"],
+.container-login input[type="password"] {
+  width: 100%;
+  padding: 0.75rem;
+  border: 1px solid #cbd5e0;
+  border-radius: 6px;
+  background-color: #ffffff;
+  color: #2d3748;
+  transition: border-color 0.2s ease;
+}
+
+.container-login input[type="text"]:focus,
+.container-login input[type="password"]:focus {
+  border-color: #3182ce; /* Light blue */
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(66, 153, 225, 0.4); /* Blue focus ring */
+}
+
+/* Button Styles */
+.container-login button[type="submit"] {
+  width: 100%;
+  padding: 0.75rem;
+  margin-top: 20px;
+  background-color: #3182ce;
+  color: #ffffff;
+  border-radius: 6px;
+  font-weight: 600;
+  transition: background-color 0.3s ease;
+  cursor: pointer;
+}
+
+.container-login button[type="submit"]:hover {
+  background-color: #2b6cb0;
+}
+
+.container-login button[type="submit"]:active {
+  background-color: #2c5282;
+  box-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.2);
+}
+
+/* Forgot Password Link */
+.container-login .forgot-password {
+  display: block;
+  text-align: center;
+  margin-top: 15px;
+  color: #3182ce;
+  font-weight: 500;
+  text-decoration: underline;
+  transition: color 0.2s ease;
+}
+
+.container-login .forgot-password:hover {
+  color: #2b6cb0;
+}
+
+/* Error Message Styling */
+.container-login .error-message {
+  color: #f56565;
+  font-size: 0.875rem;
+  margin-top: 15px;
+  text-align: center;
+}
