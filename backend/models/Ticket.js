@@ -1,47 +1,35 @@
 const mongoose = require('mongoose');
 
 const TicketSchema = new mongoose.Schema({
-  User: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: "User",
-    required: true,
+  userID: { 
+    type: String,
   },
-  description: {
+  description: { 
     type: String,
     required: true,
   },
-  status: {
+  status: { 
     type: String,
-    enum: ["open", "in-progress", "Rejected", "Approved"],
-    default: "open",
+    enum: ['open', 'in-progress', 'Rejected', 'Approved'],
+    default: 'open',
   },
   leaveType: {
     type: String,
-    enum: ["Personal", "Educational", "Medical"],
+    enum: ['Personal', 'Educational', 'Medical'],
     required: true,
   },
   files: {
-    url: {
-      // Cloudinary file URL
-      type: String,
-      required: false,
-    },
-    public_id: {
-      // Cloudinary public ID for file management
-      type: String,
-      required: false,
-    },
-    fileName: {
-      // Original file name (optional)
-      type: String,
-      required: false,
-    },
+    fileName: String,
+    filePath: String,
+    fileType: String,
+    fileSize: Number,
   },
-  fileType: {
-    type: String,
+  fileType:{
+    type: String
+    
   },
-  createdAt: {
-    type: Date,
+  createdAt: { 
+    type: Date, 
     default: new Date(),
   },
 });
