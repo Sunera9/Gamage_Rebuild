@@ -8,7 +8,6 @@ import CreateLeave from './components/CreateLeave';
 import Login from './page/Login';
 import Register from './page/Register';
 import Layout_1 from './layouts/Layout_1';
-import NewEmployee from './components/NewEmployee';
 import AllEmployee from './components/AllEmployee';
 import TicketsTable from './components/manageTicket';
 import LeavesTable from './components/leaveManage';
@@ -51,7 +50,6 @@ function App() {
           <Route path="/adduser" element={<AddUser />} />
           <Route path="/tickets" element={<TicketForm />} />
           <Route path="/leaves" element={<CreateLeave />} />
-          <Route path="/addEmployee" element={<NewEmployee />} />
           <Route path="/employee" element={<AllEmployee />} />
           <Route path="/TicketsTable" element={<TicketsTable />} />
           <Route path="/LeavesTable" element={<LeavesTable />} />
