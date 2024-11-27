@@ -1,9 +1,18 @@
 import { useState } from "react";
+import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
+import Sidebar from './components/Sidebar';
+import './App.css';
+import Sidebar from './components/Sidebar';
 import './App.css';
 import { BrowserRouter as Router, Routes, Route , Navigate} from "react-router-dom";
 import Dashboard from './page/Dashboard';
 import TicketForm from './components/TicketForm';
 import CreateLeave from './components/CreateLeave';
+import Login from './page/Login';
+import Register from './page/Register';
+import Layout_1 from './layouts/Layout_1';
+import NewEmployee from './components/NewEmployee';
+import AllEmployee from './components/AllEmployee';
 import Login from "./page/Login";
 import Register from "./page/Register";
 import Layout_1 from './layouts/Layout_1';
@@ -37,7 +46,6 @@ import AddJob from "./components/AddJob";
 import JobList from "./components/JobList";
 import ApplicationForm from "./components/ApplicationForm";
 
-
 // Authentication wrapper component
 const RequireAuth = ({ children }) => {
   const user = localStorage.getItem("user");
@@ -47,6 +55,7 @@ const RequireAuth = ({ children }) => {
 function App() {
   return (
     <Router>
+
       <Routes>
         {/* Public Routes */}
         <Route path="/login" element={<Login />} />
@@ -54,6 +63,25 @@ function App() {
 
         {/* Protected Routes */}
         <Route
+
+
+      <Routes>
+        {/* Public Routes */}
+        <Route path="/login" element={<Login setLoginUser={setLoginUser} />} />
+        <Route path="/register" element={<Register />} />
+
+        {/* Protected Routes */}
+        <Route
+
+        <Routes>
+
+          {/* Public Routes */}
+          <Route path="/login" element={<Login setLoginUser={setLoginUser} />} />
+          <Route path="/register" element={<Register />} />
+
+          {/* Protected Routes */}
+          <Route
+
           path="/"
           element={
             <RequireAuth>
@@ -61,6 +89,19 @@ function App() {
             </RequireAuth>
           }
         >
+
+          {/* Nested Routes for Dashboard */}
+          <Route path="/dashboard" element={<Dashboard />} />
+          <Route path="/adduser" element={<AddUser />} />
+          <Route path="/tickets" element={<TicketForm />} />
+          <Route path="/leaves" element={<CreateLeave />} />
+          <Route path="/addEmployee" element={<NewEmployee />} />
+          <Route path="/employee" element={<AllEmployee />} />
+        </Route>
+
+        {/* Redirect unknown routes to login */}
+        <Route path="*" element={<Navigate to="/login" replace />} />
+      </Routes>
 
            {/* Nested Routes for Dashboard */}
           {/* Users */}
@@ -99,6 +140,12 @@ function App() {
     
         
       </Routes>
+
+          {/* Redirect unknown routes to login */}
+          <Route path="*" element={<Navigate to="/login" replace />} />
+       
+        </Routes> 
+
     </Router>
   );
 }

@@ -17,12 +17,12 @@ const adminRoute = require("./routes/adminRoute");
 
 
 
+const PORT = process.env.PORT || 8070;
 
 
 app.use(cors());
 app.use(bodyParser.json());
 app.use(express.json());
-
 
 const URL = process.env.MONGODB_URL;
 
@@ -44,6 +44,7 @@ const profileRouter = require('./routes/profile');
 const attendanceRouter = require('./routes/attendance');
 const applicationRouter =require('./routes/applications');
 
+
 //admin
 app.use("/api/admin", adminRoute);
 const leaveRoutes = require("./routes/adminLeave");
@@ -63,8 +64,6 @@ app.use('/profile', profileRouter);
 app.use('/attendance',attendanceRouter);
 app.use("/auth", authRouter);
 app.use('/api/applications',applicationRouter);
-
-
 app.use("/leaveEmail", leaveEmailRoute);
 app.use("/ticketEmail", ticketEmailRoute);
 

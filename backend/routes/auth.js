@@ -1,6 +1,9 @@
 const express = require("express");
 const router = express.Router();
 const UserModel = require("../models/User");
+const User = require("../models/User"); 
+const UserModel = require("../models/User"); 
+const ProfileModel = require("../models/Profile"); 
 const bcrypt = require("bcryptjs");
 const ProfileModel = require("../models/Profile");
 const jwt = require("jsonwebtoken");
@@ -9,6 +12,10 @@ const jwt = require("jsonwebtoken");
 const JWT_SECRET = process.env.JWT_SECRET; // Change this to a more secure key
 
 // Registration Route
+router.post("/register", async (req, res) => {
+  console.log("Request Body:", req.body);
+
+  const { nic, name, email, address, phone, dob, gender, password } = req.body;
 // router.post("/register", async (req, res) => {
 //   console.log("Request Body:", req.body);
 
@@ -65,11 +72,28 @@ router.post("/register", async (req, res) => {
     !gender ||
     !password
   ) {
+
+  const {
+    nic,
+    name,
+    email,
+    address,
+    phone,
+    dob,
+    gender,
+    password,
+  } = req.body;
+
+
+  if (!nic || !name || !email || !address || !phone || !dob || !gender || !password) {
     return res.status(400).json({ message: "All fields are required" });
   }
 
   try {
     // Check if user already exists
+    const existingUser = await User.findOne({ email });
+    if (existingUser) {
+      return res.status(400).json({ message: "User already exists" });
     const existingUser = await UserModel.findOne({ email });
     if (existingUser) {
       return res.status(400).json({ message: "User already exists." });
@@ -78,7 +102,8 @@ router.post("/register", async (req, res) => {
     // Hash password
     const salt = await bcrypt.genSalt(10);
     const hashedPassword = await bcrypt.hash(password, salt);
-
+    // Create new user
+    const newUser = new User({
     // Default values for fields not provided during registration
     const defaultJobCategory = "Full-time";
     const defaultDepartment = "Other";
@@ -100,6 +125,14 @@ router.post("/register", async (req, res) => {
       dob,
       gender,
       password: hashedPassword,
+    });
+
+    // Save new user to DB
+    await newUser.save();
+    res.status(201).json({ message: "Registration successful", newUser });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Server error", error });
       jobPosition: defaultJobPosition,
       jobCategory: defaultJobCategory,
       department: defaultDepartment,
@@ -144,7 +177,11 @@ router.post("/login", async (req, res) => {
   const { email, password } = req.body; // Destructuring the email and password from the request body
 
   try {
+
     // Find the user by email
+
+    const user = await User.findOne({ email });
+
     const user = await UserModel.findOne({ email });
     if (!user) {
       return res.status(404).json({ message: "User not found" }); // If user doesn't exist, return 404
