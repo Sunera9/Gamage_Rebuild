@@ -18,7 +18,24 @@ import SettingsPage from "./components/Setting";
 import SalarySlip from "./components/SalarySlip";
 
 
-
+import { BrowserRouter as Router, Routes, Route, Navigate, Outlet } from "react-router-dom";
+import Sidebar from "./components/Sidebar";
+import "./App.css";
+import AddUser from "./components/AddUser";
+import Dashboard from "./page/Dashboard";
+import TicketForm from "./components/TicketForm";
+import CreateLeave from "./components/CreateLeave";
+import Login from "./page/Login";
+import Register from "./page/Register";
+import Layout_1 from "./layouts/Layout_1";
+import NewEmployee from "./components/NewEmployee";
+import AllEmployee from "./components/AllEmployee";
+import TicketsTable from "./components/manageTicket";
+import LeavesTable from "./components/leaveManage";
+import Program from "./components/Program";
+import AddJob from "./components/AddJob";
+import JobList from "./components/JobList";
+import ApplicationForm from "./components/ApplicationForm";
 
 
 // Authentication wrapper component
@@ -28,18 +45,15 @@ const RequireAuth = ({ children }) => {
 };
 
 function App() {
-  const [user, setLoginUser] = useState({});
-
   return (
     <Router>
-        <Routes>
+      <Routes>
+        {/* Public Routes */}
+        <Route path="/login" element={<Login />} />
+        <Route path="/register" element={<Register />} />
 
-          {/* Public Routes */}
-          <Route path="/login" element={<Login setLoginUser={setLoginUser} />} />
-          <Route path="/register" element={<Register />} />
-
-          {/* Protected Routes */}
-          <Route
+        {/* Protected Routes */}
+        <Route
           path="/"
           element={
             <RequireAuth>
@@ -47,6 +61,7 @@ function App() {
             </RequireAuth>
           }
         >
+
            {/* Nested Routes for Dashboard */}
           {/* Users */}
           <Route path="/profile" element={<Profile />} />
@@ -66,12 +81,24 @@ function App() {
           <Route path="/setting" element={<SettingsPage/>}/>
           
           
+          <Route path="adduser" element={<AddUser />} />
+          <Route path="dashboard" element={<Dashboard />} />
+          <Route path="tickets" element={<TicketForm />} />
+          <Route path="TicketsTable" element={<TicketsTable />} />
+          <Route path="LeavesTable" element={<LeavesTable />} />
+          <Route path="programs" element={<Program />} />
+          <Route path="leaves" element={<CreateLeave />} />
+          <Route path="addEmployee" element={<NewEmployee />} />
+          <Route path="employee" element={<AllEmployee />} />
+          <Route path="/addjob" element={<AddJob />} />
+          <Route path="/joblist" element={<JobList />} />
+          <Route path="/apply/:jobId" element={<ApplicationForm/>} />
+
         </Route>
 
-          {/* Redirect unknown routes to login */}
-          <Route path="*" element={<Navigate to="/login" replace />} />
-       
-        </Routes> 
+    
+        
+      </Routes>
     </Router>
   );
 }

@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 import '../styles/Ticket.css';
 import Header from '../section/Header';
 
-export default function TicketForm () {
+export default function TicketForm() {
   const [userID, setUserID] = useState('');
   const [description, setDescription] = useState('');
   const [leaveType, setLeaveType] = useState('');
@@ -12,14 +12,21 @@ export default function TicketForm () {
   const [showModal, setShowModal] = useState(false); // Modal state
 
   const handleFileChange = (e) => {
-    setFile(e.target.files[0]);
+    const selectedFile = e.target.files[0];
+    setFile(selectedFile);
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
+    // Ensure that a file is selected if it's required based on leave type
+    if ((leaveType === 'Educational' || leaveType === 'Medical') && !file) {
+      alert('Please upload a file for the selected leave type.');
+      return;
+    }
+
     const formData = new FormData();
-    formData.append('userID', userID);
+    // formData.append('userID', userID);
     formData.append('description', description);
     formData.append('leaveType', leaveType);
     if (file) {
@@ -32,8 +39,8 @@ export default function TicketForm () {
           'Content-Type': 'multipart/form-data',
         },
       });
-      setShowModal(true); 
-      resetForm();
+      setShowModal(true); // Show success modal
+      resetForm(); // Reset the form fields
     } catch (error) {
       console.error('Error submitting ticket:', error);
       alert('Failed to submit ticket. Please try again.');
@@ -48,7 +55,7 @@ export default function TicketForm () {
   };
 
   const handleOK = () => {
-    setShowModal(false); 
+    setShowModal(false); // Close modal
   };
 
   return (
@@ -82,7 +89,7 @@ export default function TicketForm () {
               <form onSubmit={handleSubmit}>
                 <h2 className="text-2xl font-semibold text-gray-700 mb-5">Create a Ticket</h2>
 
-                <div className="mb-3">
+                {/* <div className="mb-3">
                   <label className="form-label">User ID:</label>
                   <input
                     type="text"
@@ -92,7 +99,7 @@ export default function TicketForm () {
                     className="form-control"
                     placeholder="Enter User ID"
                   />
-                </div>
+                </div> */}
 
                 <div className="mb-3">
                   <label className="form-label">Description:</label>
@@ -129,6 +136,11 @@ export default function TicketForm () {
                       className="form-control"
                       required
                     />
+                    {file && (
+                      <div className="mt-2 text-sm text-gray-700">
+                        <strong>Selected File:</strong> {file.name}
+                      </div>
+                    )}
                   </div>
                 )}
 
@@ -142,5 +154,3 @@ export default function TicketForm () {
     </>
   );
 };
-
-

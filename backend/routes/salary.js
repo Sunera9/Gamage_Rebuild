@@ -6,10 +6,9 @@ const UserModel = require("../models/User");
 const SettingModel = require("../models/Setting");
 const AttendanceModel = require("../models/Attendance");
 
-
 // Route to search salary records by month, year, and either userId or userName
 router.route("/search").get(async (req, res) => {
-  const { month, year, userQuery } = req.query;
+  const { month, year, userId } = req.query;
 
   try {
     // Validate required parameters
@@ -20,14 +19,16 @@ router.route("/search").get(async (req, res) => {
     // Initialize search criteria
     const searchCriteria = { month, year };
 
-    if (userQuery) {
-      // Check if userQuery is a valid ObjectId
-      if (mongoose.Types.ObjectId.isValid(userQuery)) {
-        const userById = await UserModel.findById(userQuery).select("_id");
+    if (userId) {
+      // Check if userId is a valid ObjectId
+      if (mongoose.Types.ObjectId.isValid(userId)) {
+        const userById = await UserModel.findById(userId).select("_id");
         if (userById) searchCriteria.user = userById._id;
       } else {
         // Otherwise, search by name
-        const usersByName = await UserModel.find({ name: userQuery }).select("_id");
+        const usersByName = await UserModel.find({ name: userId }).select(
+          "_id"
+        );
         if (usersByName.length > 0) {
           searchCriteria.user = { $in: usersByName.map((user) => user._id) };
         } else {
@@ -85,8 +86,7 @@ router.route("/search").get(async (req, res) => {
         dearnessAllowance +
         conveyanceAllowance;
 
-      const totalDeductions =
-        epfEmployee + healthInsurance + professionalTax;
+      const totalDeductions = epfEmployee + healthInsurance + professionalTax;
 
       const overtimeEarnings = overtimeHours * overTimePay;
 
@@ -195,14 +195,21 @@ router.route("/sheet").get(async (req, res) => {
 
     const bulkOps = [];
     for (const employee of employees) {
-      const { _id: userId, jobPosition, startDate: employeeStartDate } = employee;
+      const {
+        _id: userId,
+        jobPosition,
+        startDate: employeeStartDate,
+      } = employee;
       if (!jobPosition) continue;
 
       // Check if the employee was recruited before the requested month/year
       const employeeStartMonth = new Date(employeeStartDate).getMonth() + 1; // Months are 0-indexed
       const employeeStartYear = new Date(employeeStartDate).getFullYear();
 
-      if (employeeStartYear > year || (employeeStartYear === year && employeeStartMonth > month)) {
+      if (
+        employeeStartYear > year ||
+        (employeeStartYear === year && employeeStartMonth > month)
+      ) {
         // Skip employees who started after the requested month/year
         continue;
       }
@@ -285,7 +292,10 @@ router.route("/sheet").get(async (req, res) => {
       .populate({
         path: "user",
         select: "name jobPosition",
-        populate: { path: "jobPosition", select: "title basicSalary overTimePay" },
+        populate: {
+          path: "jobPosition",
+          select: "title basicSalary overTimePay",
+        },
       })
       .lean();
 
@@ -310,16 +320,23 @@ router.route("/sheet").get(async (req, res) => {
       } = component;
 
       const basicSalary = user.jobPosition.basicSalary;
-      const overtimeEarnings = overtimeHours * (user.jobPosition.overTimePay || 0);
+      const overtimeEarnings =
+        overtimeHours * (user.jobPosition.overTimePay || 0);
 
       const totalAllowances =
-        medicalAllowance + dearnessAllowance + conveyanceAllowance + standardAllowance;
+        medicalAllowance +
+        dearnessAllowance +
+        conveyanceAllowance +
+        standardAllowance;
 
-      const totalDeductions =
-        epfEmployee + healthInsurance + professionalTax;
+      const totalDeductions = epfEmployee + healthInsurance + professionalTax;
 
       const netSalary =
-        basicSalary + totalAllowances + bonuses + overtimeEarnings - totalDeductions;
+        basicSalary +
+        totalAllowances +
+        bonuses +
+        overtimeEarnings -
+        totalDeductions;
 
       return {
         srNo: index + 1,
@@ -329,6 +346,7 @@ router.route("/sheet").get(async (req, res) => {
         totalAllowances,
         totalDeductions,
         netSalary,
+        salaryComponentId: component._id,
       };
     });
 
