@@ -59,6 +59,10 @@ const UserSchema = new mongoose.Schema(
       type: String,
       required: false,
     },
+    password: {
+      type: String,
+      required: true,
+    },
     startDate: {
       type: Date,
       required: false,
@@ -69,11 +73,11 @@ const UserSchema = new mongoose.Schema(
     },
     bankAccountNumber: {
       type: String,
-      required: true,
+      required: false,
     },
     bankName: {
       type: String,
-      required: true,
+      required: false,
     },
     role: {
       type: String,
