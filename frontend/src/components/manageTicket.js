@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import "../styles/manageTicket.css";
+import Header from "../section/Header";
 
 function TicketsTable() {
   const [tickets, setTickets] = useState([]);
@@ -49,6 +50,8 @@ const handleImageDownload = (fileUrl, fileName) => {
 
 
   return (
+    <>
+    <Header/>
     <div className="tickets-table">
       <div className="title">
         <h2>Tickets</h2>
@@ -138,6 +141,7 @@ const handleImageDownload = (fileUrl, fileName) => {
         </div>
       )}
     </div>
+    </>
   );
 }
 

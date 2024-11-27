@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import { Link } from 'react-router-dom';
+import Header from '../section/Header';
 
 export default function CreateLeave() {
   const [leaveDetails, setLeaveDetails] = useState({
@@ -52,6 +53,8 @@ export default function CreateLeave() {
   };
 
   return (
+    <>
+    <Header/>
     <div className="container-ticket">
       <div className="row justify-content-center">
         <div className="col-lg-8">
@@ -181,5 +184,6 @@ export default function CreateLeave() {
       </div>
       {message && <p className="mt-3 text-center">{message}</p>}
     </div>
+    </>
   );
 }

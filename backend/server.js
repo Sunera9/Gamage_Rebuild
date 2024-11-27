@@ -33,6 +33,7 @@ const salaryRouter = require('./routes/salary');
 const settingRouter = require('./routes/setting');
 const profileRouter = require('./routes/profile');
 const attendanceRouter = require('./routes/attendance');
+const applicationRouter =require('./routes/applications');
 
 //admin
 const leaveRoutes = require("./routes/adminLeave");
@@ -41,15 +42,18 @@ const leaveEmailRoute = require("./routes/leaveEmail")
 const adminRoute = require("./routes/adminRoute");
 
 
+
 app.use("/api/admin",adminRoute);
 app.use('/users', userRouter);
 app.use('/jobPosition', jobPositionRouter);
 app.use('/salaryComponent', salaryComponentRouter);
-app.use('/salary', salaryRouter);
+app.use('/api/salary', salaryRouter);
 app.use('/setting', settingRouter);
 app.use('/profile', profileRouter);
 app.use('/attendance',attendanceRouter);
 app.use("/auth", authRouter);
+app.use('/api/applications',applicationRouter);
+
 
 app.use("/leaveEmail", leaveEmailRoute);
 app.use("/ticketEmail", ticketEmailRoute);

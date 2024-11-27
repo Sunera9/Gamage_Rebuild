@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import axios from 'axios';
 import { Link } from 'react-router-dom';
 import '../styles/Ticket.css';
+import Header from '../section/Header';
 
 export default function TicketForm () {
   const [userID, setUserID] = useState('');
@@ -51,6 +52,8 @@ export default function TicketForm () {
   };
 
   return (
+    <>
+    <Header/>
     <div className="container-ticket">
       <div className="row justify-content-center">
         <div className="col-lg-8">
@@ -136,6 +139,7 @@ export default function TicketForm () {
         </div>
       </div>
     </div>
+    </>
   );
 };
 
