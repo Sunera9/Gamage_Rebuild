@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import "../styles/manageLeave.css";
+import Header from "../section/Header";
 
 function LeavesTable() {
   const [leaves, setLeaves] = useState([]);
@@ -58,6 +59,8 @@ function LeavesTable() {
 
 
   return (
+    <>
+    <Header/>
     <div className="leaves-table">
       <div className="title">
         <h2>Leave Applications</h2>
@@ -143,6 +146,7 @@ function LeavesTable() {
         </div>
       )}
     </div>
+    </>
   );
 }
 
