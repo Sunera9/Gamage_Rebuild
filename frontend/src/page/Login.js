@@ -18,16 +18,11 @@ const Login = () => {
   };
 
   const login = () => {
-    axios
-      .post("http://localhost:8070/auth/login", user)
-      .then((res) => {
-        alert(res.data.message);
-
-        // Store the token in localStorage
-        localStorage.setItem("token", res.data.token); // Save token here
-
-        // Optionally, store the user data if needed for later
-        localStorage.setItem("user", JSON.stringify(res.data.user));
+    axios.post("http://localhost:8070/auth/login", user).then((res) => {
+      alert(res.data.message);
+      
+      localStorage.setItem("userEmail", res.data.user.email);
+      localStorage.setItem("user", res.data.user);
 
         // Redirect the user to the home page (or dashboard)
         navigate("/");
