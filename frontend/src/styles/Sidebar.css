@@ -1,133 +1,220 @@
+/* Sidebar Styling */
 .sidebar {
-    width: 250px; 
-    height: 100vh; 
-    background-color: white; 
-    color: black; 
-    position: fixed; 
-    top: 0; 
-    left: 0; 
-    padding: 15px; 
-    transition: width 0.3s ease; 
-    z-index: 1000; 
-    border: 1px solid red;
-}
-
-.sidebar h2 {
-    font-size: 20px; 
-    margin-bottom: -2px; 
-}
-
-.header {
-    display: flex; 
-    align-items: center; 
-    justify-content: space-between; 
-}
-
-.toggle-button {
-    background: none; 
-    border: none; 
-    cursor: pointer; 
-}
-
-.circle-icon {
-    width: 36px; 
-    height: 36px; 
-    background-color: #f39c12; 
-    border-radius: 50%; 
-    display: flex; 
-    justify-content: center; 
-    align-items: center; 
-}
-
-.arrow-icon {
-    height: 20px; 
-    width: 20px; 
-    color: white; 
-}
-
-.sidebar ul {
-    list-style-type: none; 
+    width: 250px; /* Default width */
+    height: 100vh;
+    background-color: white;
+    color: black;
+    position: fixed;
+    top: 0;
+    left: 0;
     padding: 10px;
+    transition: width 0.3s ease, padding 0.3s ease; /* Smooth transition for width and padding */
+    z-index: 1000;
+    border-right: 1px solid #f39c12; /* Changed border color to match design */
 }
 
+/* Sidebar Title */
+.sidebar h2 {
+    font-size: 20px;
+    margin-bottom: -2px;
+    font-weight: bold;
+}
+
+/* Header section (Logo and Toggle button) */
+.header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+/* Toggle button for collapsing sidebar */
+.toggle-button {
+    background: none;
+    border: none;
+    cursor: pointer;
+}
+
+/* Icon circle for the toggle button */
+.circle-icon {
+    width: 36px;
+    height: 36px;
+    background-color: #f39c12;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* Arrow icon styling */
+.arrow-icon {
+    height: 20px;
+    width: 20px;
+    color: white;
+}
+
+/* Sidebar list items styling */
+.sidebar ul {
+    list-style-type: none;
+    padding: 10px;
+    margin: 0;
+}
+
+/* List items */
 .sidebar ul li {
-    margin: 15px 0; 
+    margin: 8px 0;
 }
 
+/* Links styling */
 .sidebar ul li a {
-    color: black; 
-    text-decoration: none; 
-    font-size: 18px; 
-    transition: color 0.3s; 
+    color: black;
+    text-decoration: none;
+    font-size: 18px;
+    transition: color 0.3s;
     padding: 10px;
     font-weight: bold;
     display: flex;
-    align-items: center; 
+    align-items: center;
 }
 
+/* Hover effect for links */
 .sidebar ul li a:hover {
-    color: #f39c12; 
+    color: #f39c12;
 }
 
+/* Collapsed sidebar styles */
 .sidebar.closed {
-    width: 60px; 
+    width: 60px; /* Reduced width when closed */
+    padding: 5px; /* Reduced padding for compact view */
 }
 
+/* When sidebar is collapsed, center-align list items */
 .sidebar.closed ul li {
-    display: flex; 
-    justify-content: center; 
+    display: flex;
+    justify-content: center;
 }
 
+/* Center the icon when collapsed */
 .sidebar.closed ul li a {
     justify-content: center;
 }
 
+/* Add abbreviation for collapsed sidebar items */
 .sidebar.closed ul li .abbreviation {
-    display: inline-block; 
-    width: 100%; 
-    text-align: center; 
-    font-weight: bold; 
+    display: inline-block;
+    width: 100%;
+    text-align: center;
+    font-weight: bold;
 }
 
+/* Sidebar border line */
 .sidebar::after {
     content: '';
-    width: 2px; 
-    background-color: #f39c12; 
-    position: absolute; 
-    top: 0; 
-    right: -1px; 
-    height: 100%; 
-    z-index: 999; 
+    width: 2px;
+    background-color: #f39c12;
+    position: absolute;
+    top: 0;
+    right: -1px;
+    height: 100%;
+    z-index: 999;
 }
 
-.small-image {
-    width: 50px; 
-    height: auto; 
-}
-
+/* Logo container and styling */
 .logo-container {
-    display: flex; 
-    align-items: center; 
+    display: flex;
+    align-items: center;
     background-color: white;
-    padding: 10px; 
-    border-radius: 50px; 
+    padding: 10px;
+    border-radius: 50px;
 }
 
+/* Logo styling */
 .rounded-logo {
-    width: 50px; 
-    height: auto; 
-    border-radius: 50%; 
-    margin-right: 10px; 
+    width: 50px;
+    height: auto;
+    border-radius: 50%;
+    margin-right: 10px;
 }
 
+/* Text styling for the logo */
 .logo-text {
-    color: #3498db; 
-    font-size: 20px; 
-    font-weight: bold; 
+    color: #3498db;
+    font-size: 20px;
+    font-weight: bold;
 }
 
+/* Icon styling in sidebar */
 .icon {
     margin-right: 10px;
     font-size: 18px;
     color: black;
+}
+
+/* Sub-menu (dropdown) styling */
+.sub-menu {
+    list-style: none;
+    padding-left: 20px;
+    margin-top: 5px;
+}
+
+/* Dropdown link styling */
+.dropdown-link {
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    padding: 8px 15px;
+}
+
+/* Styling for the dropdown icon */
+.dropdown-icon {
+    margin-left: auto;
+    transition: transform 0.3s;
+}
+
+/* Rotate the dropdown icon when the menu is open */
+.dropdown-icon.rotate {
+    transform: rotate(180deg);
+}
+
+/* Additional styles for dropdowns and responsive behavior */
+.sub-menu li a {
+    padding: 8px 20px; /* Padding for dropdown links */
+    font-size: 16px;
+}
+
+.sub-menu li a:hover {
+    background-color: #f1f1f1; /* Light background for hover effect */
+}
+
+/* Add transition effect for collapsing sidebar */
+.sidebar.closed .logo-container {
+    justify-content: center;
+}
+
+/* Small Image for collapsed sidebar */
+.small-image {
+    width: 50px;
+    height: auto;
+}
+
+/* Responsive design for small screen sizes */
+@media (max-width: 768px) {
+    .sidebar {
+        width: 200px;
+    }
+
+    .sidebar.closed {
+        width: 50px;
+    }
+
+    .sidebar h2 {
+        font-size: 16px;
+    }
+
+    .logo-text {
+        font-size: 18px;
+    }
+
+    .icon {
+        font-size: 16px;
+    }
 }
