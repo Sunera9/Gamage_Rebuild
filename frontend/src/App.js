@@ -17,6 +17,7 @@ import Program from "./components/Program";
 import AddJob from "./components/AddJob";
 import JobList from "./components/JobList";
 import ApplicationForm from "./components/ApplicationForm";
+import ApplicationsTable from "./components/manageApplications";
 
 // Authentication wrapper component
 const RequireAuth = ({ children }) => {
@@ -52,11 +53,9 @@ function App() {
           <Route path="employee" element={<AllEmployee />} />
           <Route path="/addjob" element={<AddJob />} />
           <Route path="/joblist" element={<JobList />} />
-          <Route path="/apply/:jobId" element={<ApplicationForm/>} />
+          <Route path="/apply/:jobId" element={<ApplicationForm />} />
+          <Route path="/ApplicationsTable" element={<ApplicationsTable />} />
         </Route>
-
-    
-        
       </Routes>
     </Router>
   );

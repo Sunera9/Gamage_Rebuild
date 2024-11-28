@@ -1,0 +1,52 @@
+.applications-table {
+  margin: 20px auto;
+  width: 80%;
+  border-collapse: collapse;
+}
+
+.applications-table th,
+.applications-table td {
+  border: 1px solid #ddd;
+  padding: 8px;
+  text-align: left;
+}
+
+.applications-table th {
+  background-color: #f4f4f4;
+  font-weight: bold;
+}
+
+.modal {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: #fff;
+  border-radius: 5px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+  padding: 20px;
+  z-index: 1000;
+}
+
+.modal-content {
+  margin: 10px 0;
+}
+
+.modal-actions button {
+  margin: 5px;
+  padding: 10px 15px;
+  cursor: pointer;
+}
+
+.view-details-button {
+  background-color: #007bff;
+  color: white;
+  border: none;
+  padding: 8px 12px;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.view-details-button:hover {
+  background-color: #0056b3;
+}
