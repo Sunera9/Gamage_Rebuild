@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import axios from "axios";
 import { Link, useNavigate } from "react-router-dom";
+import Swal from "sweetalert2";  // Import SweetAlert2
 
 const Login = () => {
   const navigate = useNavigate();
@@ -21,24 +22,36 @@ const Login = () => {
     axios
       .post("http://localhost:8070/auth/login", user)
       .then((res) => {
-        alert(res.data.message);
+        // Display success message using SweetAlert
+        Swal.fire({
+          title: "Success!",
+          text: res.data.message,
+          icon: "success",
+          confirmButtonText: "OK",
+        });
 
         localStorage.setItem("userEmail", res.data.user.email);
-        localStorage.setItem("user", res.data.user);
+        localStorage.setItem("user", JSON.stringify(res.data.user));
 
         // Redirect the user to the home page (or dashboard)
         navigate("/");
       })
       .catch((err) => {
         console.error("Login error:", err);
-        alert("Login failed. Please try again.");
+        // Display error message using SweetAlert
+        Swal.fire({
+          title: "Error!",
+          text: "Login failed. Please try again.",
+          icon: "error",
+          confirmButtonText: "OK",
+        });
       });
   };
 
   return (
-    <div className="flex items-center justify-center min-h-screen bg-gradient-to-br from-purple-50 to-purple-100 dark:from-gray-900 dark:to-gray-800 py-10">
-      <div className="flex flex-col max-w-lg px-8 py-10 bg-white rounded-xl shadow-xl mt-10 mb-16 dark:bg-gray-800 sm:px-16 md:px-20 lg:px-24">
-        <div className="self-center mb-6 text-2xl font-semibold text-gray-800 sm:text-3xl dark:text-white">
+    <div className="flex items-center justify-center min-h-screen bg-gray-100">
+      <div className="flex flex-col w-full max-w-md px-4 py-8 bg-white rounded-lg shadow dark:bg-gray-800 sm:px-6 md:px-8 lg:px-10">
+        <div className="self-center mb-6 text-xl font-light text-gray-600 sm:text-2xl dark:text-white">
           Login To Your Account
         </div>
         <div className="mt-8">
@@ -46,9 +59,7 @@ const Login = () => {
             <Link className="text-blue-400 underline mr-2" to="/register">
               Register
             </Link>
-            <div className="justify-center text-sm text-center text-gray-500 flex-items-center dark:text-gray-400">
             don't have an account
-            </div>
           </div>
           <form action="#" autoComplete="off">
             <div className="flex flex-col mb-2">
