@@ -2,9 +2,12 @@ const mongoose = require('mongoose');
 
 const LeaveSchema = new mongoose.Schema(
   {
-    userId: {
-        type: String,
+    User: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User",
+      required: true,
     },
+
     startDate: {
       type: Date,
       required: true,
@@ -22,8 +25,20 @@ const LeaveSchema = new mongoose.Schema(
     },
     type: {
       type: String,
-      enum: ["Sick Leave", "Annual Leave", "Maternity Leave", "Personal Leave", "Common", "Paternity Leave"], 
-      default: "Common"
+      enum: [
+        "Sick Leave",
+        "Annual Leave",
+        "Maternity Leave",
+        "Personal Leave",
+        "Common",
+        "Paternity Leave",
+      ],
+      default: "Common",
+    },
+    duration: {
+      type: String,
+      enum: ["Half Day", "Full Day"],
+      required: true,
     },
     reason: {
       type: String,
@@ -32,13 +47,13 @@ const LeaveSchema = new mongoose.Schema(
     adminApproval: {
       type: String,
       enum: ["Pending", "Approved", "Rejected"],
-      default : "Pending" 
+      default: "Pending",
     },
     supervisorApproval: {
       type: String,
       enum: ["Pending", "Approved", "Rejected"],
-      default : "Pending"  
-    }
+      default: "Pending",
+    },
   },
   { timestamps: true }
 );

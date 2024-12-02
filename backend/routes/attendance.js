@@ -91,6 +91,10 @@ router.post("/exit", async (req, res) => {
 
     // Calculate work hours
     const workHours = Math.floor((exit - entry) / (1000 * 60 * 60)); // Convert ms to hours
+
+    attendance.exitTime = time;
+    attendance.workHours = workHours > 0 ? workHours : 0; // Ensure non-negative
+
     const standardWorkHours = 8;
 
     attendance.exitTime = time;

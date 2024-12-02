@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import "../styles/manageTicket.css";
+import Header from "../section/Header";
 
 function TicketsTable() {
   const [tickets, setTickets] = useState([]);
@@ -75,6 +76,8 @@ function TicketsTable() {
   };
 
   return (
+    <>
+    <Header/>
     <div className="tickets-table">
       <div className="title">
         <h2>Tickets</h2>
@@ -165,6 +168,7 @@ function TicketsTable() {
         </div>
       )}
     </div>
+    </>
   );
 }
 

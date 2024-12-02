@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import '../styles/Program.css';
+import Header from '../section/Header';
 
 function InternshipProgram() {
   const [users, setUsers] = useState([]);
@@ -54,6 +55,8 @@ function InternshipProgram() {
   };
 
   return (
+    <>
+    <Header/>
     <div className="internship-program">
       <div className="title">
         <h2>Internship Program</h2>
@@ -102,6 +105,7 @@ function InternshipProgram() {
         </div>
       )}
     </div>
+    </>
   );
 }
 
