@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import Swal from "sweetalert2";
 
 const Register = () => {
   const [user, setUser] = useState({
@@ -35,12 +36,23 @@ const Register = () => {
       })
       .then((response) => {
         console.log("Response:", response.data);
-        alert("User added successfully!");
-        navigate("/login"); // Redirect to login page
+        Swal.fire({
+          icon: "success",
+          title: "Registration Successful",
+          text: "User added successfully!",
+          confirmButtonText: "OK",
+        }).then(() => {
+          navigate("/login"); // Redirect to login page
+        });
       })
       .catch((error) => {
         console.error("Error:", error.response ? error.response.data : error.message);
-        alert("Failed to register. Please try again.");
+        Swal.fire({
+          icon: "error",
+          title: "Registration Failed",
+          text: "Failed to register. Please try again.",
+          confirmButtonText: "OK",
+        });
       });
   };
 
