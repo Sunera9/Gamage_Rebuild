@@ -14,11 +14,13 @@ import {
     faAngleLeft,
     faAngleRight,
     faChevronDown,
+    faClock,
 } from '@fortawesome/free-solid-svg-icons';
 
 const Sidebar = () => {
     const [isOpen, setIsOpen] = useState(true);
     const [isSalaryOpen, setIsSalaryOpen] = useState(false);
+    const [isAttendanceOpen, setIsAttendanceOpen] = useState(false);  // State for the Attendance dropdown
 
     const toggleSidebar = () => {
         setIsOpen(!isOpen);
@@ -28,28 +30,30 @@ const Sidebar = () => {
         setIsSalaryOpen(!isSalaryOpen);
     };
 
+    const toggleAttendanceMenu = () => {
+        setIsAttendanceOpen(!isAttendanceOpen);  // Toggle Attendance dropdown
+    };
+
     return (
         <div
-            className={`fixed top-0 left-0 h-full bg-white text-black p-10 transition-all duration-300 ease-in-out ${isOpen ? 'w-64' : 'w-16'}`}
+            className={`fixed top-10 left-0 h-full bg-white text-black p-10 transition-all duration-300 ease-in-out ${isOpen ? 'w-64' : 'w-16'} overflow-y-auto`} // Added overflow-y-auto here
         >
             <div className="flex flex-col justify-between h-full">
                 <div>
-                    <div className="flex justify-between items-center mb-12"></div>                    
                     <ul className="space-y-10">
                         <li>
                             <Link
                                 to="/dashboard"
                                 className="flex items-center text-lg font-bold text-black hover:text-yellow-400"
                             >
-                                
                                 <FontAwesomeIcon icon={faHome} className="mr-3 text-blue-500" />
                                 {isOpen && 'Dashboard'}
                                 <button
                                     onClick={toggleSidebar}
                                     className="w-9 h-9 bg-yellow-400 rounded-full flex justify-center items-center ml-3"
                                 >
-                            <FontAwesomeIcon icon={isOpen ? faAngleLeft : faAngleRight} className="text-white" />
-                        </button>
+                                    <FontAwesomeIcon icon={isOpen ? faAngleLeft : faAngleRight} className="text-white" />
+                                </button>
                             </Link>
                         </li>
                         <li>
@@ -141,6 +145,50 @@ const Sidebar = () => {
                                 <FontAwesomeIcon icon={faUser} className="mr-3 text-blue-500" />
                                 {isOpen && 'Profile'}
                             </Link>
+                        </li>
+                        {/* Attendance Dropdown */}
+                        <li>
+                            <div
+                                onClick={toggleAttendanceMenu}
+                                className="flex items-center cursor-pointer text-lg font-bold text-black hover:text-yellow-400"
+                            >
+                                 <FontAwesomeIcon icon={faClock} className="mr-3 text-purple-500" />
+                                {isOpen && 'Attendance'}
+                                {isOpen && (
+                                    <FontAwesomeIcon
+                                        icon={faChevronDown}
+                                        className={`ml-auto transition-transform ${isAttendanceOpen ? 'rotate-180' : ''}`}
+                                    />
+                                )}
+                            </div>
+                            {isAttendanceOpen && (
+                                <ul className="ml-6 space-y-2 mt-2">
+                                    <li>
+                                        <Link
+                                            to="/attendance/attendenceform"
+                                            className="text-lg font-bold text-black hover:text-yellow-400"
+                                        >
+                                            {isOpen && 'Attendance Form'}
+                                        </Link>
+                                    </li>
+                                    <li>
+                                        <Link
+                                            to="/attendance/adminattendence"
+                                            className="text-lg font-bold text-black hover:text-yellow-400"
+                                        >
+                                            {isOpen && 'Admin Attendence'}
+                                        </Link>
+                                    </li>
+                                    <li>
+                                        <Link
+                                            to="/attendance/attendencerecords"
+                                            className="text-lg font-bold text-black hover:text-yellow-400"
+                                        >
+                                            {isOpen && 'Attendance Records'}
+                                        </Link>
+                                    </li>
+                                </ul>
+                            )}
                         </li>
                         <li>
                             <Link

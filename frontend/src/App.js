@@ -20,6 +20,10 @@ import AddUser from "./components/AddUser";
 import AddJob from "./components/AddJob";
 import JobList from "./components/JobList";
 import ApplicationForm from "./components/ApplicationForm";
+import AttendanceForm from "./components/AttendanceForm";
+import AttendanceRecords from "./components/AttendanceRecords";
+import AdminAttendence from "./components/AdminAttendence";
+
 
 // Authentication wrapper component
 const RequireAuth = ({ children }) => {
@@ -61,6 +65,9 @@ function App() {
           <Route path="/addjob" element={<AddJob />} />
           <Route path="/joblist" element={<JobList />} />
           <Route path="/apply/:jobId" element={<ApplicationForm />} />
+          <Route path="/attendance/attendenceform" element={<AttendanceForm />} />
+          <Route path="/attendance/adminattendence" element={<AdminAttendence />} />
+          <Route path="/attendance/attendencerecords" element={<AttendanceRecords />} />
         </Route>
 
         {/* Redirect unknown routes to login */}
