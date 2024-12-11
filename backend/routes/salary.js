@@ -105,6 +105,7 @@ router.route("/search").get(async (req, res) => {
         totalAllowances: totalAllowances,
         totalDeductions: totalDeductions,
         netSalary: netSalary,
+        salaryComponentId: component._id,
       };
     });
 
