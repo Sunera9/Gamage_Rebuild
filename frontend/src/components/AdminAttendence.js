@@ -26,7 +26,7 @@ const AdminAttendence = () => {
 
   return (
     <div className="max-w-xl mx-auto p-6 bg-white rounded-lg shadow-md">
-      <h2 className="text-2xl font-semibold text-center mb-4">Attendance Management</h2>
+      <h2 className="text-2xl font-semibold text-center mb-4">Admin Attendance Management</h2>
       <div className="space-y-4">
         <div>
           <label className="block font-medium">Admin Status:</label>

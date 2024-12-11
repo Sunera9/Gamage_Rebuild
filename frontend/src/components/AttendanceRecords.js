@@ -77,16 +77,28 @@ const AttendanceRecords = () => {
         {records.length > 0 && (
           <div className="mt-4">
             <h3 className="text-xl font-semibold">Attendance Summary</h3>
-            <ul className="space-y-2 mt-2">
-              {records.map((record, index) => (
-                <li key={index} className="border-b py-2">
-                  <p>{record.date} - {record.status}</p>
-                  <p>Work Hours: {record.workHours} hrs</p>
-                  <p>Overtime: {record.overtimeHours} hrs</p>
-                  <p>Remarks: {record.remarks}</p>
-                </li>
-              ))}
-            </ul>
+            <table className="min-w-full mt-2 table-auto border-collapse">
+              <thead>
+                <tr>
+                  <th className="px-4 py-2 border">Date</th>
+                  <th className="px-4 py-2 border">Status</th>
+                  <th className="px-4 py-2 border">Work Hours</th>
+                  <th className="px-4 py-2 border">Overtime Hours</th>
+                  <th className="px-4 py-2 border">Remarks</th>
+                </tr>
+              </thead>
+              <tbody>
+                {records.map((record, index) => (
+                  <tr key={index} className="text-center">
+                    <td className="px-4 py-2 border">{record.date}</td>
+                    <td className="px-4 py-2 border">{record.status}</td>
+                    <td className="px-4 py-2 border">{record.workHours} hrs</td>
+                    <td className="px-4 py-2 border">{record.overtimeHours} hrs</td>
+                    <td className="px-4 py-2 border">{record.remarks}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
           </div>
         )}
       </div>
