@@ -6,6 +6,7 @@ const AdminAttendence = () => {
   const [date, setDate] = useState(new Date().toISOString().split("T")[0]);
   const [status, setStatus] = useState("");
   const [remarks, setRemarks] = useState("");
+  const [userId, setUserId] = useState("");
 
   const handleAdminUpdate = async () => {
     try {
@@ -20,6 +21,23 @@ const AdminAttendence = () => {
         icon: 'error',
         title: 'Error',
         text: error.response?.data?.message || 'An error occurred while updating attendance.',
+      });
+    }
+  };
+
+  const markHoliday = async () => {
+    try {
+      const response = await axios.post("http://localhost:8070/attendance/mark-holiday", { date });
+      Swal.fire({
+        icon: 'success',
+        title: 'Holiday Marked',
+        text: response.data.message,
+      });
+    } catch (error) {
+      Swal.fire({
+        icon: 'error',
+        title: 'Error',
+        text: error.response?.data?.message || 'An error occurred',
       });
     }
   };
@@ -61,6 +79,29 @@ const AdminAttendence = () => {
         >
           Update Attendance
         </button>
+
+        <div className="max-w-xl mx-auto p-6 bg-white rounded-lg shadow-md">
+          <h2 className="text-2xl font-semibold text-center mb-4">Mark Holiday</h2>
+          <div className="space-y-4">
+            <div>
+              <label className="block font-medium">Holiday Date:</label>
+              <input
+                type="date"
+                className="w-full px-4 py-2 border rounded-md"
+                value={date}
+                onChange={(e) => setDate(e.target.value)}
+              />
+            </div>
+            <div>
+              <button
+                onClick={markHoliday}
+                className="w-full py-2 bg-red-500 text-white rounded-md"
+              >
+                Mark Holiday
+              </button>
+            </div>
+          </div>
+          </div>
       </div>
     </div>
   );

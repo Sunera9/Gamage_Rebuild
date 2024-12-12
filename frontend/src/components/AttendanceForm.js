@@ -1,58 +1,113 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import axios from "axios";
 import Swal from "sweetalert2"; // Import SweetAlert2
 
 const AttendanceForm = () => {
   const [userId, setUserId] = useState("");
-  const [date, setDate] = useState(new Date().toISOString().split("T")[0]);
+  const [isEntryMarked, setIsEntryMarked] = useState(false);
+  const [isExitMarked, setIsExitMarked] = useState(false);
+  const [attendanceData, setAttendanceData] = useState([]);
+  const [isAttendanceVisible, setIsAttendanceVisible] = useState(false); // State for showing/hiding attendance table
+
+  useEffect(() => {
+    // Reset button state for a new day
+    const today = new Date().toISOString().split("T")[0]; // Get the date in YYYY-MM-DD format
+    const lastMarkedDate = localStorage.getItem("lastMarkedDate");
+
+    if (lastMarkedDate !== today) {
+      setIsEntryMarked(false);
+      setIsExitMarked(false);
+      localStorage.setItem("lastMarkedDate", today);
+    }
+  }, []);
+
+  const validateUserId = (id) => {
+    // Check if userId is a valid MongoDB ObjectId format
+    return /^[a-fA-F0-9]{24}$/.test(id);
+  };
 
   const handleEntry = async () => {
-    try {
-      const response = await axios.post(`http://localhost:8070/attendance/entry?userId=${userId}`);
+    if (!validateUserId(userId)) {
       Swal.fire({
-        icon: 'success',
-        title: 'Entry Recorded',
+        icon: "error",
+        title: "Invalid User ID",
+        text: "Please enter a valid User ID (24-character hexadecimal).",
+      });
+      return;
+    }
+
+    try {
+      const response = await axios.post(
+        `http://localhost:8070/attendance/entry?userId=${userId}`
+      );
+      Swal.fire({
+        icon: "success",
+        title: "Entry Recorded",
         text: response.data.message,
       });
+      setIsEntryMarked(true);
     } catch (error) {
       Swal.fire({
-        icon: 'error',
-        title: 'Error',
-        text: error.response?.data?.message || 'An error occurred',
+        icon: "error",
+        title: "Error",
+        text: error.response?.data?.message || "An error occurred while marking entry.",
       });
     }
   };
 
   const handleExit = async () => {
-    try {
-      const response = await axios.post(`http://localhost:8070/attendance/exit?userId=${userId}`);
+    if (!validateUserId(userId)) {
       Swal.fire({
-        icon: 'success',
-        title: 'Exit Recorded',
+        icon: "error",
+        title: "Invalid User ID",
+        text: "Please enter a valid User ID (24-character hexadecimal).",
+      });
+      return;
+    }
+
+    try {
+      const response = await axios.post(
+        `http://localhost:8070/attendance/exit?userId=${userId}`
+      );
+      Swal.fire({
+        icon: "success",
+        title: "Exit Recorded",
         text: response.data.message,
       });
+      setIsExitMarked(true);
     } catch (error) {
       Swal.fire({
-        icon: 'error',
-        title: 'Error',
-        text: error.response?.data?.message || 'An error occurred',
+        icon: "error",
+        title: "Error",
+        text: error.response?.data?.message || "An error occurred while marking exit.",
       });
     }
   };
 
-  const markHoliday = async () => {
+  const handleViewAttendance = async () => {
     try {
-      const response = await axios.post("http://localhost:8070/attendance/mark-holiday", { date });
-      Swal.fire({
-        icon: 'success',
-        title: 'Holiday Marked',
-        text: response.data.message,
-      });
+      const response = await axios.get("http://localhost:8070/attendance/all");
+
+      if (response.data && response.data.attendanceRecords) {
+        // Format the date to display only the date (YYYY-MM-DD)
+        const formattedData = response.data.attendanceRecords.map((attendance) => ({
+          ...attendance,
+          date: new Date(attendance.date).toISOString().split("T")[0], // Format the date
+        }));
+        setAttendanceData(formattedData);
+        setIsAttendanceVisible(true); // Show the table after fetching the data
+      } else {
+        Swal.fire({
+          icon: "error",
+          title: "No Attendance Records",
+          text: "No attendance records found for today.",
+        });
+      }
     } catch (error) {
       Swal.fire({
-        icon: 'error',
-        title: 'Error',
-        text: error.response?.data?.message || 'An error occurred',
+        icon: "error",
+        title: "Error",
+        text: error.response?.data?.message || "An error occurred while fetching attendance data.",
       });
     }
   };
@@ -75,7 +130,10 @@ const AttendanceForm = () => {
         <div>
           <button
             onClick={handleEntry}
-            className="w-full py-2 bg-blue-500 text-white rounded-md"
+            className={`w-full py-2 text-white rounded-md ${
+              isEntryMarked ? "bg-gray-400" : "bg-blue-500"
+            }`}
+            disabled={isEntryMarked}
           >
             Mark Entry
           </button>
@@ -84,36 +142,49 @@ const AttendanceForm = () => {
         <div>
           <button
             onClick={handleExit}
-            className="w-full py-2 bg-green-500 text-white rounded-md"
+            className={`w-full py-2 text-white rounded-md ${
+              isExitMarked || !isEntryMarked ? "bg-gray-400" : "bg-green-500"
+            }`}
+            disabled={isExitMarked || !isEntryMarked}
           >
             Mark Exit
           </button>
         </div>
 
-        <div className="max-w-xl mx-auto p-6 bg-white rounded-lg shadow-md">
-          <h2 className="text-2xl font-semibold text-center mb-4">Mark Holiday</h2>
-          <div className="space-y-4">
-            <div>
-              <label className="block font-medium">Holiday Date:</label>
-              <input
-                type="date"
-                className="w-full px-4 py-2 border rounded-md"
-                value={date}
-                onChange={(e) => setDate(e.target.value)}
-              />
-            </div>
-
-            <div>
-              <button
-                onClick={markHoliday}
-                className="w-full py-2 bg-red-500 text-white rounded-md"
-              >
-                Mark Holiday
-              </button>
-            </div>
-          </div>
+        {/* View Attendance Button */}
+        <div>
+          <button
+            onClick={handleViewAttendance}
+            className="w-full py-2 text-white rounded-md bg-purple-500"
+          >
+            View Attendance
+          </button>
         </div>
       </div>
+
+      {/* Display Attendance Table */}
+      {isAttendanceVisible && (
+        <div className="mt-6 overflow-x-auto">
+          <table className="min-w-full table-auto">
+            <thead>
+              <tr className="bg-gray-100">
+                <th className="px-4 py-2 border">Entry Time</th>
+                <th className="px-4 py-2 border">Exit Time</th>
+                <th className="px-4 py-2 border">Date</th>
+              </tr>
+            </thead>
+            <tbody>
+              {attendanceData.map((attendance, index) => (
+                <tr key={index} className="odd:bg-gray-50">
+                  <td className="px-4 py-2 border">{attendance.entryTime}</td>
+                  <td className="px-4 py-2 border">{attendance.exitTime}</td>
+                  <td className="px-4 py-2 border">{attendance.date}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      )}
     </div>
   );
 };

@@ -15,15 +15,16 @@ const AttendanceRecords = () => {
       });
       setRecords(response.data.attendanceRecords);
       Swal.fire({
-        icon: 'success',
-        title: 'Records Fetched Successfully',
-        text: 'Attendance records have been loaded.',
+        icon: "success",
+        title: "Records Fetched Successfully",
+        text: "Attendance records have been loaded.",
       });
     } catch (error) {
       Swal.fire({
-        icon: 'error',
-        title: 'Error',
-        text: error.response?.data?.message || 'An error occurred while fetching records.',
+        icon: "error",
+        title: "Error",
+        text:
+          error.response?.data?.message || "An error occurred while fetching records.",
       });
     }
   };
@@ -88,15 +89,22 @@ const AttendanceRecords = () => {
                 </tr>
               </thead>
               <tbody>
-                {records.map((record, index) => (
-                  <tr key={index} className="text-center">
-                    <td className="px-4 py-2 border">{record.date}</td>
-                    <td className="px-4 py-2 border">{record.status}</td>
-                    <td className="px-4 py-2 border">{record.workHours} hrs</td>
-                    <td className="px-4 py-2 border">{record.overtimeHours} hrs</td>
-                    <td className="px-4 py-2 border">{record.remarks}</td>
-                  </tr>
-                ))}
+                {records.map((record, index) => {
+                  // Format the date to YYYY-MM-DD format
+                  const formattedDate = new Date(record.date)
+                    .toISOString()
+                    .split("T")[0];
+
+                  return (
+                    <tr key={index} className="text-center">
+                      <td className="px-4 py-2 border">{formattedDate}</td>
+                      <td className="px-4 py-2 border">{record.status}</td>
+                      <td className="px-4 py-2 border">{record.workHours} hrs</td>
+                      <td className="px-4 py-2 border">{record.overtimeHours} hrs</td>
+                      <td className="px-4 py-2 border">{record.remarks}</td>
+                    </tr>
+                  );
+                })}
               </tbody>
             </table>
           </div>
