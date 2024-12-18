@@ -23,11 +23,13 @@ import ApplicationForm from "./components/ApplicationForm";
 import AttendanceForm from "./components/AttendanceForm";
 import AttendanceRecords from "./components/AttendanceRecords";
 import AdminAttendence from "./components/AdminAttendence";
+import Sidebar from "./components/Sidebar";
+
 
 
 // Authentication wrapper component
 const RequireAuth = ({ children }) => {
-  const user = localStorage.getItem("user");
+  const user = JSON.parse(localStorage.getItem("user"));
   return user ? children : <Navigate to="/login" replace />;
 };
 
@@ -49,7 +51,8 @@ function App() {
           }
         >
           {/* Nested Routes for Dashboard */}
-          <Route path="/dashboard" element={<Dashboard />} />
+         
+          {/* <Route path="/dashboard" element={<Dashboard />} /> */}
           <Route path="/adduser" element={<AddUser />} />
           <Route path="/tickets" element={<TicketForm />} />
           <Route path="/leaves" element={<CreateLeave />} />
@@ -71,7 +74,9 @@ function App() {
         </Route>
 
         {/* Redirect unknown routes to login */}
-        <Route path="*" element={<Navigate to="/login" replace />} />
+        <Route path="/admin/dashboard" element={<Dashboard/>} />
+        <Route path="/employee/dashboard" element={<Dashboard/>} />
+        <Route path="/visitor/dashboard" element={<Dashboard/>} />
       </Routes>
     </Router>
   );

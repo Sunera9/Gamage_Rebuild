@@ -190,7 +190,7 @@ const Sidebar = () => {
                                 </ul>
                             )}
                         </li>
-                        <li>
+                        {/* <li>
                             <Link
                                 to="/logout"
                                 className="flex items-center text-lg font-bold text-black hover:text-yellow-400"
@@ -198,7 +198,7 @@ const Sidebar = () => {
                                 <FontAwesomeIcon icon={faSignOutAlt} className="mr-3 text-red-500" />
                                 {isOpen && 'Logout'}
                             </Link>
-                        </li>
+                        </li> */}
                     </ul>
                 </div>
                 {/* Placeholder for footer or other content if needed */}

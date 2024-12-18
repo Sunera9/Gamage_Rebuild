@@ -9,7 +9,7 @@ const Layout_1 = () => {
     <div className="">
       <div className="flex ">
         <Header/>
-        <Sidebar className="" />
+        <Sidebar/>
         <div className="flex-grow justify-center items-center mt-10">
           <Outlet />
 
