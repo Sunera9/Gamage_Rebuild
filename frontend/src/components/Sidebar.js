@@ -58,7 +58,7 @@ const Sidebar = () => {
                         </li>
                         <li>
                             <Link
-                                to="/leaves"
+                                to="/employee/leaves"
                                 className="flex items-center text-lg font-bold text-black hover:text-yellow-400"
                             >
                                 <FontAwesomeIcon icon={faFile} className="mr-3 text-orange-500" />
@@ -130,7 +130,7 @@ const Sidebar = () => {
                         </li>
                         <li>
                             <Link
-                                to="/tickets"
+                                to="/employee/tickets"
                                 className="flex items-center text-lg font-bold text-black hover:text-yellow-400"
                             >
                                 <FontAwesomeIcon icon={faTicketAlt} className="mr-3 text-blue-500" />
