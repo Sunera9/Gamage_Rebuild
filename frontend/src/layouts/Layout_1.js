@@ -2,6 +2,7 @@ import React from "react";
 import { Outlet } from "react-router-dom";
 import Sidebar from "../components/Sidebar";
 import Header from "../section/Header";
+import TicketForm from "../components/TicketForm";
 
 
 const Layout_1 = () => {

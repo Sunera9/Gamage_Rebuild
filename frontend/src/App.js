@@ -72,7 +72,7 @@ function App() {
 
           {/*Employee routes */}
           <Route path="/employee/dashboard" element={<Dashboard />} />
-          <Route path="/employee/tickets" element={<TicketForm />} />
+          <Route path="/employee/tickets" element={ <RequireAuth><TicketForm /> </RequireAuth>} />
           <Route path="/employee/leaves" element={<CreateLeave />} />
           <Route path="/employee/programs" element={<Program />} />    
           <Route path="/employee/apply/:jobId" element={<ApplicationForm />} />

@@ -65,7 +65,8 @@ const Sidebar = () => {
                                 </button>
                             </Link>
                         </li>
-                        <li>
+                        {!isEmployee && (
+                            <li>
                             <Link
                                 to="/employee/leaves"
                                 className="flex items-center text-lg font-bold text-black hover:text-yellow-400"
@@ -74,7 +75,10 @@ const Sidebar = () => {
                                 {isOpen && 'Leaves'}
                             </Link>
                         </li>
-                        <li>
+
+                        )}
+                        {!isAdmin && (
+                            <li>
                             <Link
                                 to="/admin/LeavesTable"
                                 className="flex items-center text-lg font-bold text-black hover:text-yellow-400"
@@ -83,16 +87,21 @@ const Sidebar = () => {
                                 {isOpen && 'Leaves'}
                             </Link>
                         </li>
-                        <li>
-                            <Link
-                                to="/employee/joblist"
-                                className="flex items-center text-lg font-bold text-black hover:text-yellow-400"
-                            >
-                                <FontAwesomeIcon icon={faBriefcase} className="mr-3 text-blue-500" />
-                                {isOpen && 'Jobs'}
-                            </Link>
-                        </li>
-                        <li>
+                        )}
+                        
+                        {!isEmployee && (
+                             <li>
+                             <Link
+                                 to="/employee/joblist"
+                                 className="flex items-center text-lg font-bold text-black hover:text-yellow-400"
+                             >
+                                 <FontAwesomeIcon icon={faBriefcase} className="mr-3 text-blue-500" />
+                                 {isOpen && 'Jobs'}
+                             </Link>
+                         </li>
+                        )}
+                       {!isAdmin && (
+                            <li>
                             <Link
                                 to="/admin/addjob"
                                 className="flex items-center text-lg font-bold text-black hover:text-yellow-400"
@@ -101,7 +110,10 @@ const Sidebar = () => {
                                 {isOpen && 'Jobs'}
                             </Link>
                         </li>
-                        <li>
+                       )}
+                        
+                        {!isEmployee && (
+                            <li>
                             <Link
                                 to="/employee/applications"
                                 className="flex items-center text-lg font-bold text-black hover:text-yellow-400"
@@ -110,7 +122,9 @@ const Sidebar = () => {
                                 {isOpen && 'Applications'}
                             </Link>
                         </li>
-                        <li>
+                        )}
+                        {!isAdmin && (
+                            <li>
                             <Link
                                 to="/admin/employee"
                                 className="flex items-center text-lg font-bold text-black hover:text-yellow-400"
@@ -119,6 +133,7 @@ const Sidebar = () => {
                                 {isOpen && 'Applications'}
                             </Link>
                         </li>
+                        )}
                         
                         {/* Salary Dropdown */}
                         <li>
@@ -137,7 +152,8 @@ const Sidebar = () => {
                             </div>
                             {isSalaryOpen && (
                                 <ul className="ml-6 space-y-2 mt-2">
-                                    <li>
+                                    {!isAdmin && (
+                                        <li>
                                         <Link
                                             to="/admin/salary/sheet"
                                             className="text-lg font-bold text-black hover:text-yellow-400"
@@ -145,7 +161,9 @@ const Sidebar = () => {
                                             {isOpen && 'Salary Sheet'}
                                         </Link>
                                     </li>
-                                    <li>
+                                    )}
+                                    {!isAdmin && (
+                                        <li>
                                         <Link
                                             to="/admin/salary/settings"
                                             className="text-lg font-bold text-black hover:text-yellow-400"
@@ -153,10 +171,12 @@ const Sidebar = () => {
                                             {isOpen && 'Salary Settings'}
                                         </Link>
                                     </li>
+                                    )}
+                                    
                                 </ul>
                             )}
                         </li>
-                        {/* Role-based links */}
+                        {!isEmployee && (
                             <li>
                             <Link
                                 to="/employee/tickets"
@@ -166,6 +186,8 @@ const Sidebar = () => {
                                 {isOpen && 'Tickets'}
                             </Link>
                         </li>
+                        )}
+                           {!isAdmin && (
                             <li>
                             <Link
                                 to="/admin/TicketsTable"
@@ -175,6 +197,8 @@ const Sidebar = () => {
                                 {isOpen && 'Tickets'}
                             </Link>
                         </li>
+                           )} 
+                            
                         
                         <li>
                             {/*profile can view admin,employee,visitor */}
@@ -203,7 +227,8 @@ const Sidebar = () => {
                             </div>
                             {isAttendanceOpen && (
                                 <ul className="ml-6 space-y-2 mt-2">
-                                    <li>
+                                    {!isEmployee && (
+                                        <li>
                                         <Link
                                             to="/employee/attendance/attendenceform"
                                             className="text-lg font-bold text-black hover:text-yellow-400"
@@ -211,7 +236,9 @@ const Sidebar = () => {
                                             {isOpen && 'Attendance Form'}
                                         </Link>
                                     </li>
-                                    <li>
+                                    )}
+                                    {!isAdmin && (
+                                        <li>
                                         <Link
                                             to="/admin/attendance/adminattendence"
                                             className="text-lg font-bold text-black hover:text-yellow-400"
@@ -219,7 +246,9 @@ const Sidebar = () => {
                                             {isOpen && 'Admin Attendence'}
                                         </Link>
                                     </li>
-                                    <li>
+                                    )}
+                                    {!isAdmin && (
+                                        <li>
                                         <Link
                                             to="/admin/attendance/attendencerecords"
                                             className="text-lg font-bold text-black hover:text-yellow-400"
@@ -227,6 +256,8 @@ const Sidebar = () => {
                                             {isOpen && 'Attendance Records'}
                                         </Link>
                                     </li>
+                                    )}
+                                    
                                 </ul>
                             )}
                         </li>
