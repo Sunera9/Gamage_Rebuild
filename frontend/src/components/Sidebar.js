@@ -14,11 +14,21 @@ import {
     faAngleLeft,
     faAngleRight,
     faChevronDown,
+    faClock,
 } from '@fortawesome/free-solid-svg-icons';
+import { useSelector, useDispatch } from 'react-redux';
+
 
 const Sidebar = () => {
     const [isOpen, setIsOpen] = useState(true);
     const [isSalaryOpen, setIsSalaryOpen] = useState(false);
+    const [isAttendanceOpen, setIsAttendanceOpen] = useState(false);  // State for the Attendance dropdown
+    const user = useSelector((state) => state.auth.user);
+
+    const isEmployee = user?.role === 'employee';
+    const isAdmin = user?.role === 'admin';
+    //const isVisitor = user?.role === 'visitor'
+
 
     const toggleSidebar = () => {
         setIsOpen(!isOpen);
@@ -28,66 +38,103 @@ const Sidebar = () => {
         setIsSalaryOpen(!isSalaryOpen);
     };
 
+    const toggleAttendanceMenu = () => {
+        setIsAttendanceOpen(!isAttendanceOpen);  // Toggle Attendance dropdown
+    };
+
     return (
         <div
-            className={`fixed top-0 left-0 h-full bg-white text-black p-10 transition-all duration-300 ease-in-out ${isOpen ? 'w-64' : 'w-16'}`}
+            className={`fixed top-10 left-0 h-full bg-white text-black p-10 transition-all duration-300 ease-in-out ${isOpen ? 'w-64' : 'w-16'} overflow-y-auto`} // Added overflow-y-auto here
         >
             <div className="flex flex-col justify-between h-full">
                 <div>
-                    <div className="flex justify-between items-center mb-12"></div>                    
                     <ul className="space-y-10">
                         <li>
+                            {/*dashboard can view visitor,employee, admin */}
                             <Link
                                 to="/dashboard"
                                 className="flex items-center text-lg font-bold text-black hover:text-yellow-400"
                             >
-                                
                                 <FontAwesomeIcon icon={faHome} className="mr-3 text-blue-500" />
                                 {isOpen && 'Dashboard'}
                                 <button
                                     onClick={toggleSidebar}
                                     className="w-9 h-9 bg-yellow-400 rounded-full flex justify-center items-center ml-3"
                                 >
-                            <FontAwesomeIcon icon={isOpen ? faAngleLeft : faAngleRight} className="text-white" />
-                        </button>
+                                    <FontAwesomeIcon icon={isOpen ? faAngleLeft : faAngleRight} className="text-white" />
+                                </button>
                             </Link>
                         </li>
-                        <li>
+                        {!isEmployee && (
+                            <li>
                             <Link
-                                to="/leaves"
+                                to="/employee/leaves"
                                 className="flex items-center text-lg font-bold text-black hover:text-yellow-400"
                             >
                                 <FontAwesomeIcon icon={faFile} className="mr-3 text-orange-500" />
                                 {isOpen && 'Leaves'}
                             </Link>
                         </li>
-                        <li>
+
+                        )}
+                        {!isAdmin && (
+                            <li>
                             <Link
-                                to="/jobs"
+                                to="/admin/LeavesTable"
+                                className="flex items-center text-lg font-bold text-black hover:text-yellow-400"
+                            >
+                                <FontAwesomeIcon icon={faFile} className="mr-3 text-orange-500" />
+                                {isOpen && 'Leaves'}
+                            </Link>
+                        </li>
+                        )}
+                        
+                        {!isEmployee && (
+                             <li>
+                             <Link
+                                 to="/employee/joblist"
+                                 className="flex items-center text-lg font-bold text-black hover:text-yellow-400"
+                             >
+                                 <FontAwesomeIcon icon={faBriefcase} className="mr-3 text-blue-500" />
+                                 {isOpen && 'Jobs'}
+                             </Link>
+                         </li>
+                        )}
+                       {!isAdmin && (
+                            <li>
+                            <Link
+                                to="/admin/addjob"
                                 className="flex items-center text-lg font-bold text-black hover:text-yellow-400"
                             >
                                 <FontAwesomeIcon icon={faBriefcase} className="mr-3 text-blue-500" />
                                 {isOpen && 'Jobs'}
                             </Link>
                         </li>
-                        <li>
+                       )}
+                        
+                        {!isEmployee && (
+                            <li>
                             <Link
-                                to="/applications"
+                                to="/employee/applications"
                                 className="flex items-center text-lg font-bold text-black hover:text-yellow-400"
                             >
                                 <FontAwesomeIcon icon={faClipboardList} className="mr-3 text-gray-500" />
                                 {isOpen && 'Applications'}
                             </Link>
                         </li>
-                        <li>
+                        )}
+                        {!isAdmin && (
+                            <li>
                             <Link
-                                to="/employee"
+                                to="/admin/employee"
                                 className="flex items-center text-lg font-bold text-black hover:text-yellow-400"
                             >
-                                <FontAwesomeIcon icon={faUser} className="mr-3 text-sky-500" />
-                                {isOpen && 'Employee'}
+                                <FontAwesomeIcon icon={faClipboardList} className="mr-3 text-gray-500" />
+                                {isOpen && 'Applications'}
                             </Link>
                         </li>
+                        )}
+                        
                         {/* Salary Dropdown */}
                         <li>
                             <div
@@ -105,35 +152,56 @@ const Sidebar = () => {
                             </div>
                             {isSalaryOpen && (
                                 <ul className="ml-6 space-y-2 mt-2">
-                                    <li>
+                                    {!isAdmin && (
+                                        <li>
                                         <Link
-                                            to="/salary/sheet"
+                                            to="/admin/salary/sheet"
                                             className="text-lg font-bold text-black hover:text-yellow-400"
                                         >
                                             {isOpen && 'Salary Sheet'}
                                         </Link>
                                     </li>
-                                    <li>
+                                    )}
+                                    {!isAdmin && (
+                                        <li>
                                         <Link
-                                            to="/salary/settings"
+                                            to="/admin/salary/settings"
                                             className="text-lg font-bold text-black hover:text-yellow-400"
                                         >
                                             {isOpen && 'Salary Settings'}
                                         </Link>
                                     </li>
+                                    )}
+                                    
                                 </ul>
                             )}
                         </li>
-                        <li>
+                        {!isEmployee && (
+                            <li>
                             <Link
-                                to="/tickets"
+                                to="/employee/tickets"
                                 className="flex items-center text-lg font-bold text-black hover:text-yellow-400"
                             >
                                 <FontAwesomeIcon icon={faTicketAlt} className="mr-3 text-blue-500" />
                                 {isOpen && 'Tickets'}
                             </Link>
                         </li>
+                        )}
+                           {!isAdmin && (
+                            <li>
+                            <Link
+                                to="/admin/TicketsTable"
+                                className="flex items-center text-lg font-bold text-black hover:text-yellow-400"
+                            >
+                                <FontAwesomeIcon icon={faTicketAlt} className="mr-3 text-blue-500" />
+                                {isOpen && 'Tickets'}
+                            </Link>
+                        </li>
+                           )} 
+                            
+                        
                         <li>
+                            {/*profile can view admin,employee,visitor */}
                             <Link
                                 to="/profile"
                                 className="flex items-center text-lg font-bold text-black hover:text-yellow-400"
@@ -142,7 +210,58 @@ const Sidebar = () => {
                                 {isOpen && 'Profile'}
                             </Link>
                         </li>
+                        {/* Attendance Dropdown */}
                         <li>
+                            <div
+                                onClick={toggleAttendanceMenu}
+                                className="flex items-center cursor-pointer text-lg font-bold text-black hover:text-yellow-400"
+                            >
+                                 <FontAwesomeIcon icon={faClock} className="mr-3 text-purple-500" />
+                                {isOpen && 'Attendance'}
+                                {isOpen && (
+                                    <FontAwesomeIcon
+                                        icon={faChevronDown}
+                                        className={`ml-auto transition-transform ${isAttendanceOpen ? 'rotate-180' : ''}`}
+                                    />
+                                )}
+                            </div>
+                            {isAttendanceOpen && (
+                                <ul className="ml-6 space-y-2 mt-2">
+                                    {!isEmployee && (
+                                        <li>
+                                        <Link
+                                            to="/employee/attendance/attendenceform"
+                                            className="text-lg font-bold text-black hover:text-yellow-400"
+                                        >
+                                            {isOpen && 'Attendance Form'}
+                                        </Link>
+                                    </li>
+                                    )}
+                                    {!isAdmin && (
+                                        <li>
+                                        <Link
+                                            to="/admin/attendance/adminattendence"
+                                            className="text-lg font-bold text-black hover:text-yellow-400"
+                                        >
+                                            {isOpen && 'Admin Attendence'}
+                                        </Link>
+                                    </li>
+                                    )}
+                                    {!isAdmin && (
+                                        <li>
+                                        <Link
+                                            to="/admin/attendance/attendencerecords"
+                                            className="text-lg font-bold text-black hover:text-yellow-400"
+                                        >
+                                            {isOpen && 'Attendance Records'}
+                                        </Link>
+                                    </li>
+                                    )}
+                                    
+                                </ul>
+                            )}
+                        </li>
+                        {/* <li>
                             <Link
                                 to="/logout"
                                 className="flex items-center text-lg font-bold text-black hover:text-yellow-400"
@@ -150,7 +269,7 @@ const Sidebar = () => {
                                 <FontAwesomeIcon icon={faSignOutAlt} className="mr-3 text-red-500" />
                                 {isOpen && 'Logout'}
                             </Link>
-                        </li>
+                        </li> */}
                     </ul>
                 </div>
                 {/* Placeholder for footer or other content if needed */}

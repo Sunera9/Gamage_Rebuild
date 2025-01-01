@@ -2,6 +2,7 @@ import React from "react";
 import { Outlet } from "react-router-dom";
 import Sidebar from "../components/Sidebar";
 import Header from "../section/Header";
+import TicketForm from "../components/TicketForm";
 
 
 const Layout_1 = () => {
@@ -9,7 +10,7 @@ const Layout_1 = () => {
     <div className="">
       <div className="flex ">
         <Header/>
-        <Sidebar className="" />
+        <Sidebar/>
         <div className="flex-grow justify-center items-center mt-10">
           <Outlet />
 
