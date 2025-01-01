@@ -23,10 +23,12 @@ const Sidebar = () => {
     const [isOpen, setIsOpen] = useState(true);
     const [isSalaryOpen, setIsSalaryOpen] = useState(false);
     const [isAttendanceOpen, setIsAttendanceOpen] = useState(false);  // State for the Attendance dropdown
-    const user = useSelector((state) => state.auth.user);
+    //const user = useSelector((state) => state.auth.user);
 
-    const isEmployee = user?.role === 'employee';
-    const isAdmin = user?.role === 'admin';
+    const userRole = localStorage.getItem('role'); // Get role from localStorage
+
+    //const isEmployee = user?.role === 'employee';
+    //const isAdmin = user?.role === 'admin';
     //const isVisitor = user?.role === 'visitor'
 
 
@@ -65,7 +67,7 @@ const Sidebar = () => {
                                 </button>
                             </Link>
                         </li>
-                        {!isEmployee && (
+                        { userRole === 'employee' && (
                             <li>
                             <Link
                                 to="/employee/leaves"
@@ -77,7 +79,7 @@ const Sidebar = () => {
                         </li>
 
                         )}
-                        {!isAdmin && (
+                        {userRole === 'admin' && (
                             <li>
                             <Link
                                 to="/admin/LeavesTable"
@@ -89,7 +91,7 @@ const Sidebar = () => {
                         </li>
                         )}
                         
-                        {!isEmployee && (
+                        {userRole === 'employee' && (
                              <li>
                              <Link
                                  to="/employee/joblist"
@@ -100,7 +102,7 @@ const Sidebar = () => {
                              </Link>
                          </li>
                         )}
-                       {!isAdmin && (
+                       {userRole === 'admin' && (
                             <li>
                             <Link
                                 to="/admin/addjob"
@@ -112,7 +114,7 @@ const Sidebar = () => {
                         </li>
                        )}
                         
-                        {!isEmployee && (
+                        {userRole === 'employee' && (
                             <li>
                             <Link
                                 to="/employee/applications"
@@ -123,7 +125,7 @@ const Sidebar = () => {
                             </Link>
                         </li>
                         )}
-                        {!isAdmin && (
+                        {userRole === 'admin' && (
                             <li>
                             <Link
                                 to="/admin/employee"
@@ -152,7 +154,7 @@ const Sidebar = () => {
                             </div>
                             {isSalaryOpen && (
                                 <ul className="ml-6 space-y-2 mt-2">
-                                    {!isAdmin && (
+                                    {userRole === 'admin' && (
                                         <li>
                                         <Link
                                             to="/admin/salary/sheet"
@@ -162,7 +164,7 @@ const Sidebar = () => {
                                         </Link>
                                     </li>
                                     )}
-                                    {!isAdmin && (
+                                    {userRole === 'admin' && (
                                         <li>
                                         <Link
                                             to="/admin/salary/settings"
@@ -176,7 +178,7 @@ const Sidebar = () => {
                                 </ul>
                             )}
                         </li>
-                        {!isEmployee && (
+                        {userRole === 'employee' && (
                             <li>
                             <Link
                                 to="/employee/tickets"
@@ -187,7 +189,7 @@ const Sidebar = () => {
                             </Link>
                         </li>
                         )}
-                           {!isAdmin && (
+                           {userRole === 'admin' && userRole === 'employee' && (
                             <li>
                             <Link
                                 to="/admin/TicketsTable"
@@ -227,7 +229,7 @@ const Sidebar = () => {
                             </div>
                             {isAttendanceOpen && (
                                 <ul className="ml-6 space-y-2 mt-2">
-                                    {!isEmployee && (
+                                    {userRole === 'employee' && (
                                         <li>
                                         <Link
                                             to="/employee/attendance/attendenceform"
@@ -237,7 +239,7 @@ const Sidebar = () => {
                                         </Link>
                                     </li>
                                     )}
-                                    {!isAdmin && (
+                                    {userRole === 'admin' && (
                                         <li>
                                         <Link
                                             to="/admin/attendance/adminattendence"
@@ -247,7 +249,7 @@ const Sidebar = () => {
                                         </Link>
                                     </li>
                                     )}
-                                    {!isAdmin && (
+                                    {userRole === 'admin' && (
                                         <li>
                                         <Link
                                             to="/admin/attendance/attendencerecords"

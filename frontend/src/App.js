@@ -56,6 +56,7 @@ function App() {
 
           {/*Visitor routes */}
           <Route path="/profile" element={<Profile />} />
+          <Route path="/dashboard" element={<Dashboard />} />
 
           {/*Admin routes */}
           <Route path="/admin/dashboard" element={<Dashboard />} />
