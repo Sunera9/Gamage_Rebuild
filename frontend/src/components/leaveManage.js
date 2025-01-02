@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import "../styles/manageLeave.css";
+import "../styles/manageLeave.css"; // You can remove this if it's not being used
 import Header from "../section/Header";
 
 function LeavesTable() {
@@ -57,95 +57,104 @@ function LeavesTable() {
     }
   };
 
-
   return (
     <>
-    <Header/>
-    <div className="leaves-table">
-      <div className="title">
-        <h2>Leave Applications</h2>
-      </div>
+      <Header />
+      <div className="container mx-auto p-6">
+        <div className="text-2xl font-bold mb-4">
+          <h2>Leave Applications</h2>
+        </div>
 
-      <table className="leaves-table">
-        <thead>
-          <tr>
-            <th>User name</th>
-            <th>User Email</th>
-            <th>Start Date</th>
-            <th>End Date</th>
-            <th>Leave Type</th>
-            <th>Duration</th>
-            <th>Admin Approval</th>
-            <th>Supervisor Approval</th>
-          </tr>
-        </thead>
-        <tbody>
-          {leaves.length > 0 ? (
-            leaves.map((leave) => (
-              <tr key={leave._id}>
-                <td
-                  onClick={() => handleIdClick(leave)}
-                  style={{
-                    cursor: "pointer",
-                    color: "blue",
-                    textDecoration: "underline",
-                  }}
-                >
-                  {leave.User?.name || "N/A"}
-                </td>
-                <td>{leave.User?.email || "N/A"}</td>
-                <td>{leave.startDate}</td>
-                <td>{leave.endDate}</td>
-                <td>{leave.type}</td>
-                <td>{leave.duration}</td>
-                <td>{leave.adminApproval}</td>
-                <td>{leave.supervisorApproval}</td>
-              </tr>
-            ))
-          ) : (
+        <table className="table-auto w-full border-collapse border border-gray-300 shadow-lg">
+          <thead>
             <tr>
-              <td colSpan="7">No leaves available</td>
+              <th className="py-2 px-4 text-left bg-gray-100">User name</th>
+              <th className="py-2 px-4 text-left bg-gray-100">User Email</th>
+              <th className="py-2 px-4 text-left bg-gray-100">Start Date</th>
+              <th className="py-2 px-4 text-left bg-gray-100">End Date</th>
+              <th className="py-2 px-4 text-left bg-gray-100">Leave Type</th>
+              <th className="py-2 px-4 text-left bg-gray-100">Duration</th>
+              <th className="py-2 px-4 text-left bg-gray-100">Admin Approval</th>
+              <th className="py-2 px-4 text-left bg-gray-100">Supervisor Approval</th>
             </tr>
-          )}
-        </tbody>
-      </table>
+          </thead>
+          <tbody>
+            {leaves.length > 0 ? (
+              leaves.map((leave) => (
+                <tr key={leave._id} className="border-b hover:bg-gray-50">
+                  <td
+                    onClick={() => handleIdClick(leave)}
+                    className="py-2 px-4 text-blue-600 cursor-pointer underline"
+                  >
+                    {leave.User?.name || "N/A"}
+                  </td>
+                  <td className="py-2 px-4">{leave.User?.email || "N/A"}</td>
+                  <td className="py-2 px-4">{leave.startDate}</td>
+                  <td className="py-2 px-4">{leave.endDate}</td>
+                  <td className="py-2 px-4">{leave.type}</td>
+                  <td className="py-2 px-4">{leave.duration}</td>
+                  <td className="py-2 px-4">{leave.adminApproval}</td>
+                  <td className="py-2 px-4">{leave.supervisorApproval}</td>
+                </tr>
+              ))
+            ) : (
+              <tr>
+                <td colSpan="8" className="py-2 px-4 text-center">No leaves available</td>
+              </tr>
+            )}
+          </tbody>
+        </table>
 
-      {/* Modal for viewing leave details */}
-      {showModal && selectedLeave && (
-        <div className="modal">
-          <div className="modal-content">
-            <h3>Leave Details</h3>
-            <p>
-              <strong>User ID:</strong> {selectedLeave._id}
-            </p>
-            <p>
-              <strong>Start Date:</strong> {selectedLeave.startDate}
-            </p>
-            <p>
-              <strong>End Date:</strong> {selectedLeave.endDate}
-            </p>
-            <p>
-              <strong>Leave Type:</strong> {selectedLeave.type}
-            </p>
-            <p>
-              <strong>Duration:</strong> {selectedLeave.duration}
-            </p>
-            <p>
-              <strong>Admin Approval:</strong> {selectedLeave.adminApproval}
-            </p>
-            <p>
-              <strong>Supervisor Approval:</strong>{" "}
-              {selectedLeave.supervisorApproval}
-            </p>
-            <div className="modal-actions">
-              <button onClick={handleApprove}>Approve</button>
-              <button onClick={handleReject}>Reject</button>
-              <button onClick={() => setShowModal(false)}>Close</button>
+        {/* Modal for viewing leave details */}
+        {showModal && selectedLeave && (
+          <div className="fixed inset-0 bg-gray-500 bg-opacity-50 flex justify-center items-center">
+            <div className="bg-white p-6 rounded-lg shadow-xl w-96">
+              <h3 className="text-xl font-bold mb-4">Leave Details</h3>
+              <p className="mb-2">
+                <strong>User ID:</strong> {selectedLeave._id}
+              </p>
+              <p className="mb-2">
+                <strong>Start Date:</strong> {selectedLeave.startDate}
+              </p>
+              <p className="mb-2">
+                <strong>End Date:</strong> {selectedLeave.endDate}
+              </p>
+              <p className="mb-2">
+                <strong>Leave Type:</strong> {selectedLeave.type}
+              </p>
+              <p className="mb-2">
+                <strong>Duration:</strong> {selectedLeave.duration}
+              </p>
+              <p className="mb-2">
+                <strong>Admin Approval:</strong> {selectedLeave.adminApproval}
+              </p>
+              <p className="mb-2">
+                <strong>Supervisor Approval:</strong> {selectedLeave.supervisorApproval}
+              </p>
+              <div className="modal-actions flex justify-end gap-4 mt-4">
+                <button
+                  onClick={handleApprove}
+                  className="bg-green-500 text-white px-4 py-2 rounded-lg hover:bg-green-600"
+                >
+                  Approve
+                </button>
+                <button
+                  onClick={handleReject}
+                  className="bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600"
+                >
+                  Reject
+                </button>
+                <button
+                  onClick={() => setShowModal(false)}
+                  className="bg-gray-300 text-black px-4 py-2 rounded-lg hover:bg-gray-400"
+                >
+                  Close
+                </button>
+              </div>
             </div>
           </div>
-        </div>
-      )}
-    </div>
+        )}
+      </div>
     </>
   );
 }

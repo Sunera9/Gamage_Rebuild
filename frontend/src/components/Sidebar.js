@@ -57,14 +57,15 @@ const Sidebar = () => {
                                 to="/dashboard"
                                 className="flex items-center text-lg font-bold text-black hover:text-yellow-400"
                             >
-                                <FontAwesomeIcon icon={faHome} className="mr-3 text-blue-500" />
+                                <FontAwesomeIcon icon={faHome} className="mr-3 text-yellow-500" />
                                 {isOpen && 'Dashboard'}
-                                <button
-                                    onClick={toggleSidebar}
-                                    className="w-9 h-9 bg-yellow-400 rounded-full flex justify-center items-center ml-3"
-                                >
-                                    <FontAwesomeIcon icon={isOpen ? faAngleLeft : faAngleRight} className="text-white" />
-                                </button>
+                                {/* Toggle Button */}
+                                    {/* <button
+                                        onClick={toggleSidebar}
+                                        className="text-gray-600 hover:text-gray-800"
+                                    >
+                                        <FontAwesomeIcon icon={isOpen ? faAngleLeft : faAngleRight} className="text-white" />
+                                    </button> */}
                             </Link>
                         </li>
                         { userRole === 'employee' && (
