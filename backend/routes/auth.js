@@ -5,54 +5,11 @@ const ProfileModel = require("../models/Profile");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 
-// Secret key for JWT token generation (make sure to store it securely)
-const JWT_SECRET = "yourSecretKey"; // Change this to a more secure key
-
-// Registration Route
-// router.post("/register", async (req, res) => {
-//   console.log("Request Body:", req.body);
-
-//   const { nic, name, email, address, phone, dob, gender, password } = req.body;
-//   if (!nic || !name || !email || !address || !phone || !dob || !gender || !password) {
-//     return res.status(400).json({ message: "All fields are required" });
-//   }
-
-//   try {
-//     // Check if user already exists
-//     const existingUser = await User.findOne({ email });
-//     if (existingUser) {
-//       return res.status(400).json({ message: "User already exists" });
-//     }
-
-//     // Hash password
-//     const salt = await bcrypt.genSalt(10);
-//     const hashedPassword = await bcrypt.hash(password, salt);
-
-//     // Create new user
-//     const newUser = new User({
-//       nic,
-//       name,
-//       email,
-//       address,
-//       phone,
-//       dob,
-//       gender,
-//       password: hashedPassword,
-//     });
-
-//     // Save new user to DB
-//     await newUser.save();
-//     res.status(201).json({ message: "Registration successful", newUser });
-//   } catch (error) {
-//     console.error(error);
-//     res.status(500).json({ message: "Server error", error });
-//   }
-// });
+// Secret key for JWT token generation (store this in an env variable for security)
+const JWT_SECRET = process.env.JWT_SECRET || "yourSecretKey"; 
 
 // Registration Route
 router.post("/register", async (req, res) => {
-  console.log("Request Body:", req.body);
-
   const {
     nic,
     name,
@@ -62,9 +19,10 @@ router.post("/register", async (req, res) => {
     dob,
     gender,
     password,
+    role
   } = req.body;
 
-  if (!nic || !name || !email || !address || !phone || !dob || !gender || !password) {
+  if (!nic || !name || !email || !address || !phone || !dob || !gender || !password || !role) {
     return res.status(400).json({ message: "All fields are required" });
   }
 
@@ -73,6 +31,12 @@ router.post("/register", async (req, res) => {
     const existingUser = await UserModel.findOne({ email });
     if (existingUser) {
       return res.status(400).json({ message: "User already exists." });
+    }
+
+    // Validate role
+    const validRoles = ["visitor", "employee", "admin"];
+    if (!validRoles.includes(role)) {
+      return res.status(400).json({ message: "Invalid role provided" });
     }
 
     // Hash password
@@ -88,7 +52,6 @@ router.post("/register", async (req, res) => {
     const defaultJobPosition = null;
     const defaultBankName = "None";
     const defaultBankAccountNumber = "None";
-    const defaultRole = "visitor";
 
     // Create new user with hashed password and default values for missing fields
     const newUser = new UserModel({
@@ -108,7 +71,7 @@ router.post("/register", async (req, res) => {
       endDate: defaultEndDate,
       bankAccountNumber: defaultBankAccountNumber,
       bankName: defaultBankName,
-      role: defaultRole,
+      role, // role passed from the request
     });
 
     await newUser.save();
@@ -138,7 +101,7 @@ router.post("/register", async (req, res) => {
 
 // Login Route
 router.post("/login", async (req, res) => {
-  const { email, password } = req.body;
+  const { email, password, role } = req.body;
 
   try {
     const user = await UserModel.findOne({ email });
@@ -150,26 +113,19 @@ router.post("/login", async (req, res) => {
     const isMatch = await bcrypt.compare(password, user.password);
 
     if (isMatch) {
-      // Generate a JWT token
-      const token = jwt.sign({ userId: user._id }, process.env.JWT_SECRET, { expiresIn: "1h" });
+      // Role validation
+      if (user.role !== role) {
+        return res.status(400).json({ message: "Role mismatch. You cannot log in with this role." });
+      }
 
-      // Send response
-      res.status(200).json({
-        message: "Login success",
-        token,
-        user: {
-          _id: user._id,
-          name: user.name,
-          email: user.email,
-          // Exclude password and sensitive info
-        },
-      });
+      // Generate a JWT token
+      const token = jwt.sign({ userId: user._id, role: user.role }, JWT_SECRET, { expiresIn: "1d" });
+      res.status(200).json({ message: "Login success", token, role: user.role });
     } else {
       res.status(400).json({ message: "Wrong credentials" });
     }
   } catch (error) {
-    console.error("Error during login:", error); // Log the error
-    res.status(500).json({ message: "Server error" });
+    res.status(500).json({ message: "Server error", error });
   }
 });
 

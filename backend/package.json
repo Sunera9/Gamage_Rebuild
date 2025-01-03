@@ -11,7 +11,9 @@
   "license": "ISC",
   "dependencies": {
     "backend": "file:",
+    "bcrypt": "^5.1.1",
     "bcryptjs": "^2.4.3",
+    "cjs-loader": "^0.1.0",
     "cloudinary": "^2.5.1",
     "cors": "^2.8.5",
     "dotenv": "^16.4.5",
@@ -21,7 +23,6 @@
     "mongoose": "^8.7.2",
     "multer": "^1.4.5-lts.1",
     "node-cron": "^3.0.3",
-    "nodemon": "^3.1.7",
     "nodemailer": "^6.9.16",
     "streamifier": "^0.1.1"
   }

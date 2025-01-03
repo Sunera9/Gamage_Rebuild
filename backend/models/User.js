@@ -1,46 +1,95 @@
-const mongoose = require('mongoose')
+const mongoose = require("mongoose");
 
-const UserSchema = new mongoose.Schema({
+const UserSchema = new mongoose.Schema(
+  {
     nic: {
-        type:String,
-        require:true
+      type: String,
+      required: true,
     },
-
     name: {
-        type:String,
-        require:true
+      type: String,
+      required: true,
     },
-
     email: {
-        type:String,
-        require:true
+      type: String,
+      required: true,
     },
-
     address: {
-        type:String,
-        require:true
+      type: String,
+      required: true,
     },
-
     phone: {
-        type:String,
-        require:true
+      type: String,
+      required: true,
     },
-
     dob: {
-        type:String,
-        require:true
+      type: Date,
+      required: true,
     },
-
     gender: {
-        type:String,
-        require:true
+      type: String,
+      enum: ["Male", "Female"],
+      required: true,
+    },
+    password: {
+      type: String,
+      required: true,
     },
 
-    role:{
-        type:String,
-        default:"visitor"
-    }
-})
-  
-const UserModel = mongoose.model("users", UserSchema)
-module.exports = UserModel
+    jobPosition: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "JobPosition",
+      required: false,
+    },
+    jobCategory: {
+      type: String,
+      required: false,
+      enum: [
+        "Full-time",
+        "Part-time",
+        "Contract",
+        "Internship",
+        "Remote",
+        "Other",
+      ],
+      default: "Full-time",
+    },
+    department: {
+      type: String,
+      required: false,
+      enum: ["HR", "Finance", "IT", "Sales", "Marketing", "Other"],
+      default: "Other",
+    },
+    company: {
+      type: String,
+      required: false,
+    },
+
+    startDate: {
+      type: Date,
+      required: false,
+    },
+    endDate: {
+      type: Date,
+      required: false,
+    },
+    bankAccountNumber: {
+      type: String,
+      required: true,
+    },
+    bankName: {
+      type: String,
+      required: true,
+    },
+    role: {
+      type: String,
+      enum: ["visitor", "admin", "employee"],
+      required: true,
+      default: "visitor",
+    },
+  },
+  { timestamps: true }
+);
+
+const UserModel = mongoose.model("User", UserSchema);
+module.exports = UserModel;

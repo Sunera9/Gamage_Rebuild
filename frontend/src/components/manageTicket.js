@@ -3,10 +3,11 @@ import axios from "axios";
 import "../styles/manageTicket.css";
 import Header from "../section/Header";
 
-function TicketsTable() {
+function TicketsTable({ token }) {
   const [tickets, setTickets] = useState([]);
   const [selectedTicket, setSelectedTicket] = useState(null);
   const [showModal, setShowModal] = useState(false);
+  console.log("token is :", token);
 
   useEffect(() => {
     const fetchTickets = async () => {
@@ -77,97 +78,97 @@ function TicketsTable() {
 
   return (
     <>
-    <Header/>
-    <div className="tickets-table">
-      <div className="title">
-        <h2>Tickets</h2>
-      </div>
+      <Header />
+      <div className="tickets-table">
+        <div className="title">
+          <h2>Tickets</h2>
+        </div>
 
-      <table className="tickets-table">
-        <thead>
-          <tr>
-            <th>User Name</th>
-            <th>User Email</th>
-            <th>Description</th>
-            <th>Status</th>
-            <th>Leave Type</th>
-            <th>Date</th>
-            <th>Action</th>
-          </tr>
-        </thead>
-        <tbody>
-          {tickets.map((ticket) => (
-            <tr key={ticket._id}>
-              <td
-                onClick={() => handleIdClick(ticket)}
-                style={{
-                  cursor: "pointer",
-                  color: "blue",
-                  textDecoration: "underline",
-                }}
-              >
-                {ticket.User?.name || "N/A"}
-              </td>
-              <td>{ticket.User?.email || "N/A"}</td>
-              <td>{ticket.description}</td>
-              <td>{ticket.status}</td>
-              <td>{ticket.leaveType}</td>
-              <td>{new Date(ticket.createdAt).toLocaleDateString()}</td>
-              <td>
-                <button title="Send Email">✉️</button>
-              </td>
+        <table className="tickets-table">
+          <thead>
+            <tr>
+              <th>User Name</th>
+              <th>User Email</th>
+              <th>Description</th>
+              <th>Status</th>
+              <th>Leave Type</th>
+              <th>Date</th>
+              <th>Action</th>
             </tr>
-          ))}
-        </tbody>
-      </table>
+          </thead>
+          <tbody>
+            {tickets.map((ticket) => (
+              <tr key={ticket._id}>
+                <td
+                  onClick={() => handleIdClick(ticket)}
+                  style={{
+                    cursor: "pointer",
+                    color: "blue",
+                    textDecoration: "underline",
+                  }}
+                >
+                  {ticket.User?.name || "N/A"}
+                </td>
+                <td>{ticket.User?.email || "N/A"}</td>
+                <td>{ticket.description}</td>
+                <td>{ticket.status}</td>
+                <td>{ticket.leaveType}</td>
+                <td>{new Date(ticket.createdAt).toLocaleDateString()}</td>
+                <td>
+                  <button title="Send Email">✉️</button>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
 
-      {showModal && selectedTicket && (
-        <div className="modal">
-          <div className="modal-content">
-            <h3>Ticket Details</h3>
-            <p>
-              <strong>ID:</strong> {selectedTicket._id}
-            </p>
-            <p>
-              <strong>Description:</strong> {selectedTicket.description}
-            </p>
-            <p>
-              <strong>Status:</strong> {selectedTicket.status}
-            </p>
-            <p>
-              <strong>Leave Type:</strong> {selectedTicket.leaveType}
-            </p>
-            <p>
-              <strong>Date:</strong>{" "}
-              {new Date(selectedTicket.createdAt).toLocaleDateString()}
-            </p>
+        {showModal && selectedTicket && (
+          <div className="modal">
+            <div className="modal-content">
+              <h3>Ticket Details</h3>
+              <p>
+                <strong>ID:</strong> {selectedTicket._id}
+              </p>
+              <p>
+                <strong>Description:</strong> {selectedTicket.description}
+              </p>
+              <p>
+                <strong>Status:</strong> {selectedTicket.status}
+              </p>
+              <p>
+                <strong>Leave Type:</strong> {selectedTicket.leaveType}
+              </p>
+              <p>
+                <strong>Date:</strong>{" "}
+                {new Date(selectedTicket.createdAt).toLocaleDateString()}
+              </p>
 
-            {selectedTicket.files?.url && (
-              <button
-                onClick={() =>
-                  handleImageDownload(
-                    selectedTicket.files.url,
-                    selectedTicket.files.fileName
-                  )
-                }
-                className="download-button"
-              >
-                Download Attachment
-              </button>
-            )}
+              {selectedTicket.files?.url && (
+                <button
+                  onClick={() =>
+                    handleImageDownload(
+                      selectedTicket.files.url,
+                      selectedTicket.files.fileName
+                    )
+                  }
+                  className="download-button"
+                >
+                  Download Attachment
+                </button>
+              )}
 
-            <div className="modal-buttons">
-              <button onClick={handleAccept} className="accept-button">
-                Accept
-              </button>
-              <button onClick={handleReject} className="reject-button">
-                Reject
-              </button>
+              <div className="modal-buttons">
+                <button onClick={handleAccept} className="accept-button">
+                  Accept
+                </button>
+                <button onClick={handleReject} className="reject-button">
+                  Reject
+                </button>
+              </div>
             </div>
           </div>
-        </div>
-      )}
-    </div>
+        )}
+      </div>
     </>
   );
 }

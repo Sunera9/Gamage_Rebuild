@@ -60,8 +60,7 @@ const SettingsPage = () => {
   return (
     <>
     <Header/>
-    <div style={{ maxWidth: "600px", margin: "0 auto", padding: "20px" }}>
-      <h2 style={{ textAlign: "center" }}>Settings</h2>
+    <div style={{ maxWidth: "600px", margin: "0 auto", padding: "30px" }}>
       {error && (
         <div
           style={{
