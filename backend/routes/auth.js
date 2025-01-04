@@ -99,6 +99,12 @@ router.post("/register", async (req, res) => {
   }
 });
 
+// const token = jwt.sign(
+//   { id: user._id, email: user.email, name: user.name }, // Include email in the token payload
+//   process.env.JWT_SECRET,
+//   { expiresIn: '1d' }
+// );
+
 // Login Route
 router.post("/login", async (req, res) => {
   const { email, password, role } = req.body;

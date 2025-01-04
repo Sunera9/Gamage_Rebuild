@@ -15,6 +15,7 @@ import {
     faAngleRight,
     faChevronDown,
     faClock,
+    faUserPlus,
 } from '@fortawesome/free-solid-svg-icons';
 import { useSelector, useDispatch } from 'react-redux';
 
@@ -25,12 +26,14 @@ const Sidebar = () => {
     const [isAttendanceOpen, setIsAttendanceOpen] = useState(false);  // State for the Attendance dropdown
     //const user = useSelector((state) => state.auth.user);
 
-    const userRole = localStorage.getItem('role'); // Get role from localStorage
+    //const userRole = localStorage.getItem('role'); // Get role from localStorage
 
     //const isEmployee = user?.role === 'employee';
     //const isAdmin = user?.role === 'admin';
     //const isVisitor = user?.role === 'visitor'
 
+    const user = JSON.parse(localStorage.getItem('user')); // Parse the user object
+    const userRole = user?.role; // Safely access the role
 
     const toggleSidebar = () => {
         setIsOpen(!isOpen);
@@ -60,7 +63,7 @@ const Sidebar = () => {
                                 <FontAwesomeIcon icon={faHome} className="mr-3 text-yellow-500" />
                                 {isOpen && 'Dashboard'}
                                 {/* Toggle Button */}
-                                    {/* <button
+                                {/* <button
                                         onClick={toggleSidebar}
                                         className="text-gray-600 hover:text-gray-800"
                                     >
@@ -68,76 +71,88 @@ const Sidebar = () => {
                                     </button> */}
                             </Link>
                         </li>
-                        { userRole === 'employee' && (
+                        {userRole === 'employee' && (
                             <li>
-                            <Link
-                                to="/employee/leaves"
-                                className="flex items-center text-lg font-bold text-black hover:text-yellow-400"
-                            >
-                                <FontAwesomeIcon icon={faFile} className="mr-3 text-orange-500" />
-                                {isOpen && 'Leaves'}
-                            </Link>
-                        </li>
+                                <Link
+                                    to="/employee/leaves"
+                                    className="flex items-center text-lg font-bold text-black hover:text-yellow-400"
+                                >
+                                    <FontAwesomeIcon icon={faFile} className="mr-3 text-orange-500" />
+                                    {isOpen && 'Leaves'}
+                                </Link>
+                            </li>
 
                         )}
                         {userRole === 'admin' && (
                             <li>
-                            <Link
-                                to="/admin/LeavesTable"
-                                className="flex items-center text-lg font-bold text-black hover:text-yellow-400"
-                            >
-                                <FontAwesomeIcon icon={faFile} className="mr-3 text-orange-500" />
-                                {isOpen && 'Leaves'}
-                            </Link>
-                        </li>
+                                <Link
+                                    to="/admin/LeavesTable"
+                                    className="flex items-center text-lg font-bold text-black hover:text-yellow-400"
+                                >
+                                    <FontAwesomeIcon icon={faFile} className="mr-3 text-orange-500" />
+                                    {isOpen && 'Leaves'}
+                                </Link>
+                            </li>
                         )}
-                        
-                        {userRole === 'employee' && (
-                             <li>
-                             <Link
-                                 to="/employee/joblist"
-                                 className="flex items-center text-lg font-bold text-black hover:text-yellow-400"
-                             >
-                                 <FontAwesomeIcon icon={faBriefcase} className="mr-3 text-blue-500" />
-                                 {isOpen && 'Jobs'}
-                             </Link>
-                         </li>
-                        )}
-                       {userRole === 'admin' && (
-                            <li>
-                            <Link
-                                to="/admin/addjob"
-                                className="flex items-center text-lg font-bold text-black hover:text-yellow-400"
-                            >
-                                <FontAwesomeIcon icon={faBriefcase} className="mr-3 text-blue-500" />
-                                {isOpen && 'Jobs'}
-                            </Link>
-                        </li>
-                       )}
-                        
+
                         {userRole === 'employee' && (
                             <li>
-                            <Link
-                                to="/employee/applications"
-                                className="flex items-center text-lg font-bold text-black hover:text-yellow-400"
-                            >
-                                <FontAwesomeIcon icon={faClipboardList} className="mr-3 text-gray-500" />
-                                {isOpen && 'Applications'}
-                            </Link>
-                        </li>
+                                <Link
+                                    to="/employee/joblist"
+                                    className="flex items-center text-lg font-bold text-black hover:text-yellow-400"
+                                >
+                                    <FontAwesomeIcon icon={faBriefcase} className="mr-3 text-blue-500" />
+                                    {isOpen && 'Jobs'}
+                                </Link>
+                            </li>
                         )}
                         {userRole === 'admin' && (
                             <li>
-                            <Link
-                                to="/admin/employee"
-                                className="flex items-center text-lg font-bold text-black hover:text-yellow-400"
-                            >
-                                <FontAwesomeIcon icon={faClipboardList} className="mr-3 text-gray-500" />
-                                {isOpen && 'Applications'}
-                            </Link>
-                        </li>
+                                <Link
+                                    to="/admin/addjob"
+                                    className="flex items-center text-lg font-bold text-black hover:text-yellow-400"
+                                >
+                                    <FontAwesomeIcon icon={faBriefcase} className="mr-3 text-blue-500" />
+                                    {isOpen && 'Jobs'}
+                                </Link>
+                            </li>
                         )}
-                        
+
+                        {userRole === 'admin' && (
+                            <li>
+                                <Link
+                                    to="/admin/recruite"
+                                    className="flex items-center text-lg font-bold text-black hover:text-yellow-400"
+                                >
+                                    <FontAwesomeIcon icon={faUserPlus} className="mr-3 text-blue-500" />
+                                    {isOpen && 'Recruit'}
+                                </Link>
+                            </li>
+                        )}
+
+                        {userRole === 'employee' && (
+                            <li>
+                                <Link
+                                    to="/employee/applications"
+                                    className="flex items-center text-lg font-bold text-black hover:text-yellow-400"
+                                >
+                                    <FontAwesomeIcon icon={faClipboardList} className="mr-3 text-gray-500" />
+                                    {isOpen && 'Applications'}
+                                </Link>
+                            </li>
+                        )}
+                        {userRole === 'admin' && (
+                            <li>
+                                <Link
+                                    to="/admin/employee"
+                                    className="flex items-center text-lg font-bold text-black hover:text-yellow-400"
+                                >
+                                    <FontAwesomeIcon icon={faClipboardList} className="mr-3 text-gray-500" />
+                                    {isOpen && 'Applications'}
+                                </Link>
+                            </li>
+                        )}
+
                         {/* Salary Dropdown */}
                         <li>
                             <div
@@ -157,52 +172,61 @@ const Sidebar = () => {
                                 <ul className="ml-6 space-y-2 mt-2">
                                     {userRole === 'admin' && (
                                         <li>
-                                        <Link
-                                            to="/admin/salary/sheet"
-                                            className="text-lg font-bold text-black hover:text-yellow-400"
-                                        >
-                                            {isOpen && 'Salary Sheet'}
-                                        </Link>
-                                    </li>
+                                            <Link
+                                                to="/admin/salary/sheet"
+                                                className="text-lg font-bold text-black hover:text-yellow-400"
+                                            >
+                                                {isOpen && 'Salary Sheet'}
+                                            </Link>
+                                        </li>
                                     )}
                                     {userRole === 'admin' && (
                                         <li>
-                                        <Link
-                                            to="/admin/salary/settings"
-                                            className="text-lg font-bold text-black hover:text-yellow-400"
-                                        >
-                                            {isOpen && 'Salary Settings'}
-                                        </Link>
-                                    </li>
+                                            <Link
+                                                to="/admin/salary/settings"
+                                                className="text-lg font-bold text-black hover:text-yellow-400"
+                                            >
+                                                {isOpen && 'Salary Settings'}
+                                            </Link>
+                                        </li>
                                     )}
-                                    
+                                    {userRole === 'employee' && (
+                                        <li>
+                                            <Link
+                                                to="/employee/salary/sheet"
+                                                className="text-lg font-bold text-black hover:text-yellow-400"
+                                            >
+                                                {isOpen && 'Salary Sheet'}
+                                            </Link>
+                                        </li>
+                                    )}
                                 </ul>
                             )}
                         </li>
                         {userRole === 'employee' && (
                             <li>
-                            <Link
-                                to="/employee/tickets"
-                                className="flex items-center text-lg font-bold text-black hover:text-yellow-400"
-                            >
-                                <FontAwesomeIcon icon={faTicketAlt} className="mr-3 text-blue-500" />
-                                {isOpen && 'Tickets'}
-                            </Link>
-                        </li>
+                                <Link
+                                    to="/employee/tickets"
+                                    className="flex items-center text-lg font-bold text-black hover:text-yellow-400"
+                                >
+                                    <FontAwesomeIcon icon={faTicketAlt} className="mr-3 text-blue-500" />
+                                    {isOpen && 'Tickets'}
+                                </Link>
+                            </li>
                         )}
-                           {userRole === 'admin' && userRole === 'employee' && (
+                        {userRole === 'admin' && (
                             <li>
-                            <Link
-                                to="/admin/TicketsTable"
-                                className="flex items-center text-lg font-bold text-black hover:text-yellow-400"
-                            >
-                                <FontAwesomeIcon icon={faTicketAlt} className="mr-3 text-blue-500" />
-                                {isOpen && 'Tickets'}
-                            </Link>
-                        </li>
-                           )} 
-                            
-                        
+                                <Link
+                                    to="/admin/TicketsTable"
+                                    className="flex items-center text-lg font-bold text-black hover:text-yellow-400"
+                                >
+                                    <FontAwesomeIcon icon={faTicketAlt} className="mr-3 text-blue-500" />
+                                    {isOpen && 'Tickets'}
+                                </Link>
+                            </li>
+                        )}
+
+
                         <li>
                             {/*profile can view admin,employee,visitor */}
                             <Link
@@ -219,7 +243,7 @@ const Sidebar = () => {
                                 onClick={toggleAttendanceMenu}
                                 className="flex items-center cursor-pointer text-lg font-bold text-black hover:text-yellow-400"
                             >
-                                 <FontAwesomeIcon icon={faClock} className="mr-3 text-purple-500" />
+                                <FontAwesomeIcon icon={faClock} className="mr-3 text-purple-500" />
                                 {isOpen && 'Attendance'}
                                 {isOpen && (
                                     <FontAwesomeIcon
@@ -232,35 +256,35 @@ const Sidebar = () => {
                                 <ul className="ml-6 space-y-2 mt-2">
                                     {userRole === 'employee' && (
                                         <li>
-                                        <Link
-                                            to="/employee/attendance/attendenceform"
-                                            className="text-lg font-bold text-black hover:text-yellow-400"
-                                        >
-                                            {isOpen && 'Attendance Form'}
-                                        </Link>
-                                    </li>
+                                            <Link
+                                                to="/employee/attendance/attendenceform"
+                                                className="text-lg font-bold text-black hover:text-yellow-400"
+                                            >
+                                                {isOpen && 'Attendance Form'}
+                                            </Link>
+                                        </li>
                                     )}
                                     {userRole === 'admin' && (
                                         <li>
-                                        <Link
-                                            to="/admin/attendance/adminattendence"
-                                            className="text-lg font-bold text-black hover:text-yellow-400"
-                                        >
-                                            {isOpen && 'Admin Attendence'}
-                                        </Link>
-                                    </li>
+                                            <Link
+                                                to="/admin/attendance/adminattendence"
+                                                className="text-lg font-bold text-black hover:text-yellow-400"
+                                            >
+                                                {isOpen && 'Admin Attendence'}
+                                            </Link>
+                                        </li>
                                     )}
                                     {userRole === 'admin' && (
                                         <li>
-                                        <Link
-                                            to="/admin/attendance/attendencerecords"
-                                            className="text-lg font-bold text-black hover:text-yellow-400"
-                                        >
-                                            {isOpen && 'Attendance Records'}
-                                        </Link>
-                                    </li>
+                                            <Link
+                                                to="/admin/attendance/attendencerecords"
+                                                className="text-lg font-bold text-black hover:text-yellow-400"
+                                            >
+                                                {isOpen && 'Attendance Records'}
+                                            </Link>
+                                        </li>
                                     )}
-                                    
+
                                 </ul>
                             )}
                         </li>

@@ -4,6 +4,7 @@ const TicketModel = require('../models/Ticket');
 const cloudinary = require('../config/cloudinaryConfig'); // Import Cloudinary config
 const upload = require('../config/multerConfig'); // Import Multer config
 const streamifier = require('streamifier');
+const mongoose = require('mongoose');
 
 // Helper function to upload file to Cloudinary
 const uploadToCloudinary = (buffer) => {
@@ -39,7 +40,7 @@ router.route('/add').post(upload.single('file'), async (req, res) => {
     }
 
     const newTicket = new TicketModel({
-      userID,
+      User: mongoose.Types.ObjectId(userID),
       description,
       status,
       leaveType,

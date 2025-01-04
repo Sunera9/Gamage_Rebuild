@@ -5,44 +5,36 @@ const UserModel = require('../models/User'); // Import the User model
 const authMiddleware = require("../middlewares/authMiddleware"); // Import your auth middleware
 
 // Create a new leave application
-router.post("/add", authMiddleware, async (req, res) => {
+router.post('/add', async (req, res) => {
   try {
-    const { duration, ...rest } = req.body;
+    const { duration, startDate, endDate, type, reason } = req.body;
 
     // Validate duration
-    if (!["Half Day", "Full Day"].includes(duration)) {
-      return res
-        .status(400)
-        .json({
-          status: "Invalid duration value. It must be 'Half Day' or 'Full Day'",
-        });
+    if (!['Half Day', 'Full Day'].includes(duration)) {
+      return res.status(400).json({
+        status: 'Invalid duration value. It must be "Half Day" or "Full Day".',
+      });
     }
 
-    // Get user details (name and email) from the User model
-    const user = await UserModel.findById(req.body.userId); // Assuming userId is passed in the request body
-
-    if (!user) {
-      return res.status(404).json({ status: "User not found" });
-    }
-
+    // Create a new leave
     const leave = new LeaveModel({
-      ...rest,
+      User: req.user.id, // Use the authenticated user's ID
       duration,
-      User: req.body.userId,// Save the user's ID
+      startDate,
+      endDate,
+      type,
+      reason,
     });
-    await leave.save();
 
-    res.status(201).json({
-      status: "Leave application created successfully",
-      leave,
-      userName: user.name,
-      userEmail: user.email,
-    });
+    await leave.save();
+    res.status(201).json({ status: 'Leave application created successfully', leave });
   } catch (error) {
-    console.error(error.message);
-    res.status(400).json({ status: "Error creating leave application", error: error.message });
+    console.error('Error creating leave application:', error);
+    res.status(400).json({ status: 'Error creating leave application', error: error.message });
   }
 });
+
+
 // Get all leave applications with populated user details
 router.get("/get", async (req, res) => {
   try {

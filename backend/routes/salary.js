@@ -514,4 +514,5 @@ router.route("/slip/:salaryComponentId").get(async (req, res) => {
   }
 });
 
+
 module.exports = router;
