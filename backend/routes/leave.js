@@ -18,9 +18,10 @@ router.post('/add', async (req, res) => {
 
     // Create a new leave
     const leave = new LeaveModel({
-      User: req.user.id, // Use the authenticated user's ID
+  
       duration,
       startDate,
+      User: req.body.userId, // Save the user's ID
       endDate,
       type,
       reason,
