@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
+import Header from "../section/Header2";
 
 const Login = () => {
   const [credentials, setCredentials] = useState({ email: "", password: "", role: "" });
@@ -65,8 +66,9 @@ const Login = () => {
 
 
       // Store token and role in localStorage
-      localStorage.setItem("token", response.data.token);
-      localStorage.setItem("role", response.data.role); // Save role
+      localStorage.setItem('user',JSON.stringify({token: response.data.token, role: response.data.role }) );
+      // localStorage.setItem("token", response.data.token);
+      // localStorage.setItem("role", response.data.role); // Save role
 
       Swal.fire({
         icon: "success",
@@ -100,6 +102,8 @@ const Login = () => {
   };
 
   return (
+    <>
+    <Header/>
     <div className="flex items-center justify-center min-h-screen bg-gradient-to-r from-indigo-500 via-purple-600 to-pink-500">
       <div className="flex flex-col max-w-lg px-8 py-10 bg-white rounded-xl shadow-xl mt-10 mb-16 dark:bg-gray-800 sm:px-16 md:px-20 lg:px-24">
         <div className="self-center mb-6 text-2xl font-semibold text-gray-800 sm:text-3xl dark:text-white">
@@ -171,6 +175,7 @@ const Login = () => {
         </div>
       </div>
     </div>
+    </>
   );
 };
 

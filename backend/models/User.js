@@ -4,36 +4,36 @@ const UserSchema = new mongoose.Schema(
   {
     nic: {
       type: String,
-      required: true,
+      required: false,
     },
     name: {
       type: String,
-      required: true,
+      required: false,
     },
     email: {
       type: String,
-      required: true,
+      required: false,
     },
     address: {
       type: String,
-      required: true,
+      required: false,
     },
     phone: {
       type: String,
-      required: true,
+      required: false,
     },
     dob: {
       type: Date,
-      required: true,
+      required: false,
     },
     gender: {
       type: String,
       enum: ["Male", "Female"],
-      required: true,
+      required: false,
     },
     password: {
       type: String,
-      required: true,
+      required: false,
     },
 
     jobPosition: {
@@ -75,20 +75,20 @@ const UserSchema = new mongoose.Schema(
     },
     bankAccountNumber: {
       type: String,
-      required: true,
+      required: false,
     },
     bankName: {
       type: String,
-      required: true,
+      required: false,
     },
     role: {
       type: String,
       enum: ["visitor", "admin", "employee"],
-      required: true,
+      required: false,
       default: "visitor",
     },
   },
-  { timestamps: true }
+  { timestamps: false }
 );
 
 const UserModel = mongoose.model("User", UserSchema);

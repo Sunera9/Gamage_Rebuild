@@ -1,102 +1,209 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import axios from "axios";
-import Header from "../section/Header";
+import jsPDF from "jspdf";
+import html2canvas from "html2canvas";
 
 const SalarySlip = () => {
-  const { userId, month, year } = useParams();  // Correctly fetching params from URL
-  const [salaryDetails, setSalaryDetails] = useState(null);
+  const { salaryComponentId } = useParams();
+  const [salarySlipData, setSalarySlipData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
 
   const API_BASE_URL = "http://localhost:8070/api";
 
   useEffect(() => {
-    const fetchSalaryDetails = async () => {
+    const fetchSalarySlip = async () => {
       try {
-        // Replace salaryComponentId with actual parameters (userId, month, year)
-        const response = await axios.get(`${API_BASE_URL}/slip`, {
-          params: { userId, month, year },
-        });
-        setSalaryDetails(response.data.salary);
-        console.log('User ID:', userId);
-        console.log('Month:', month);
-        console.log('Year:', year);
-        console.log('Salary Details:', response.data);
+        setError("");
+        const response = await axios.get(`${API_BASE_URL}/salary/slip/${salaryComponentId}`);
+        setSalarySlipData(response.data.salarySlip);
       } catch (err) {
-        setError(err.response?.data?.message || "Failed to fetch salary details");
+        setError(err.response?.data?.message || "Failed to fetch salary slip data");
       } finally {
         setLoading(false);
       }
     };
 
-    fetchSalaryDetails();
-  }, [userId, month, year]);
+    fetchSalarySlip();
+  }, [salaryComponentId]);
 
-  
+  const handleDownloadPDF = async () => {
+    const element = document.getElementById("salary-slip-content");
+    const canvas = await html2canvas(element, { backgroundColor: "#fff" });
+    const imgData = canvas.toDataURL("image/png");
 
+    const pdf = new jsPDF("p", "mm", "a4");
+    const pdfWidth = pdf.internal.pageSize.getWidth();
+    const pdfHeight = (canvas.height * pdfWidth) / canvas.width;
 
-
-  const handlePrint = () => {
-    window.print(); // You can customize the print styles here
+    pdf.addImage(imgData, "PNG", 0, 0, pdfWidth, pdfHeight);
+    pdf.save("SalarySlip.pdf");
   };
 
-  if (loading) return <p>Loading salary details...</p>;
-  if (error) return <p className="text-red-500">{error}</p>;
+  if (loading) {
+    return <div className="min-h-screen flex items-center justify-center text-xl font-semibold text-gray-600">Loading...</div>;
+  }
+
+  if (error) {
+    return (
+      <div className="min-h-screen flex items-center justify-center text-red-500 text-xl font-bold">
+        {error}
+      </div>
+    );
+  }
+
+  const {
+    employee,
+    period,
+    attendance,
+    earnings,
+    totalEarnings,
+    deductions,
+    totalDeductions,
+    netSalary,
+    employerContributions,
+  } = salarySlipData;
 
   return (
-    <>
-    <Header/>
-    <div className="min-h-screen flex items-center justify-center bg-gray-100">
-      <div className="bg-white shadow-lg rounded-lg p-6 w-full max-w-3xl">
-        <header className="text-center mb-6">
-          <h1 className="text-2xl font-bold text-gray-800">Salary Slip</h1>
-          <p className="text-gray-600">{`Month: ${month}, Year: ${year}`}</p>
+    <div className="min-h-screen bg-gradient-to-r from-blue-100 via-white to-blue-50 flex flex-col items-center p-10 mt-10">
+      <div
+        id="salary-slip-content"
+        className="max-w-4xl w-full bg-white shadow-2xl rounded-lg overflow-hidden border border-gray-200"
+      >
+        <header className="bg-blue-500 text-white py-4 text-center">
+          <h1 className="text-3xl font-bold">Salary Slip</h1>
+          <p className="text-lg">{employee.company}</p>
         </header>
 
-        {salaryDetails ? (
-          <div>
-            <div className="flex justify-between mb-4">
-              <div>
-                <p className="text-gray-700">Employee Name: {salaryDetails.userName}</p>
-                <p className="text-gray-700">Designation: {salaryDetails.designation}</p>
-              </div>
-              <div>
-                <p className="text-gray-700">Basic Salary: {salaryDetails.basic}</p>
-                <p className="text-gray-700">Net Salary: {salaryDetails.netSalary}</p>
-              </div>
-            </div>
-
-            <table className="w-full border-collapse mb-4">
-              <thead>
-                <tr className="bg-gray-200">
-                  <th className="border p-2">Earnings</th>
-                  <th className="border p-2">Amount</th>
-                </tr>
-              </thead>
+        <div className="p-8 bg-gray-100">
+          {/* Employee Details */}
+          <section className="mb-8">
+            <h2 className="text-xl font-semibold text-gray-800 border-b-2 border-gray-200 pb-2">Employee Details</h2>
+            <table className="table-auto w-full mt-4 border-collapse border border-gray-200 text-gray-700">
               <tbody>
-                {salaryDetails.earnings && salaryDetails.earnings.map((earning, index) => (
-                  <tr key={index}>
-                    <td className="border p-2">{earning.name}</td>
-                    <td className="border p-2">{earning.amount}</td>
-                  </tr>
-                ))}
+                <tr>
+                  <td className="border border-gray-300 px-4 py-2 font-bold">Name</td>
+                  <td className="border border-gray-300 px-4 py-2">{employee.name}</td>
+                </tr>
+                <tr>
+                  <td className="border border-gray-300 px-4 py-2 font-bold">Designation</td>
+                  <td className="border border-gray-300 px-4 py-2">{employee.designation}</td>
+                </tr>
+                <tr>
+                  <td className="border border-gray-300 px-4 py-2 font-bold">Department</td>
+                  <td className="border border-gray-300 px-4 py-2">{employee.department}</td>
+                </tr>
+                <tr>
+                  <td className="border border-gray-300 px-4 py-2 font-bold">Bank</td>
+                  <td className="border border-gray-300 px-4 py-2">{employee.bankName} ({employee.bankAccountNumber})</td>
+                </tr>
               </tbody>
             </table>
+          </section>
 
-            <button
-              onClick={handlePrint}
-              className="bg-blue-500 text-white px-6 py-2 rounded hover:bg-blue-600 mt-4"
-            >
-              Print Salary Slip
-            </button>
-          </div>
-        ) : (
-          <p>No salary details found.</p>
-        )}
+          {/* Salary Period */}
+          <section className="mb-8">
+            <h2 className="text-xl font-semibold text-gray-800 border-b-2 border-gray-200 pb-2">Salary Period</h2>
+            <p className="mt-4 text-gray-700">{`Month: ${period.month}, Year: ${period.year}`}</p>
+          </section>
+
+          {/* Attendance */}
+          <section className="mb-8">
+            <h2 className="text-xl font-semibold text-gray-800 border-b-2 border-gray-200 pb-2">Attendance</h2>
+            <table className="table-auto w-full mt-4 border-collapse border border-gray-200 text-gray-700">
+              <tbody>
+                <tr>
+                  <td className="border border-gray-300 px-4 py-2 font-bold">Working Days</td>
+                  <td className="border border-gray-300 px-4 py-2">{attendance.workingDays}</td>
+                </tr>
+                <tr>
+                  <td className="border border-gray-300 px-4 py-2 font-bold">Attended Days</td>
+                  <td className="border border-gray-300 px-4 py-2">{attendance.attendedDays}</td>
+                </tr>
+                <tr>
+                  <td className="border border-gray-300 px-4 py-2 font-bold">Leaves Taken</td>
+                  <td className="border border-gray-300 px-4 py-2">{attendance.leavesTaken}</td>
+                </tr>
+                <tr>
+                  <td className="border border-gray-300 px-4 py-2 font-bold">Absent Days</td>
+                  <td className="border border-gray-300 px-4 py-2">{attendance.absentDays}</td>
+                </tr>
+              </tbody>
+            </table>
+          </section>
+
+          {/* Earnings and Deductions */}
+          <section className="mb-8">
+            <div className="grid grid-cols-2 gap-8">
+              {/* Earnings */}
+              <div>
+                <h3 className="text-lg font-semibold text-gray-800">Earnings</h3>
+                <table className="table-auto w-full mt-4 border-collapse border border-gray-200 text-gray-700">
+                  <tbody>
+                    {earnings.map((earning, index) => (
+                      <tr key={index}>
+                        <td className="border border-gray-300 px-4 py-2">{earning.name}</td>
+                        <td className="border border-gray-300 px-4 py-2 font-bold">{earning.amount.toLocaleString()}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+                <p className="font-bold mt-4 text-green-600">Total Earnings: {totalEarnings.toLocaleString()}</p>
+              </div>
+
+              {/* Deductions */}
+              <div>
+                <h3 className="text-lg font-semibold text-gray-800">Deductions</h3>
+                <table className="table-auto w-full mt-4 border-collapse border border-gray-200 text-gray-700">
+                  <tbody>
+                    {deductions.map((deduction, index) => (
+                      <tr key={index}>
+                        <td className="border border-gray-300 px-4 py-2">{deduction.name}</td>
+                        <td className="border border-gray-300 px-4 py-2 font-bold">{deduction.amount.toLocaleString()}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+                <p className="font-bold mt-4 text-red-600">Total Deductions: {totalDeductions.toLocaleString()}</p>
+              </div>
+            </div>
+          </section>
+
+          {/* Net Salary */}
+          <section className="mb-8">
+            <h2 className="text-xl font-semibold text-gray-800 border-b-2 border-gray-200 pb-2">Net Salary</h2>
+            <p className="text-2xl font-bold text-green-600 mt-4">{netSalary.toLocaleString()}</p>
+          </section>
+
+          {/* Employer Contributions */}
+          <section className="mb-8">
+            <h2 className="text-xl font-semibold text-gray-800 border-b-2 border-gray-200 pb-2">Employer Contributions</h2>
+            <table className="table-auto w-full mt-4 border-collapse border border-gray-200 text-gray-700">
+              <tbody>
+                <tr>
+                  <td className="border border-gray-300 px-4 py-2 font-bold">EPF (Employer)</td>
+                  <td className="border border-gray-300 px-4 py-2">{employerContributions.epfEmployer.toLocaleString()}</td>
+                </tr>
+                <tr>
+                  <td className="border border-gray-300 px-4 py-2 font-bold">ETF (Employer)</td>
+                  <td className="border border-gray-300 px-4 py-2">{employerContributions.etfEmployer.toLocaleString()}</td>
+                </tr>
+              </tbody>
+            </table>
+          </section>
+        </div>
       </div>
+
+      <footer className="mt-6">
+        <button
+          onClick={handleDownloadPDF}
+          className="bg-blue-500 text-white px-6 py-3 rounded-lg shadow-md hover:bg-blue-600 hover:shadow-lg transition-all"
+        >
+          Download PDF
+        </button>
+      </footer>
     </div>
-    </>
   );
 };
 

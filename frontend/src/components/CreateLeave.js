@@ -1,11 +1,12 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { Link } from 'react-router-dom';
 import Header from '../section/Header';
+import Swal from 'sweetalert2';
 
 export default function CreateLeave() {
   const [leaveDetails, setLeaveDetails] = useState({
-    userId: '', // or fetch from user context if logged in
+    userId: '', 
     startDate: '',
     endDate: '',
     type: 'Common', // default value
@@ -14,6 +15,19 @@ export default function CreateLeave() {
   });
   const [showModal, setShowModal] = useState(false); // Modal state
   const [message, setMessage] = useState("");
+
+
+  // Populate userId from token
+  useEffect(() => {
+    const token = localStorage.getItem('token');
+    if (token) {
+      const payload = JSON.parse(atob(token.split('.')[1])); // Decode the JWT payload
+      setLeaveDetails((prev) => ({ ...prev, userId: payload.id })); // Populate userId
+    }
+  }, []);
+  
+  
+  
 
   // Consolidated handleChange for all fields, including duration
   const handleChange = (e) => {
@@ -27,24 +41,60 @@ export default function CreateLeave() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+  
     try {
-      const response = await axios.post('http://localhost:8070/leaves/add', leaveDetails);
-      setMessage(response.data.status);
-      setShowModal(true); // Show modal on successful submission
-      resetForm();
+      const token = localStorage.getItem('token'); // Get token from localStorage
+      const response = await axios.post(
+        'http://localhost:8070/leaves/add',
+        leaveDetails,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`, // Attach token
+            'Content-Type': 'application/json',
+          },
+        }
+      );
+
+      // Show success alert
+      Swal.fire({
+        icon: 'success',
+        title: 'Leave Request Submitted',
+        text: 'Your leave request has been successfully submitted!',
+        confirmButtonText: 'OK'
+      }).then(() => {
+        resetForm(); // Reset the form after user acknowledges the success message
+      });
     } catch (error) {
-      setMessage(`Error: ${error.response ? error.response.data.status : error.message}`);
+      console.error('Error submitting leave:', error);
+
+      // Show error alert
+      Swal.fire({
+        icon: 'error',
+        title: 'Error',
+        text: error.response?.data?.status || error.message,
+      });
     }
   };
+  //     setMessage(response.data.status);
+  //     setShowModal(true);
+  //     resetForm();
+  //   } catch (error) {
+  //     console.error('Error submitting leave:', error);
+  //     setMessage(`Error: ${error.response?.data?.status || error.message}`);
+  //   }
+  // };
+  
+  
+
 
   const resetForm = () => {
     setLeaveDetails({
-      userId: '',
+      userId: leaveDetails.userId,
       startDate: '',
       endDate: '',
       type: 'Common',
       reason: '',
-      duration: ''
+      duration: '',
     });
   };
 
@@ -109,7 +159,7 @@ export default function CreateLeave() {
                       />{' '}
                       Full Day
                     </label>
-                    <label className="ml-4">
+                    <div className="mb-3">
                       <input
                         type="radio"
                         name="duration"
@@ -118,7 +168,7 @@ export default function CreateLeave() {
                         onChange={handleDurationChange}
                       />{' '}
                       Half Day
-                    </label>
+                    </div>
                   </div>
                 </div>
 

@@ -86,6 +86,46 @@ router.route("/getByEmail/:email").get(async (req, res) => {
   }
 });
 
+// Update a user by email
+router.route("/updateByEmail/:email").put(async (req, res) => {
+  const email = req.params.email;
+  const { nic, name, address, phone, dob, gender, jobPosition, jobCategory, department, company, startDate, endDate, bankAccountNumber, bankName, role } = req.body;
+
+  try {
+    const updatedUser = await UserModel.findOneAndUpdate(
+      { email: email },
+      {
+        nic,
+        name,
+        address,
+        phone,
+        dob,
+        gender,
+        jobPosition,
+        jobCategory,
+        department,
+        company,
+        startDate,
+        endDate,
+        bankAccountNumber,
+        bankName,
+        role,
+      },
+      { new: true } 
+    );
+
+    if (!updatedUser) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    res.status(200).json({ message: "User updated successfully", updatedUser });
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).json({ status: "Error with updating user", error: err.message });
+  }
+});
+
+
 
 
 module.exports = router;
