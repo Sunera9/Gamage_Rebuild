@@ -26,6 +26,7 @@ import AdminAttendence from "./components/AdminAttendence";
 import Project from "../src/page/Project"
 import AboutUs from "./page/AboutUs";
 import Recruite from "./components/Recruite";
+import JobPositions from "./components/jobposition";
 
 
 
@@ -68,28 +69,39 @@ function App() {
           <Route path="/admin/salary/sheet" element={<Salary />} />
           <Route path="/admin/salary/settings" element={<SettingsPage />} />
           <Route path="/admin/recruite" element={<Recruite />} />
-          <Route path="/salary/slip/:salaryComponentId" element={<SalarySlip />} />  
-          <Route path="/admin/addjob" element={<AddJob />} />                   
-          <Route path="/admin/attendance/adminattendence" element={<AdminAttendence />} />
-          <Route path="/admin/attendance/attendencerecords" element={<AttendanceRecords />} />
+          <Route
+            path="/salary/slip/:salaryComponentId"
+            element={<SalarySlip />}
+          />
+          <Route path="/admin/addjob" element={<AddJob />} />
+          <Route
+            path="/admin/attendance/adminattendence"
+            element={<AdminAttendence />}
+          />
+          <Route
+            path="/admin/attendance/attendencerecords"
+            element={<AttendanceRecords />}
+          />
           <Route path="/admin/employee" element={<AllEmployee />} />
           <Route path="/admin/TicketsTable" element={<TicketsTable />} />
           <Route path="/admin/LeavesTable" element={<LeavesTable />} />
-          
+          <Route path="/admin/LeavesTable" element={<LeavesTable />} />
+          <Route path="/admin/JobPositions" element={<JobPositions />} />
 
           {/*Employee routes */}
           <Route path="/employee/dashboard" element={<Dashboard />} />
-          <Route path="/employee/tickets" element={ <TicketForm  />}/>
+          <Route path="/employee/tickets" element={<TicketForm />} />
           <Route path="/employee/leaves" element={<CreateLeave />} />
-          <Route path="/employee/programs" element={<Program />} />  
-          <Route path="/employee/salary/sheet" element={<Salary />} /> 
+          <Route path="/employee/programs" element={<Program />} />
+          <Route path="/employee/salary/sheet" element={<Salary />} />
           <Route path="/employee/apply/:jobId" element={<ApplicationForm />} />
-          <Route path="/employee/attendance/attendenceform" element={<AttendanceForm />} />
+          <Route
+            path="/employee/attendance/attendenceform"
+            element={<AttendanceForm />}
+          />
           <Route path="/employee/applications" element={<Application />} />
           <Route path="/employee/joblist" element={<JobList />} />
         </Route>
-
-        
 
         {/* Redirect unknown routes to login */}
         {/* <Route path="/admin/dashboard" element={<Dashboard/>} />

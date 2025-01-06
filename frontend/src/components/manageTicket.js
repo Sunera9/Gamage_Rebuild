@@ -80,20 +80,32 @@ function TicketsTable() {
       <Header />
       <div className="flex justify-center p-6">
         <div className="w-2/10 bg-white shadow-lg rounded-lg">
-          <div className="text-center mb-4">
-            {/* <h2 className="text-2xl font-semibold text-gray-700">Tickets</h2> */}
-          </div>
+          <div className="text-center mb-4"></div>
 
           <table className="min-w-full bg-gray-50 rounded-lg shadow-md overflow-hidden">
             <thead className="bg-gray-100">
               <tr>
-                <th className="py-3 px-4 text-left text-sm font-semibold text-gray-600">User Name</th>
-                <th className="py-3 px-4 text-left text-sm font-semibold text-gray-600">User Email</th>
-                <th className="py-3 px-4 text-left text-sm font-semibold text-gray-600">Description</th>
-                <th className="py-3 px-4 text-left text-sm font-semibold text-gray-600">Status</th>
-                <th className="py-3 px-4 text-left text-sm font-semibold text-gray-600">Leave Type</th>
-                <th className="py-3 px-4 text-left text-sm font-semibold text-gray-600">Date</th>
-                <th className="py-3 px-4 text-left text-sm font-semibold text-gray-600">Action</th>
+                <th className="py-3 px-4 text-left text-sm font-semibold text-gray-600">
+                  User Name
+                </th>
+                <th className="py-3 px-4 text-left text-sm font-semibold text-gray-600">
+                  User Email
+                </th>
+                <th className="py-3 px-4 text-left text-sm font-semibold text-gray-600">
+                  Description
+                </th>
+                <th className="py-3 px-4 text-left text-sm font-semibold text-gray-600">
+                  Status
+                </th>
+                <th className="py-3 px-4 text-left text-sm font-semibold text-gray-600">
+                  Leave Type
+                </th>
+                <th className="py-3 px-4 text-left text-sm font-semibold text-gray-600">
+                  Date
+                </th>
+                <th className="py-3 px-4 text-left text-sm font-semibold text-gray-600">
+                  Action
+                </th>
               </tr>
             </thead>
             <tbody>
@@ -105,13 +117,19 @@ function TicketsTable() {
                   >
                     {ticket.User?.name || "N/A"}
                   </td>
-                  <td className="py-3 px-4 text-sm">{ticket.User?.email || "N/A"}</td>
+                  <td className="py-3 px-4 text-sm">
+                    {ticket.User?.email || "N/A"}
+                  </td>
                   <td className="py-3 px-4 text-sm">{ticket.description}</td>
                   <td className="py-3 px-4 text-sm">{ticket.status}</td>
                   <td className="py-3 px-4 text-sm">{ticket.leaveType}</td>
-                  <td className="py-3 px-4 text-sm">{new Date(ticket.createdAt).toLocaleDateString()}</td>
                   <td className="py-3 px-4 text-sm">
-                    <button className="text-gray-600 hover:text-blue-500">✉️</button>
+                    {new Date(ticket.createdAt).toLocaleDateString()}
+                  </td>
+                  <td className="py-3 px-4 text-sm">
+                    <button className="text-gray-600 hover:text-blue-500">
+                      ✉️
+                    </button>
                   </td>
                 </tr>
               ))}
@@ -120,13 +138,30 @@ function TicketsTable() {
 
           {showModal && selectedTicket && (
             <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center">
-              <div className="bg-white rounded-lg p-6 w-1/3 shadow-lg">
+              <div className="bg-white rounded-lg p-6 w-1/3 shadow-lg relative">
+                <button
+                  onClick={() => setShowModal(false)} // Close the modal
+                  className="absolute top-2 right-2 bg-gray-200 text-gray-600 rounded-full w-8 h-8 flex items-center justify-center hover:bg-gray-300"
+                >
+                  ✖
+                </button>
                 <h3 className="text-xl font-semibold mb-4">Ticket Details</h3>
-                <p><strong>ID:</strong> {selectedTicket._id}</p>
-                <p><strong>Description:</strong> {selectedTicket.description}</p>
-                <p><strong>Status:</strong> {selectedTicket.status}</p>
-                <p><strong>Leave Type:</strong> {selectedTicket.leaveType}</p>
-                <p><strong>Date:</strong> {new Date(selectedTicket.createdAt).toLocaleDateString()}</p>
+                <p>
+                  <strong>ID:</strong> {selectedTicket._id}
+                </p>
+                <p>
+                  <strong>Description:</strong> {selectedTicket.description}
+                </p>
+                <p>
+                  <strong>Status:</strong> {selectedTicket.status}
+                </p>
+                <p>
+                  <strong>Leave Type:</strong> {selectedTicket.leaveType}
+                </p>
+                <p>
+                  <strong>Date:</strong>{" "}
+                  {new Date(selectedTicket.createdAt).toLocaleDateString()}
+                </p>
 
                 {selectedTicket.files?.url && (
                   <button

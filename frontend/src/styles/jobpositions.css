@@ -1,0 +1,97 @@
+/* General Container */
+.jb-container {
+  font-family: Arial, sans-serif;
+  font-weight: bold; /* Makes the font bold */
+  font-size: 18px; /* Adjust the size as needed */
+  background-color: #f9f9f9;
+  margin: 0 auto;
+  padding: 50px;
+  max-width: 800px;
+  box-sizing: border-box;
+}
+
+
+/* Heading */
+.jb-heading {
+  text-align: center;
+  color: #333;
+  margin-bottom: 20px;
+}
+
+/* Form Styling */
+.jb-form {
+  background: #ffffff;
+  border: 1px solid #ddd;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  margin-bottom: 20px;
+}
+
+.jb-form-group {
+  margin-bottom: 15px;
+}
+
+.jb-label {
+  display: block;
+  font-weight: bold;
+  margin-bottom: 5px;
+  color: #555;
+}
+
+.jb-input {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  font-size: 14px;
+  box-sizing: border-box;
+}
+
+/* Button Styling */
+.jb-button {
+  background-color: #4caf50;
+  color: white;
+  font-size: 16px;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  display: block;
+  margin: 0 auto;
+  width: 100%;
+}
+
+.jb-button:hover {
+  background-color: #45a049;
+}
+
+/* Table Styling */
+.jb-table {
+  width: 100%;
+  border-collapse: collapse;
+  background: #fff;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.jb-table th,
+.jb-table td {
+  border: 1px solid #ddd;
+  text-align: left;
+  padding: 10px;
+  font-size: 14px;
+}
+
+.jb-table th {
+  background-color: #007acc;
+  color: white;
+  font-weight: bold;
+}
+
+.jb-table tr:nth-child(even) {
+  background-color: #f2f2f2;
+}
+
+.jb-table tr:hover {
+  background-color: #e9e9e9;
+}

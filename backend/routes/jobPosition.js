@@ -30,13 +30,13 @@ router.route("/:id").get(async (req, res) => {
 
 // Add a new job position
 router.route("/").post(async (req, res) => {
-  const { title, basicSalary, standardAllowance } = req.body;
+  const { title, basicSalary, overTimePay } = req.body;
 
   try {
     const newJobPosition = new JobPositionModel({
       title,
       basicSalary,
-      standardAllowance: standardAllowance || 0,
+      overTimePay: overTimePay || 0,
     });
 
     await newJobPosition.save();
