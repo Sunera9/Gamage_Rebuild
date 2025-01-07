@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
 import "../styles/Ticket.css";
 import Header from "../section/Header";
@@ -12,6 +12,7 @@ export default function TicketForm() {
   const [file, setFile] = useState(null);
   const [ticketID, setTicketID] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
+  const navigate = useNavigate();
 
   // Fetch the user ID from the token in localStorage on component mount
   useEffect(() => {
@@ -98,6 +99,7 @@ export default function TicketForm() {
         icon: "success",
         confirmButtonText: "OK",
       }).then(() => {
+        //navigate(`/tickets/${ticketId}`);
         resetForm();
       });
     } catch (error) {

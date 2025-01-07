@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import { Link } from "react-router-dom";
+import { Link, useNavigate  } from "react-router-dom";
 import Header from "../section/Header";
 import Swal from "sweetalert2";
 
@@ -16,6 +16,7 @@ export default function CreateLeave() {
   const [showModal, setShowModal] = useState(false); // Modal state
   const [message, setMessage] = useState("");
   const [userID, setUserID] = useState("");
+  const navigate = useNavigate();
 
   // Populate userId from token
   useEffect(() => {
@@ -74,6 +75,7 @@ export default function CreateLeave() {
         text: "Your leave request has been successfully submitted!",
         confirmButtonText: "OK",
       }).then(() => {
+        //navigate("/viewleaves");
         setShowModal(true); // Show the modal upon successful submission
         resetForm(); // Reset the form after user acknowledges the success message
       });

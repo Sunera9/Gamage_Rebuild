@@ -27,6 +27,7 @@ import Project from "../src/page/Project"
 import AboutUs from "./page/AboutUs";
 import Recruite from "./components/Recruite";
 import JobPositions from "./components/jobposition";
+import ViewTicket from "./components/ViewTicket";
 
 
 
@@ -101,6 +102,8 @@ function App() {
           />
           <Route path="/employee/applications" element={<Application />} />
           <Route path="/employee/joblist" element={<JobList />} />
+          {/* <Route path="/tickets/:ticketId" element={<ViewTicket />} /> */}
+
         </Route>
 
         {/* Redirect unknown routes to login */}

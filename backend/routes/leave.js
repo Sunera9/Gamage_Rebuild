@@ -102,4 +102,16 @@ router.route("/delete/:id").delete(async (req, res) => {
   }
 });
 
+//Get leave requests for a specific user
+router.get("/leaves/user/:userId", async (req, res) => {
+  try {
+    const leaves = await LeaveModel.find().populate('User', 'name email');
+    res.status(200).json(leaves);
+  } catch (error) {
+    console.error(error.message);
+    res.status(500).json({ status: "Failed to fetch leave requests.", error: error.message });
+  }
+});
+
+
 module.exports = router;
