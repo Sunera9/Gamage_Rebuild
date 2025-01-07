@@ -5,7 +5,7 @@ import Swal from "sweetalert2";
 
 export default function ViewLeaves() {
   const [leaves, setLeaves] = useState([]);
-  const [userID, setUserID] = useState("");
+  const [id, setUserID] = useState("");
 
   // Fetch userId from localStorage
   useEffect(() => {
@@ -26,9 +26,9 @@ export default function ViewLeaves() {
 
   // Fetch leaves for the user
   useEffect(() => {
-    if (userID) {
+    if (id) {
       axios
-        .get(`http://localhost:8070/leaves/user/${userID}`)
+        .get(`http://localhost:8070/leaves/get/${id}`)
         .then((response) => {
           setLeaves(response.data);
         })
@@ -41,7 +41,7 @@ export default function ViewLeaves() {
           });
         });
     }
-  }, [userID]);
+  }, [id]);
 
   return (
     <>

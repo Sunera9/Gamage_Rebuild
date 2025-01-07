@@ -10,17 +10,16 @@ export default function TicketForm() {
   const [description, setDescription] = useState("");
   const [leaveType, setLeaveType] = useState("");
   const [file, setFile] = useState(null);
-  const [ticketID, setTicketID] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
+
   const navigate = useNavigate();
 
-  // Fetch the user ID from the token in localStorage on component mount
   useEffect(() => {
     const storedUser = localStorage.getItem("user");
     if (storedUser) {
       try {
         const parsedUser = JSON.parse(storedUser);
-        const tokenPayload = JSON.parse(atob(parsedUser.token.split(".")[1])); // Decode the token payload
+        const tokenPayload = JSON.parse(atob(parsedUser.token.split(".")[1]));
         setUserID(tokenPayload.userId);
       } catch (error) {
         console.error("Error parsing token:", error);
@@ -92,16 +91,18 @@ export default function TicketForm() {
         }
       );
 
-      setTicketID(response.data.ticket._id);
+      const ticketId = response.data.ticket._id;
+
       Swal.fire({
         title: "Ticket Submitted",
-        text: `Your ticket has been successfully submitted! Ticket ID: ${response.data.ticket._id}`,
+        text: `Your ticket has been successfully submitted! Ticket ID: ${ticketId}`,
         icon: "success",
-        confirmButtonText: "OK",
+        confirmButtonText: "View Ticket",
       }).then(() => {
-        //navigate(`/tickets/${ticketId}`);
-        resetForm();
+        navigate(`/tickets/${ticketId}`); // Navigate to the ticket view page using ticketId
       });
+
+      resetForm();
     } catch (error) {
       console.error("Error submitting ticket:", error);
       Swal.fire("Error", "Failed to submit ticket. Please try again.", "error");

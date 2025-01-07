@@ -28,6 +28,8 @@ import AboutUs from "./page/AboutUs";
 import Recruite from "./components/Recruite";
 import JobPositions from "./components/jobposition";
 import ViewTicket from "./components/ViewTicket";
+import ViewLeaves from "./components/ViewLeaves";
+import SupportPage from "./page/SupportPage";
 
 
 
@@ -102,7 +104,9 @@ function App() {
           />
           <Route path="/employee/applications" element={<Application />} />
           <Route path="/employee/joblist" element={<JobList />} />
-          {/* <Route path="/tickets/:ticketId" element={<ViewTicket />} /> */}
+          <Route path="/tickets/:id" element={<ViewTicket />} />
+          <Route path="/leaves" element={<ViewLeaves />} />
+          <Route path="/support" element={<SupportPage />} />
 
         </Route>
 

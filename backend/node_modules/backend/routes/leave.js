@@ -18,7 +18,6 @@ router.post('/add', async (req, res) => {
 
     // Create a new leave
     const leave = new LeaveModel({
-  
       duration,
       startDate,
       User: req.body.userId, // Save the user's ID
@@ -35,7 +34,6 @@ router.post('/add', async (req, res) => {
   }
 });
 
-
 // Get all leave applications with populated user details
 router.get("/get", async (req, res) => {
   try {
@@ -47,11 +45,10 @@ router.get("/get", async (req, res) => {
   }
 });
 
-
 // Get a specific leave application by ID with populated user details
 router.route("/get/:id").get(async (req, res) => {
   try {
-    const leave = await LeaveModel.findById(req.params.id).populate('userId', 'name email');
+    const leave = await LeaveModel.findById(req.params.id).populate('User', 'name email');
     if (!leave) {
       return res.status(404).json({ status: "Leave application not found" });
     }
@@ -102,16 +99,19 @@ router.route("/delete/:id").delete(async (req, res) => {
   }
 });
 
-//Get leave requests for a specific user
-router.get("/leaves/user/:userId", async (req, res) => {
-  try {
-    const leaves = await LeaveModel.find().populate('User', 'name email');
-    res.status(200).json(leaves);
-  } catch (error) {
-    console.error(error.message);
-    res.status(500).json({ status: "Failed to fetch leave requests.", error: error.message });
-  }
-});
-
+// // Get leave requests for a specific user
+// router.get("/leaves/user/:userId", async (req, res) => {
+//   try {
+//     const { userId } = req.params; // Extract userId from request parameters
+//     const leaves = await LeaveModel.find({ User: userId }).populate('User', 'name email'); // Filter by userId
+//     if (!leaves || leaves.length === 0) {
+//       return res.status(404).json({ status: "No leave applications found for this user." });
+//     }
+//     res.status(200).json(leaves);
+//   } catch (error) {
+//     console.error("Error fetching user-specific leaves:", error.message);
+//     res.status(500).json({ status: "Failed to fetch leave requests.", error: error.message });
+//   }
+// });
 
 module.exports = router;
