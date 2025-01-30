@@ -21,6 +21,22 @@ const AttendanceForm = () => {
     }
   }, []);
 
+  useEffect(() => {
+    const storedUser = localStorage.getItem("user");
+    if (storedUser) {
+      try {
+        const parsedUser = JSON.parse(storedUser);
+        const tokenPayload = JSON.parse(atob(parsedUser.token.split(".")[1]));
+        setUserId(tokenPayload.userId);
+      } catch (error) {
+        console.error("Error parsing token:", error);
+        Swal.fire("Invalid Token", "Please log in again.", "error");
+      }
+    } else {
+      Swal.fire("Missing Token", "Please log in again.", "error");
+    }
+  }, []);
+
   const validateUserId = (id) => {
     // Check if userId is a valid MongoDB ObjectId format
     return /^[a-fA-F0-9]{24}$/.test(id);
@@ -50,7 +66,9 @@ const AttendanceForm = () => {
       Swal.fire({
         icon: "error",
         title: "Error",
-        text: error.response?.data?.message || "An error occurred while marking entry.",
+        text:
+          error.response?.data?.message ||
+          "An error occurred while marking entry.",
       });
     }
   };
@@ -79,7 +97,9 @@ const AttendanceForm = () => {
       Swal.fire({
         icon: "error",
         title: "Error",
-        text: error.response?.data?.message || "An error occurred while marking exit.",
+        text:
+          error.response?.data?.message ||
+          "An error occurred while marking exit.",
       });
     }
   };
@@ -90,10 +110,12 @@ const AttendanceForm = () => {
 
       if (response.data && response.data.attendanceRecords) {
         // Format the date to display only the date (YYYY-MM-DD)
-        const formattedData = response.data.attendanceRecords.map((attendance) => ({
-          ...attendance,
-          date: new Date(attendance.date).toISOString().split("T")[0], // Format the date
-        }));
+        const formattedData = response.data.attendanceRecords.map(
+          (attendance) => ({
+            ...attendance,
+            date: new Date(attendance.date).toISOString().split("T")[0], // Format the date
+          })
+        );
         setAttendanceData(formattedData);
         setIsAttendanceVisible(true); // Show the table after fetching the data
       } else {
@@ -107,16 +129,20 @@ const AttendanceForm = () => {
       Swal.fire({
         icon: "error",
         title: "Error",
-        text: error.response?.data?.message || "An error occurred while fetching attendance data.",
+        text:
+          error.response?.data?.message ||
+          "An error occurred while fetching attendance data.",
       });
     }
   };
 
   return (
     <div className="max-w-xl mx-auto p-6 bg-white rounded-lg shadow-md">
-      <h2 className="text-2xl font-semibold text-center mb-4">Attendance Management</h2>
+      <h2 className="text-2xl font-semibold text-center mb-4">
+        Attendance Management
+      </h2>
       <div className="space-y-4">
-        <div>
+        {/* <div>
           <label className="block font-medium">User ID:</label>
           <input
             type="text"
@@ -125,7 +151,7 @@ const AttendanceForm = () => {
             onChange={(e) => setUserId(e.target.value)}
             placeholder="Enter User ID"
           />
-        </div>
+        </div> */}
 
         <div>
           <button

@@ -117,51 +117,95 @@ router.post("/exit", async (req, res) => {
 });
 
 // Admin Manual Update (Restricted to employees)
+// router.put("/admin-update", async (req, res) => {
+//   const { userId, date, status, remarks } = req.body;
+
+//   try {
+//     const user = await UserModel.findById(userId);
+
+//     if (!user || user.role !== "employee") {
+//       return res
+//         .status(403)
+//         .json({ message: "Attendance is only applicable to employees." });
+//     }
+
+//     const attendance = await AttendanceModel.findOne({ user: userId, date });
+
+//     if (!attendance) {
+//       return res.status(404).json({ message: "Attendance record not found." });
+//     }
+
+//     attendance.status = status || attendance.status;
+//     attendance.remarks = remarks || attendance.remarks;
+
+//     await attendance.save();
+
+//     res
+//       .status(200)
+//       .json({ message: "Attendance updated successfully.", attendance });
+//   } catch (error) {
+//     res.status(500).json({ message: "Server error.", error });
+//   }
+// });
+
 router.put("/admin-update", async (req, res) => {
-  const { userId, date, status, remarks } = req.body;
+  const { email, date, status, remarks } = req.body;
 
   try {
-    const user = await UserModel.findById(userId);
+    // Step 1: Find the user by email
+    const user = await UserModel.findOne({ email });
 
     if (!user || user.role !== "employee") {
-      return res
-        .status(403)
-        .json({ message: "Attendance is only applicable to employees." });
+      return res.status(403).json({ message: "Attendance is only applicable to employees." });
     }
 
+    const userId = user._id; // Extract user ID
+
+    // Step 2: Find the attendance record by userId and date
     const attendance = await AttendanceModel.findOne({ user: userId, date });
 
     if (!attendance) {
       return res.status(404).json({ message: "Attendance record not found." });
     }
 
+    // Step 3: Update the attendance record
     attendance.status = status || attendance.status;
     attendance.remarks = remarks || attendance.remarks;
 
     await attendance.save();
 
-    res
-      .status(200)
-      .json({ message: "Attendance updated successfully.", attendance });
+    res.status(200).json({ message: "Attendance updated successfully.", attendance });
   } catch (error) {
-    res.status(500).json({ message: "Server error.", error });
+    console.error("Error updating attendance:", error.message);
+    res.status(500).json({ message: "Server error.", error: error.message });
   }
 });
 
+
 // Fetch attendance records for a specific user for a given year and month
 router.get("/records", async (req, res) => {
-  const { userId, year, month } = req.query;
+  const { email, year, month } = req.query;
 
   try {
-    if (!userId || !year || !month) {
+    if (!email || !year || !month) {
       return res
         .status(400)
-        .json({ message: "Please provide userId, year, and month." });
+        .json({ message: "Please provide email, year, and month." });
     }
 
-    const startDate = new Date(year, month - 1, 1); // Start of the month
-    const endDate = new Date(year, month, 0); // End of the month
+    // Step 1: Find the user by email
+    const user = await UserModel.findOne({ email }).lean();
+    if (!user) {
+      return res.status(404).json({ message: "User not found." });
+    }
 
+    const userId = user._id; // Extract user ID from found user
+
+    // Step 2: Define the start and end dates for the month
+    const startDate = new Date(year, month - 1, 1); // First day of the month
+    const endDate = new Date(year, month, 0); // Last day of the month
+
+    // Step 3: Fetch attendance records
     const attendanceRecords = await AttendanceModel.find({
       user: userId,
       date: { $gte: startDate.toISOString(), $lte: endDate.toISOString() },
@@ -170,12 +214,10 @@ router.get("/records", async (req, res) => {
     if (!attendanceRecords.length) {
       return res
         .status(404)
-        .json({
-          message: "No attendance records found for the given criteria.",
-        });
+        .json({ message: "No attendance records found for the given criteria." });
     }
 
-    // Calculate working days, attended days, leave days, holidays, and absent days
+    // Step 4: Calculate attendance summary
     const totalDays = attendanceRecords.length;
     const holidays = attendanceRecords.filter(
       (record) => record.status === "Holiday"

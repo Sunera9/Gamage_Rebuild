@@ -4,6 +4,7 @@ import Swal from "sweetalert2"; // Import SweetAlert2
 
 const AttendanceRecords = () => {
   const [userId, setUserId] = useState("");
+  const [email, setEmail] = useState("");
   const [year, setYear] = useState("");
   const [month, setMonth] = useState("");
   const [records, setRecords] = useState([]);
@@ -11,7 +12,7 @@ const AttendanceRecords = () => {
   const fetchRecords = async () => {
     try {
       const response = await axios.get("http://localhost:8070/attendance/records", {
-        params: { userId, year, month },
+        params: { email, year, month },
       });
       setRecords(response.data.attendanceRecords);
       Swal.fire({
@@ -34,13 +35,13 @@ const AttendanceRecords = () => {
       <h2 className="text-2xl font-semibold text-center mb-4">Attendance Records</h2>
       <div className="space-y-4">
         <div>
-          <label className="block font-medium">User ID:</label>
+          <label className="block font-medium">Email:</label>
           <input
             type="text"
             className="w-full px-4 py-2 border rounded-md"
-            value={userId}
-            onChange={(e) => setUserId(e.target.value)}
-            placeholder="Enter User ID"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            placeholder="Enter User Email"
           />
         </div>
 

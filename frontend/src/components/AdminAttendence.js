@@ -4,50 +4,85 @@ import Swal from "sweetalert2"; // Import SweetAlert2
 
 const AdminAttendence = () => {
   const [date, setDate] = useState(new Date().toISOString().split("T")[0]);
+  const [attendanceDate, setAttendanceDate] = useState(new Date().toISOString().split("T")[0]);
   const [status, setStatus] = useState("");
   const [remarks, setRemarks] = useState("");
+  const [email, setEmail] = useState("");
   const [userId, setUserId] = useState("");
 
   const handleAdminUpdate = async () => {
     try {
-      const response = await axios.put("http://localhost:8070/attendance/admin-update");
+      const response = await axios.put("http://localhost:8070/attendance/admin-update", {
+        email,
+        date: attendanceDate,
+        status,
+        remarks,
+      });
+  
       Swal.fire({
-        icon: 'success',
-        title: 'Attendance Updated',
+        icon: "success",
+        title: "Attendance Updated",
         text: response.data.message,
       });
     } catch (error) {
       Swal.fire({
-        icon: 'error',
-        title: 'Error',
-        text: error.response?.data?.message || 'An error occurred while updating attendance.',
+        icon: "error",
+        title: "Error",
+        text:
+          error.response?.data?.message ||
+          "An error occurred while updating attendance.",
       });
     }
   };
+  
 
   const markHoliday = async () => {
     try {
-      const response = await axios.post("http://localhost:8070/attendance/mark-holiday", { date });
+      const response = await axios.post(
+        "http://localhost:8070/attendance/mark-holiday",
+        { date }
+      );
       Swal.fire({
-        icon: 'success',
-        title: 'Holiday Marked',
+        icon: "success",
+        title: "Holiday Marked",
         text: response.data.message,
       });
     } catch (error) {
       Swal.fire({
-        icon: 'error',
-        title: 'Error',
-        text: error.response?.data?.message || 'An error occurred',
+        icon: "error",
+        title: "Error",
+        text: error.response?.data?.message || "An error occurred",
       });
     }
   };
 
   return (
     <div className="max-w-xl mx-auto p-6 bg-white rounded-lg shadow-md">
-      <h2 className="text-2xl font-semibold text-center mb-4">Admin Attendance Management</h2>
+      <h2 className="text-2xl font-semibold text-center mb-4">
+        Admin Attendance Management
+      </h2>
       <div className="space-y-4">
         <div>
-          <label className="block font-medium">Admin Status:</label>
+          <label className="block font-medium">Email:</label>
+          <input
+            type="text"
+            className="w-full px-4 py-2 border rounded-md"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            placeholder="Enter User Email"
+          />
+        </div>
+        <div>
+              <label className="block font-medium">Date:</label>
+              <input
+                type="date"
+                className="w-full px-4 py-2 border rounded-md"
+                value={attendanceDate}
+                onChange={(e) => setAttendanceDate(e.target.value)}
+              />
+            </div>
+        <div>
+          <label className="block font-medium">Status:</label>
           <select
             className="w-full px-4 py-2 border rounded-md"
             value={status}
@@ -81,7 +116,9 @@ const AdminAttendence = () => {
         </button>
 
         <div className="max-w-xl mx-auto p-6 bg-white rounded-lg shadow-md">
-          <h2 className="text-2xl font-semibold text-center mb-4">Mark Holiday</h2>
+          <h2 className="text-2xl font-semibold text-center mb-4">
+            Mark Holiday
+          </h2>
           <div className="space-y-4">
             <div>
               <label className="block font-medium">Holiday Date:</label>
@@ -101,7 +138,7 @@ const AdminAttendence = () => {
               </button>
             </div>
           </div>
-          </div>
+        </div>
       </div>
     </div>
   );
