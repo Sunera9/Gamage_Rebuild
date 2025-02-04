@@ -153,6 +153,18 @@ router.route("/delete/:id").delete(async (req, res) => {
   }
 });
 
+// Get total ticket count
+router.get("/count", async (req, res) => {
+  try {
+    const totalTickets = await TicketModel.countDocuments();
+    res.json({ totalTickets });
+  } catch (err) {
+    console.error("Error fetching tickets count:", err.message);
+    res.status(500).json({ status: "Error fetching tickets count", error: err.message });
+  }
+});
+
+
 
 
 module.exports = router;

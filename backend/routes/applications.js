@@ -78,6 +78,17 @@ router.route("/delete/:id").delete(async (req, res) => {
   }
 });
 
+// Get total application count
+router.get("/count", async (req, res) => {
+  try {
+    const totalApplications = await ApplicationModel.countDocuments();
+    res.json({ totalApplications });
+  } catch (err) {
+    console.error("Error fetching applications count:", err.message);
+    res.status(500).json({ status: "Error fetching applications count", error: err.message });
+  }
+});
+
 // Update an application by ID
 router.route("/update/:id").put(async (req, res) => {
   const applicationId = req.params.id;

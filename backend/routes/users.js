@@ -126,6 +126,23 @@ router.route("/updateByEmail/:email").put(async (req, res) => {
 });
 
 
+// Get all users by job position (role)
+router.route("/getRoleCount/:role").get(async (req, res) => {
+  const role = req.params.role;
+  try {
+    // Count the number of users with the specified role
+    const count = await UserModel.countDocuments({ role: role });
+
+    res.status(200).json({ status: "Role count fetched", role, count });
+  } catch (err) {
+    console.error(err.message);
+    res
+      .status(500)
+      .json({ status: "Error with fetching role count", error: err.message });
+  }
+});
+
+
 
 
 module.exports = router;

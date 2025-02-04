@@ -30,6 +30,8 @@ import JobPositions from "./components/jobposition";
 import ViewTicket from "./components/ViewTicket";
 import ViewLeaves from "./components/ViewLeaves";
 import SupportPage from "./page/SupportPage";
+import ApplicationsTable from "./components/manageApplications";
+
 
 
 
@@ -67,6 +69,8 @@ function App() {
           <Route path="/dashboard" element={<Dashboard />} />
 
           {/*Admin routes */}
+          <Route path="/admin/applications" element={<ApplicationsTable />} />
+
           <Route path="/admin/dashboard" element={<Dashboard />} />
           <Route path="/admin/employee" element={<AllEmployee />} />
           <Route path="/admin/salary/sheet" element={<Salary />} />
@@ -107,7 +111,6 @@ function App() {
           <Route path="/tickets/:id" element={<ViewTicket />} />
           <Route path="/leaves" element={<ViewLeaves />} />
           <Route path="/support" element={<SupportPage />} />
-
         </Route>
 
         {/* Redirect unknown routes to login */}
