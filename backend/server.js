@@ -17,6 +17,7 @@ app.use(
     origin: [
       "https://gamage-rebuild-e918-git-main-sunera9s-projects.vercel.app", // Frontend URL
       "https://gamage-rebuild.vercel.app", // Another Frontend URL if applicable
+      "https://gamage-rebuild-p9ce9adut-sunera9s-projects.vercel.app", 
     ],
     methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"], // Add OPTIONS method
     allowedHeaders: ["Content-Type", "Authorization"],
