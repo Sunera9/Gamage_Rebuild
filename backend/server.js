@@ -18,8 +18,10 @@ app.use(
       "https://gamage-rebuild-e918-git-main-sunera9s-projects.vercel.app", // Frontend URL
       "https://gamage-rebuild.vercel.app", // Another Frontend URL if applicable
     ],
-    methods: ["GET", "POST", "PUT", "DELETE"],
+    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"], // Add OPTIONS method
     allowedHeaders: ["Content-Type", "Authorization"],
+    preflightContinue: false, // Do not pass the preflight to the next handler
+    optionsSuccessStatus: 204, // Status code to return for successful OPTIONS request
   })
 );
 
