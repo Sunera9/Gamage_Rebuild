@@ -59,7 +59,7 @@ const Login = () => {
     try {
       // API call to login
       const response = await axios.post(
-        "https://gamage-rebuild-git-main-sunera9s-projects.vercel.app/auth/login",
+        "https://gamage-rebuild-p9ce9adut-sunera9s-projects.vercel.app/auth/login",
         credentials,
         {
           headers: {
