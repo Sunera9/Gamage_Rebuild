@@ -61,9 +61,10 @@ const Login = () => {
 
       const backendURL = process.env.REACT_APP_BACKEND_BASEURL;
 
-      
+       console.log("Backend URL:", backendURL);
+
       const response = await axios.post(
-        `${backendURL}/auth/login`,
+         `${backendURL}/auth/login`, 
         credentials,
         {
           headers: {
