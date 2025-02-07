@@ -58,8 +58,12 @@ const Login = () => {
 
     try {
       // API call to login
+
+      const backendURL = process.env.REACT_APP_BACKEND_BASEURL;
+
+      
       const response = await axios.post(
-        "http://localhost:8070/auth/login",
+        `${backendURL}/auth/login`,
         credentials,
         {
           headers: {
