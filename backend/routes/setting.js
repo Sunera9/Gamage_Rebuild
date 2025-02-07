@@ -53,6 +53,56 @@ router.get('/:id', async (req, res) => {
     }
 });
 
+// Update multiple settings using their names
+router.put("/update-by-name", async (req, res) => {
+    const {
+        healthInsurance,
+        professionalTax,
+        standardAllowance,
+        medicalAllowance,
+        dearnessAllowance,
+        conveyanceAllowance,
+        epfEmployee,
+        epfEmployer,
+        etfEmployer
+    } = req.body;
+
+    // Mapping names to corresponding request body fields
+    const updateData = [
+        { name: "Health Insurance Deduction", value: healthInsurance },
+        { name: "Professional Tax", value: professionalTax },
+        { name: "Standard Allowance", value: standardAllowance },
+        { name: "Medical Allowance", value: medicalAllowance },
+        { name: "Dearness Allowance", value: dearnessAllowance },
+        { name: "Conveyance Allowance", value: conveyanceAllowance },
+        { name: "EPF Employee", value: epfEmployee },
+        { name: "EPF Employer", value: epfEmployer },
+        { name: "ETF Employer", value: etfEmployer }
+    ];
+
+    try {
+        const updatePromises = updateData.map(async (item) => {
+            if (item.value !== undefined) {
+                return SettingModel.findOneAndUpdate(
+                    { name: item.name }, // Find by name
+                    { value: item.value }, // Update the value
+                    { new: true, runValidators: true } // Return updated document
+                );
+            }
+        });
+
+        const updatedSettings = await Promise.all(updatePromises);
+        res.status(200).json({
+            message: "Settings updated successfully.",
+            settings: updatedSettings.filter(setting => setting !== null) // Remove null values
+        });
+
+    } catch (error) {
+        console.error("Error updating settings:", error.message);
+        res.status(500).json({ message: "Failed to update settings.", error: error.message });
+    }
+});
+
 // UPDATE a setting by ID
 router.put('/:id', async (req, res) => {
     const { name, value, description } = req.body;

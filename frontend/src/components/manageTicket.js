@@ -77,97 +77,125 @@ function TicketsTable() {
 
   return (
     <>
-    <Header/>
-    <div className="tickets-table">
-      <div className="title">
-        <h2>Tickets</h2>
-      </div>
+      <Header />
+      <div className="flex justify-center p-6">
+        <div className="w-2/10 bg-white shadow-lg rounded-lg">
+          <div className="text-center mb-4"></div>
 
-      <table className="tickets-table">
-        <thead>
-          <tr>
-            <th>User Name</th>
-            <th>User Email</th>
-            <th>Description</th>
-            <th>Status</th>
-            <th>Leave Type</th>
-            <th>Date</th>
-            <th>Action</th>
-          </tr>
-        </thead>
-        <tbody>
-          {tickets.map((ticket) => (
-            <tr key={ticket._id}>
-              <td
-                onClick={() => handleIdClick(ticket)}
-                style={{
-                  cursor: "pointer",
-                  color: "blue",
-                  textDecoration: "underline",
-                }}
-              >
-                {ticket.User?.name || "N/A"}
-              </td>
-              <td>{ticket.User?.email || "N/A"}</td>
-              <td>{ticket.description}</td>
-              <td>{ticket.status}</td>
-              <td>{ticket.leaveType}</td>
-              <td>{new Date(ticket.createdAt).toLocaleDateString()}</td>
-              <td>
-                <button title="Send Email">✉️</button>
-              </td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
+          <table className="min-w-full bg-gray-50 rounded-lg shadow-md overflow-hidden">
+            <thead className="bg-gray-100">
+              <tr>
+                <th className="py-3 px-4 text-left text-sm font-semibold text-gray-600">
+                  User Name
+                </th>
+                <th className="py-3 px-4 text-left text-sm font-semibold text-gray-600">
+                  User Email
+                </th>
+                <th className="py-3 px-4 text-left text-sm font-semibold text-gray-600">
+                  Description
+                </th>
+                <th className="py-3 px-4 text-left text-sm font-semibold text-gray-600">
+                  Status
+                </th>
+                <th className="py-3 px-4 text-left text-sm font-semibold text-gray-600">
+                  Leave Type
+                </th>
+                <th className="py-3 px-4 text-left text-sm font-semibold text-gray-600">
+                  Date
+                </th>
+                <th className="py-3 px-4 text-left text-sm font-semibold text-gray-600">
+                  Action
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              {tickets.map((ticket) => (
+                <tr key={ticket._id} className="hover:bg-gray-100">
+                  <td
+                    onClick={() => handleIdClick(ticket)}
+                    className="py-3 px-4 text-sm text-blue-500 cursor-pointer underline"
+                  >
+                    {ticket.User?.name || "N/A"}
+                  </td>
+                  <td className="py-3 px-4 text-sm">
+                    {ticket.User?.email || "N/A"}
+                  </td>
+                  <td className="py-3 px-4 text-sm">{ticket.description}</td>
+                  <td className="py-3 px-4 text-sm">{ticket.status}</td>
+                  <td className="py-3 px-4 text-sm">{ticket.leaveType}</td>
+                  <td className="py-3 px-4 text-sm">
+                    {new Date(ticket.createdAt).toLocaleDateString()}
+                  </td>
+                  <td className="py-3 px-4 text-sm">
+                    <button className="text-gray-600 hover:text-blue-500">
+                      ✉️
+                    </button>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
 
-      {showModal && selectedTicket && (
-        <div className="modal">
-          <div className="modal-content">
-            <h3>Ticket Details</h3>
-            <p>
-              <strong>ID:</strong> {selectedTicket._id}
-            </p>
-            <p>
-              <strong>Description:</strong> {selectedTicket.description}
-            </p>
-            <p>
-              <strong>Status:</strong> {selectedTicket.status}
-            </p>
-            <p>
-              <strong>Leave Type:</strong> {selectedTicket.leaveType}
-            </p>
-            <p>
-              <strong>Date:</strong>{" "}
-              {new Date(selectedTicket.createdAt).toLocaleDateString()}
-            </p>
+          {showModal && selectedTicket && (
+            <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center">
+              <div className="bg-white rounded-lg p-6 w-1/3 shadow-lg relative">
+                <button
+                  onClick={() => setShowModal(false)} // Close the modal
+                  className="absolute top-2 right-2 bg-gray-200 text-gray-600 rounded-full w-8 h-8 flex items-center justify-center hover:bg-gray-300"
+                >
+                  ✖
+                </button>
+                <h3 className="text-xl font-semibold mb-4">Ticket Details</h3>
+                <p>
+                  <strong>ID:</strong> {selectedTicket._id}
+                </p>
+                <p>
+                  <strong>Description:</strong> {selectedTicket.description}
+                </p>
+                <p>
+                  <strong>Status:</strong> {selectedTicket.status}
+                </p>
+                <p>
+                  <strong>Leave Type:</strong> {selectedTicket.leaveType}
+                </p>
+                <p>
+                  <strong>Date:</strong>{" "}
+                  {new Date(selectedTicket.createdAt).toLocaleDateString()}
+                </p>
 
-            {selectedTicket.files?.url && (
-              <button
-                onClick={() =>
-                  handleImageDownload(
-                    selectedTicket.files.url,
-                    selectedTicket.files.fileName
-                  )
-                }
-                className="download-button"
-              >
-                Download Attachment
-              </button>
-            )}
+                {selectedTicket.files?.url && (
+                  <button
+                    onClick={() =>
+                      handleImageDownload(
+                        selectedTicket.files.url,
+                        selectedTicket.files.fileName
+                      )
+                    }
+                    className="mt-4 bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600"
+                  >
+                    Download Attachment
+                  </button>
+                )}
 
-            <div className="modal-buttons">
-              <button onClick={handleAccept} className="accept-button">
-                Accept
-              </button>
-              <button onClick={handleReject} className="reject-button">
-                Reject
-              </button>
+                <div className="mt-4 flex justify-between">
+                  <button
+                    onClick={handleAccept}
+                    className="bg-green-500 text-white px-4 py-2 rounded-md hover:bg-green-600"
+                  >
+                    Accept
+                  </button>
+                  <button
+                    onClick={handleReject}
+                    className="bg-red-500 text-white px-4 py-2 rounded-md hover:bg-red-600"
+                  >
+                    Reject
+                  </button>
+                </div>
+              </div>
             </div>
-          </div>
+          )}
         </div>
-      )}
-    </div>
+      </div>
     </>
   );
 }

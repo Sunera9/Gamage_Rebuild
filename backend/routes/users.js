@@ -3,6 +3,8 @@ const router = express.Router();
 const UserModel = require("../models/User"); 
 const ProfileModel = require("../models/Profile");
 
+
+
 // Get all users
 router.route("/get").get(async (req, res) => {
   try {
@@ -66,5 +68,80 @@ router.route("/update/:id").put(async (req, res) => {
     res.status(500).json({ status: "Error with updating user", error: err.message });
   }
 });
+
+
+// Get user by email
+router.route("/getByEmail/:email").get(async (req, res) => {
+  const email = req.params.email;
+  try {
+    const user = await UserModel.findOne({ email: email });
+    if (!user) {
+      return res.status(404).json({ status: "User not found" });
+    }
+    res.status(200).json({ status: "User fetched", user });
+  } catch (error) {
+    console.error(error.message);
+    res.status(500).json({ status: "Error with getting user", error: error.message });
+  }
+});
+
+// Update a user by email
+router.route("/updateByEmail/:email").put(async (req, res) => {
+  const email = req.params.email;
+  const { nic, name, address, phone, dob, gender, jobPosition, jobCategory, department, company, startDate, endDate, bankAccountNumber, bankName, role } = req.body;
+
+  try {
+    const updatedUser = await UserModel.findOneAndUpdate(
+      { email: email },
+      {
+        nic,
+        name,
+        address,
+        phone,
+        dob,
+        gender,
+        jobPosition,
+        jobCategory,
+        department,
+        company,
+        startDate,
+        endDate,
+        bankAccountNumber,
+        bankName,
+        role,
+      },
+      { new: true } 
+    );
+
+    if (!updatedUser) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    res.status(200).json({ message: "User updated successfully", updatedUser });
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).json({ status: "Error with updating user", error: err.message });
+  }
+});
+
+
+// Get all users by job position (role)
+router.route("/getRoleCount/:role").get(async (req, res) => {
+  const role = req.params.role;
+  try {
+    // Count the number of users with the specified role
+    const count = await UserModel.countDocuments({ role: role });
+
+    res.status(200).json({ status: "Role count fetched", role, count });
+  } catch (err) {
+    console.error(err.message);
+    res
+      .status(500)
+      .json({ status: "Error with fetching role count", error: err.message });
+  }
+});
+
+
+
 
 module.exports = router;

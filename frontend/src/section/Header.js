@@ -1,11 +1,13 @@
 import React, { useState } from 'react';
 import { FaBell, FaUserCircle, FaSearch, FaUser, FaCog, FaListAlt, FaLifeRing, FaSignOutAlt } from 'react-icons/fa';
-import { Link } from 'react-router-dom';  // Import Link from react-router-dom
+import { Link, useNavigate } from 'react-router-dom';  // Import Link from react-router-dom
 import gamgelogo from '../assest/img/brand/gamageLogo.jpg';
 
 const Header = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [isProfileDropdownOpen, setIsProfileDropdownOpen] = useState(false);
+
+  const navigate = useNavigate();
 
   const handleInputChange = (event) => {
     setSearchTerm(event.target.value);
@@ -17,6 +19,16 @@ const Header = () => {
 
   const toggleProfileDropdown = () => {
     setIsProfileDropdownOpen((prevState) => !prevState);
+  };
+
+  // Handle Logout
+  const handleLogout = () => {
+    // Clear local storage or session storage
+    localStorage.removeItem("token");
+    localStorage.removeItem("role");
+
+    // Redirect to the login page
+    navigate("/login");
   };
 
   return (
@@ -92,7 +104,9 @@ const Header = () => {
                     Support
                   </Link>
                 </li>
-                <li className="flex items-center px-4 py-2 hover:bg-gray-100 cursor-pointer text-red-500">
+                <li className="flex items-center px-4 py-2 hover:bg-gray-100 cursor-pointer text-red-500"
+                onClick={handleLogout}
+                >
                   <Link to="/logout" className="flex items-center">
                     <FaSignOutAlt className="mr-2" />
                     Logout
@@ -108,3 +122,23 @@ const Header = () => {
 };
 
 export default Header;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -66,88 +66,90 @@ const JobList = () => {
   };
 
   return (
-    <Container sx={{ marginTop: 5 }}>
-      <Typography variant="h4" gutterBottom align="center">
-        Available Jobs
-      </Typography>
-      {loading && (
-        <Grid container justifyContent="center" sx={{ marginTop: 3 }}>
-          <CircularProgress />
-        </Grid>
-      )}
-      {error && (
-        <Alert severity="error" sx={{ marginTop: 3 }}>
-          {error}
-        </Alert>
-      )}
-      {!loading && !error && jobs.length === 0 && (
-        <Typography variant="h6" align="center" sx={{ marginTop: 3 }}>
-          No jobs available at the moment.
+    <Container sx={{ marginTop: 6, display: "flex", justifyContent: "center" }}>
+      <Grid container spacing={3} direction="column" alignItems="center">
+        <Typography variant="h4" gutterBottom align="center">
+          Available Jobs
         </Typography>
-      )}
-      {!loading && jobs.length > 0 && (
-        <Grid container spacing={3} sx={{ marginTop: 3 }}>
-          {jobs.map((job) => (
-            <Grid item xs={12} sm={6} md={4} key={job._id}>
-              <Card
-                sx={{
-                  height: "100%",
-                  display: "flex",
-                  flexDirection: "column",
-                  justifyContent: "space-between", // Ensure content is spaced
-                  "&:hover": {
-                    boxShadow: 6,
-                  },
-                }}
-              >
-                <CardContent sx={{ flexGrow: 1 }}>
-                  <Typography variant="h6" gutterBottom>
-                    {job.jobTitle}
-                  </Typography>
-                  <Typography variant="body2" color="textSecondary">
-                    <strong>Company:</strong> {job.companyName}
-                  </Typography>
-                  <Typography variant="body2" color="textSecondary">
-                    <strong>Location:</strong> {job.location}
-                  </Typography>
-                  <Typography
-                    variant="body2"
-                    color="textSecondary"
-                    sx={{ marginTop: 1 }}
-                  >
-                    <strong>Description:</strong> {job.jobDescription}
-                  </Typography>
-                  <Typography
-                    variant="body2"
-                    color="textSecondary"
-                    sx={{ marginTop: 1 }}
-                  >
-                    <strong>Requirements:</strong> {job.requirements.join(", ")}
-                  </Typography>
-                  <Typography
-                    variant="body2"
-                    color="textSecondary"
-                    sx={{ marginTop: 1 }}
-                  >
-                    <strong>Type:</strong> {job.jobType}
-                  </Typography>
-                </CardContent>
-                <CardActions sx={{ justifyContent: "center", paddingBottom: 2 }}>
-                  <Button
-                    size="small"
-                    variant="contained"
-                    color="primary"
-                    fullWidth
-                    onClick={() => handleApply(job._id, job.jobTitle)}
-                  >
-                    Apply
-                  </Button>
-                </CardActions>
-              </Card>
-            </Grid>
-          ))}
-        </Grid>
-      )}
+        {loading && (
+          <Grid container justifyContent="center" sx={{ marginTop: 3 }}>
+            <CircularProgress />
+          </Grid>
+        )}
+        {error && (
+          <Alert severity="error" sx={{ marginTop: 3 }}>
+            {error}
+          </Alert>
+        )}
+        {!loading && !error && jobs.length === 0 && (
+          <Typography variant="h6" align="center" sx={{ marginTop: 3 }}>
+            No jobs available at the moment.
+          </Typography>
+        )}
+        {!loading && jobs.length > 0 && (
+          <Grid container spacing={3} sx={{ marginTop: 3 }} justifyContent="center">
+            {jobs.map((job) => (
+              <Grid item xs={12} sm={6} md={4} key={job._id}>
+                <Card
+                  sx={{
+                    height: "100%",
+                    display: "flex",
+                    flexDirection: "column",
+                    justifyContent: "space-between", // Ensure content is spaced
+                    "&:hover": {
+                      boxShadow: 6,
+                    },
+                  }}
+                >
+                  <CardContent sx={{ flexGrow: 1 }}>
+                    <Typography variant="h6" gutterBottom>
+                      {job.jobTitle}
+                    </Typography>
+                    <Typography variant="body2" color="textSecondary">
+                      <strong>Company:</strong> {job.companyName}
+                    </Typography>
+                    <Typography variant="body2" color="textSecondary">
+                      <strong>Location:</strong> {job.location}
+                    </Typography>
+                    <Typography
+                      variant="body2"
+                      color="textSecondary"
+                      sx={{ marginTop: 1 }}
+                    >
+                      <strong>Description:</strong> {job.jobDescription}
+                    </Typography>
+                    <Typography
+                      variant="body2"
+                      color="textSecondary"
+                      sx={{ marginTop: 1 }}
+                    >
+                      <strong>Requirements:</strong> {job.requirements.join(", ")}
+                    </Typography>
+                    <Typography
+                      variant="body2"
+                      color="textSecondary"
+                      sx={{ marginTop: 1 }}
+                    >
+                      <strong>Type:</strong> {job.jobType}
+                    </Typography>
+                  </CardContent>
+                  <CardActions sx={{ justifyContent: "center", paddingBottom: 2 }}>
+                    <Button
+                      size="small"
+                      variant="contained"
+                      color="primary"
+                      fullWidth
+                      onClick={() => handleApply(job._id, job.jobTitle)}
+                    >
+                      Apply
+                    </Button>
+                  </CardActions>
+                </Card>
+              </Grid>
+            ))}
+          </Grid>
+        )}
+      </Grid>
     </Container>
   );
 };

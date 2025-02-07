@@ -4,18 +4,37 @@ const LeaveModel = require('../models/Leave');
 
 
 // Create a new leave application
-router.post('/leaves', async (req, res) => {
+router.post('/add', async (req, res) => {
   try {
-    const leave = new LeaveModel(req.body);
+    const { duration, startDate, endDate, type, reason } = req.body;
+
+    // Validate duration
+    if (!['Half Day', 'Full Day'].includes(duration)) {
+      return res.status(400).json({
+        status: 'Invalid duration value. It must be "Half Day" or "Full Day".',
+      });
+    }
+
+    // Create a new leave
+    const leave = new LeaveModel({
+      duration,
+      startDate,
+      User: req.body.userId, // Save the user's ID
+      endDate,
+      type,
+      reason,
+    });
+
     await leave.save();
-    res.status(201).json({ message: 'Leave application created successfully', leave });
+    res.status(201).json({ status: 'Leave application created successfully', leave });
   } catch (error) {
-    res.status(400).json({ message: 'Error creating leave application', error: error.message });
+    console.error('Error creating leave application:', error);
+    res.status(400).json({ status: 'Error creating leave application', error: error.message });
   }
 });
 
-// Get all leave applications
-router.get('/leaves', async (req, res) => {
+// Get all leave applications with populated user details
+router.get("/get", async (req, res) => {
   try {
     const leaves = await LeaveModel.find().populate('userId', 'name email'); // Populate user details
     res.status(200).json(leaves);
@@ -24,10 +43,10 @@ router.get('/leaves', async (req, res) => {
   }
 });
 
-// Get a specific leave application by ID
-router.get('/leaves/:id', async (req, res) => {
+// Get a specific leave application by ID with populated user details
+router.route("/get/:id").get(async (req, res) => {
   try {
-    const leave = await LeaveModel.findById(req.params.id).populate('userId', 'name email');
+    const leave = await LeaveModel.findById(req.params.id).populate('User', 'name email');
     if (!leave) {
       return res.status(404).json({ message: 'Leave application not found' });
     }
@@ -59,8 +78,24 @@ router.delete('/leaves/:id', async (req, res) => {
     }
     res.status(200).json({ message: 'Leave application deleted successfully' });
   } catch (error) {
-    res.status(500).json({ message: 'Error deleting leave application', error: error.message });
+    console.error(error.message);
+    res.status(500).json({ status: "Error deleting leave application", error: error.message });
   }
 });
+
+// // Get leave requests for a specific user
+// router.get("/leaves/user/:userId", async (req, res) => {
+//   try {
+//     const { userId } = req.params; // Extract userId from request parameters
+//     const leaves = await LeaveModel.find({ User: userId }).populate('User', 'name email'); // Filter by userId
+//     if (!leaves || leaves.length === 0) {
+//       return res.status(404).json({ status: "No leave applications found for this user." });
+//     }
+//     res.status(200).json(leaves);
+//   } catch (error) {
+//     console.error("Error fetching user-specific leaves:", error.message);
+//     res.status(500).json({ status: "Failed to fetch leave requests.", error: error.message });
+//   }
+// });
 
 module.exports = router;

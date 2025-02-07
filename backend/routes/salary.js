@@ -105,6 +105,7 @@ router.route("/search").get(async (req, res) => {
         totalAllowances: totalAllowances,
         totalDeductions: totalDeductions,
         netSalary: netSalary,
+        salaryComponentId: component._id,
       };
     });
 
@@ -512,5 +513,6 @@ router.route("/slip/:salaryComponentId").get(async (req, res) => {
     });
   }
 });
+
 
 module.exports = router;
