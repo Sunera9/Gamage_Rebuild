@@ -1,0 +1,3 @@
+{
+  "rewrites": [{"source": "/(.*0'","destination": "/index.js"}]
+}
