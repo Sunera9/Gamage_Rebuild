@@ -12,15 +12,14 @@ require("./cronJobs/attendanceCron");
 const PORT = process.env.PORT || 8070;
 
 
-
 app.use(
   cors({
     origin: [
-      "http://localhost:3000", // Local development URL
-      "https://gamage-rebuild-e918-git-main-sunera9s-projects.vercel.app", // Deployed frontend URL
+      "https://gamage-rebuild-e918-git-main-sunera9s-projects.vercel.app", // Frontend URL
+      "https://gamage-rebuild.vercel.app", // Another Frontend URL if applicable
     ],
     methods: ["GET", "POST", "PUT", "DELETE"],
-    allowedHeaders: ["Content-Type"],
+    allowedHeaders: ["Content-Type", "Authorization"],
   })
 );
 
