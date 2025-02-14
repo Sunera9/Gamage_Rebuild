@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import axios from "axios";
-import '../styles/AddJob.css';
+import "../styles/AddJob.css";
 
 const PostJob = () => {
   const [formData, setFormData] = useState({
@@ -30,9 +30,14 @@ const PostJob = () => {
     try {
       const formattedData = {
         ...formData,
-        requirements: formData.requirements.split(",").map((item) => item.trim()), // Convert comma-separated string to array
+        requirements: formData.requirements
+          .split(",")
+          .map((item) => item.trim()), // Convert comma-separated string to array
       };
-      const response = await axios.post("http://localhost:8070/api/jobs", formattedData);
+      const response = await axios.post(
+        `${process.env.REACT_APP_BACKEND_URL}/api/jobs`,
+        formattedData
+      );
       setSuccessMessage("Job posted successfully!");
       setErrorMessage("");
       setFormData({

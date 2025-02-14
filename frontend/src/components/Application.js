@@ -59,18 +59,19 @@ const Application = () => {
     console.log("FormData before sending:", formData);
 
 
-    try {
-      await axios.post(
-        "http://localhost:8070/api/applications/add",
-        formData,
-        { headers: { "Content-Type": "application/json" } }
-      );
-      alert("Employee added successfully");
-      navigate("/employee");
-    } catch (error) {
-      alert("Failed to add employee");
-      console.error("Error:", error.response?.data || error.message);
-    }
+  try {
+    await axios.post(
+      `${process.env.REACT_APP_BACKEND_URL}/api/applications/add`, // Using dynamic base URL
+      formData,
+      { headers: { "Content-Type": "application/json" } }
+    );
+    alert("Employee added successfully");
+    navigate("/employee");
+  } catch (error) {
+    alert("Failed to add employee");
+    console.error("Error:", error.response?.data || error.message);
+  }
+
   };
   
 

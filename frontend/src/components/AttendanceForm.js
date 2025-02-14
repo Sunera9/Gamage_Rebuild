@@ -42,6 +42,7 @@ const AttendanceForm = () => {
     return /^[a-fA-F0-9]{24}$/.test(id);
   };
 
+  // Handle entry
   const handleEntry = async () => {
     if (!validateUserId(userId)) {
       Swal.fire({
@@ -54,7 +55,7 @@ const AttendanceForm = () => {
 
     try {
       const response = await axios.post(
-        `http://localhost:8070/attendance/entry?userId=${userId}`
+        `${process.env.REACT_APP_BACKEND_URL}/attendance/entry?userId=${userId}`
       );
       Swal.fire({
         icon: "success",
@@ -73,6 +74,7 @@ const AttendanceForm = () => {
     }
   };
 
+  // Handle exit
   const handleExit = async () => {
     if (!validateUserId(userId)) {
       Swal.fire({
@@ -85,7 +87,7 @@ const AttendanceForm = () => {
 
     try {
       const response = await axios.post(
-        `http://localhost:8070/attendance/exit?userId=${userId}`
+        `${process.env.REACT_APP_BACKEND_URL}/attendance/exit?userId=${userId}`
       );
       Swal.fire({
         icon: "success",
@@ -104,9 +106,12 @@ const AttendanceForm = () => {
     }
   };
 
+  // View attendance
   const handleViewAttendance = async () => {
     try {
-      const response = await axios.get("http://localhost:8070/attendance/all");
+      const response = await axios.get(
+        `${process.env.REACT_APP_BACKEND_URL}/attendance/all`
+      );
 
       if (response.data && response.data.attendanceRecords) {
         // Format the date to display only the date (YYYY-MM-DD)

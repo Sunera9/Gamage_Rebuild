@@ -8,51 +8,62 @@ function InternshipProgram() {
   const [showModal, setShowModal] = useState(false); 
   const [modalMessage, setModalMessage] = useState(''); 
 
-  useEffect(() => {
-    const fetchUsers = async () => {
-      try {
-        const response = await axios.get('http://localhost:8070/users/get');
-        const filteredUsers = response.data.filter(user => user.jobPosition);
-        setUsers(filteredUsers);
-      } catch (error) {
-        console.error('Error fetching users:', error);
-      }
-    };
-
-    fetchUsers();
-  }, []);
-
-  const handleEmail = async (userId) => {
+useEffect(() => {
+  const fetchUsers = async () => {
     try {
-      // Check if the user already received an email
-      const statusResponse = await axios.get(`http://localhost:8070/send-email/check-status/${userId}`);
-  
-      if (statusResponse.data.emailSent) {
-        setModalMessage(`Email already sent to this user`); // Message for already sent email
-        setShowModal(true);
-      } else {
-        // Send the email if it hasn't been sent before
-        const sendResponse = await axios.post('http://localhost:8070/send-email', { userId });
-  
-        if (sendResponse.data.success) {
-          setModalMessage(`Email sent successfully to ${sendResponse.data.userName}`); // Success message
-          setShowModal(true);
-        } else {
-          setModalMessage('Failed to send the email. Please try again.'); // Failure case
-          setShowModal(true);
-        }
-      }
+      const response = await axios.get(
+        `${process.env.REACT_APP_BACKEND_URL}/users/get`
+      );
+      const filteredUsers = response.data.filter((user) => user.jobPosition);
+      setUsers(filteredUsers);
     } catch (error) {
-      console.error(`Error handling email for user with ID: ${userId}`, error);
-      setModalMessage('An error occurred while sending the email. Please try again.'); // Error case
-      setShowModal(true);
+      console.error("Error fetching users:", error);
     }
   };
-  
 
-  const closeModal = () => {
-    setShowModal(false); // Close the modal
-  };
+  fetchUsers();
+}, []);
+
+const handleEmail = async (userId) => {
+  try {
+    // Check if the user already received an email
+    const statusResponse = await axios.get(
+      `${process.env.REACT_APP_BACKEND_URL}/send-email/check-status/${userId}`
+    );
+
+    if (statusResponse.data.emailSent) {
+      setModalMessage(`Email already sent to this user`); // Message for already sent email
+      setShowModal(true);
+    } else {
+      // Send the email if it hasn't been sent before
+      const sendResponse = await axios.post(
+        `${process.env.REACT_APP_BACKEND_URL}/send-email`,
+        { userId }
+      );
+
+      if (sendResponse.data.success) {
+        setModalMessage(
+          `Email sent successfully to ${sendResponse.data.userName}`
+        ); // Success message
+        setShowModal(true);
+      } else {
+        setModalMessage("Failed to send the email. Please try again."); // Failure case
+        setShowModal(true);
+      }
+    }
+  } catch (error) {
+    console.error(`Error handling email for user with ID: ${userId}`, error);
+    setModalMessage(
+      "An error occurred while sending the email. Please try again."
+    ); // Error case
+    setShowModal(true);
+  }
+};
+
+const closeModal = () => {
+  setShowModal(false); // Close the modal
+};
+
 
   return (
     <>

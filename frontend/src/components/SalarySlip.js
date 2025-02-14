@@ -10,36 +10,41 @@ const SalarySlip = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
 
-  const API_BASE_URL = "http://localhost:8070/api";
+ const API_BASE_URL = process.env.REACT_APP_BACKEND_URL + "/api"; // Use environment variable for the base URL
 
-  useEffect(() => {
-    const fetchSalarySlip = async () => {
-      try {
-        setError("");
-        const response = await axios.get(`${API_BASE_URL}/salary/slip/${salaryComponentId}`);
-        setSalarySlipData(response.data.salarySlip);
-      } catch (err) {
-        setError(err.response?.data?.message || "Failed to fetch salary slip data");
-      } finally {
-        setLoading(false);
-      }
-    };
+ useEffect(() => {
+   const fetchSalarySlip = async () => {
+     try {
+       setError("");
+       const response = await axios.get(
+         `${API_BASE_URL}/salary/slip/${salaryComponentId}`
+       );
+       setSalarySlipData(response.data.salarySlip);
+     } catch (err) {
+       setError(
+         err.response?.data?.message || "Failed to fetch salary slip data"
+       );
+     } finally {
+       setLoading(false);
+     }
+   };
 
-    fetchSalarySlip();
-  }, [salaryComponentId]);
+   fetchSalarySlip();
+ }, [salaryComponentId]);
 
-  const handleDownloadPDF = async () => {
-    const element = document.getElementById("salary-slip-content");
-    const canvas = await html2canvas(element, { backgroundColor: "#fff" });
-    const imgData = canvas.toDataURL("image/png");
+ const handleDownloadPDF = async () => {
+   const element = document.getElementById("salary-slip-content");
+   const canvas = await html2canvas(element, { backgroundColor: "#fff" });
+   const imgData = canvas.toDataURL("image/png");
 
-    const pdf = new jsPDF("p", "mm", "a4");
-    const pdfWidth = pdf.internal.pageSize.getWidth();
-    const pdfHeight = (canvas.height * pdfWidth) / canvas.width;
+   const pdf = new jsPDF("p", "mm", "a4");
+   const pdfWidth = pdf.internal.pageSize.getWidth();
+   const pdfHeight = (canvas.height * pdfWidth) / canvas.width;
 
-    pdf.addImage(imgData, "PNG", 0, 0, pdfWidth, pdfHeight);
-    pdf.save("SalarySlip.pdf");
-  };
+   pdf.addImage(imgData, "PNG", 0, 0, pdfWidth, pdfHeight);
+   pdf.save("SalarySlip.pdf");
+ };
+
 
   if (loading) {
     return <div className="min-h-screen flex items-center justify-center text-xl font-semibold text-gray-600">Loading...</div>;

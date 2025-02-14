@@ -19,42 +19,47 @@ const Salary = () => {
   const [sheetError, setSheetError] = useState("");
   const [loadingSheet, setLoadingSheet] = useState(false);
 
-  const API_BASE_URL = "http://localhost:8070/api";
+const API_BASE_URL = process.env.REACT_APP_BACKEND_URL + "/api"; // Use environment variable for the base URL
 
-  const handleSearch = async () => {
-    try {
-      setSearchError("");
-      setLoadingSearch(true);
-      const response = await axios.get(`${API_BASE_URL}/salary/search`, {
-        params: { month: searchMonth, year: searchYear, userQuery },
-      });
-      setSearchResults(response.data.salaryRecords);
-    } catch (err) {
-      setSearchError(err.response?.data?.message || "Failed to fetch salary records");
-    } finally {
-      setLoadingSearch(false);
+const handleSearch = async () => {
+  try {
+    setSearchError("");
+    setLoadingSearch(true);
+    const response = await axios.get(`${API_BASE_URL}/salary/search`, {
+      params: { month: searchMonth, year: searchYear, userQuery },
+    });
+    setSearchResults(response.data.salaryRecords);
+  } catch (err) {
+    setSearchError(
+      err.response?.data?.message || "Failed to fetch salary records"
+    );
+  } finally {
+    setLoadingSearch(false);
+  }
+};
+
+const handleGenerateSheet = async () => {
+  try {
+    setSheetError("");
+    setLoadingSheet(true);
+    if (!sheetMonth || !sheetYear || sheetMonth < 1 || sheetMonth > 12) {
+      setSheetError("Please provide a valid month (1-12) and year.");
+      return;
     }
-  };
 
-  const handleGenerateSheet = async () => {
-    try {
-      setSheetError("");
-      setLoadingSheet(true);
-      if (!sheetMonth || !sheetYear || sheetMonth < 1 || sheetMonth > 12) {
-        setSheetError("Please provide a valid month (1-12) and year.");
-        return;
-      }
+    const response = await axios.get(`${API_BASE_URL}/salary/sheet`, {
+      params: { month: sheetMonth, year: sheetYear },
+    });
+    setSalarySheet(response.data.salarySheet);
+  } catch (err) {
+    setSheetError(
+      err.response?.data?.message || "Failed to generate salary sheet"
+    );
+  } finally {
+    setLoadingSheet(false);
+  }
+};
 
-      const response = await axios.get(`${API_BASE_URL}/salary/sheet`, {
-        params: { month: sheetMonth, year: sheetYear },
-      });
-      setSalarySheet(response.data.salarySheet);
-    } catch (err) {
-      setSheetError(err.response?.data?.message || "Failed to generate salary sheet");
-    } finally {
-      setLoadingSheet(false);
-    }
-  };
 
   const handleDownloadPDF = () => {
     const doc = new jsPDF();

@@ -10,7 +10,10 @@ const ViewTicket = () => {
   useEffect(() => {
     const fetchTicket = async () => {
       try {
-        const response = await axios.get(`http://localhost:8070/tickets/get/${id}`);
+       const response = await axios.get(
+         `${process.env.REACT_APP_BACKEND_URL}/tickets/get/${id}`
+       );
+
         setTicket(response.data.ticket);
       } catch (err) {
         console.error("Error fetching ticket details:", err);

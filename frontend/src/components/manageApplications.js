@@ -11,7 +11,9 @@ function ApplicationsTable() {
   useEffect(() => {
     const fetchApplications = async () => {
       try {
-        const response = await axios.get("http://localhost:8070/api/applications");
+        const response = await axios.get(
+          `${process.env.REACT_APP_BACKEND_URL}/api/applications`
+        );
         setApplications(response.data || []); // Ensure applications is an array
       } catch (error) {
         console.error("Error fetching applications:", error);

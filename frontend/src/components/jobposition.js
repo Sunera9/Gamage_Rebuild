@@ -8,32 +8,38 @@ const JobPositions = () => {
   const [overTimePay, setOvertimePay] = useState("");
   const [jobPositions, setJobPositions] = useState([]);
 
-  const fetchJobPositions = async () => {
-    try {
-      const response = await axios.get("http://localhost:8070/jobPosition/");
-      setJobPositions(response.data);
-    } catch (err) {
-      console.error(err);
-    }
-  };
+ const fetchJobPositions = async () => {
+   try {
+     const response = await axios.get(
+       `${process.env.REACT_APP_BACKEND_URL}/jobPosition/`
+     );
+     setJobPositions(response.data);
+   } catch (err) {
+     console.error(err);
+   }
+ };
 
-  const handleSave = async (e) => {
-    e.preventDefault();
-    try {
-      const newJob = { title, basicSalary, overTimePay };
-      await axios.post("http://localhost:8070/jobPosition", newJob);
-      fetchJobPositions(); // Refresh the list
-      setTitle("");
-      setBasicSalary("");
-      setOvertimePay("");
-    } catch (err) {
-      console.error(err);
-    }
-  };
+ const handleSave = async (e) => {
+   e.preventDefault();
+   try {
+     const newJob = { title, basicSalary, overTimePay };
+     await axios.post(
+       `${process.env.REACT_APP_BACKEND_URL}/jobPosition`,
+       newJob
+     );
+     fetchJobPositions(); // Refresh the list
+     setTitle("");
+     setBasicSalary("");
+     setOvertimePay("");
+   } catch (err) {
+     console.error(err);
+   }
+ };
 
-  useEffect(() => {
-    fetchJobPositions();
-  }, []);
+ useEffect(() => {
+   fetchJobPositions();
+ }, []);
+
 
   return (
     <div className="jb-container">

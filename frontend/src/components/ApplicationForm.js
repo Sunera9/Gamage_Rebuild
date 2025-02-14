@@ -18,7 +18,15 @@ import axios from "axios";
 const ApplicationForm = () => {
   const location = useLocation();
   const navigate = useNavigate();
-  const { userName, userNIC, userEmail, contactNumber, userAddress, jobId, jobName } = location.state || {};
+  const {
+    userName,
+    userNIC,
+    userEmail,
+    contactNumber,
+    userAddress,
+    jobId,
+    jobName,
+  } = location.state || {};
 
   const [formData, setFormData] = useState({
     userName: userName || "",
@@ -34,7 +42,15 @@ const ApplicationForm = () => {
 
   const [openDialog, setOpenDialog] = useState(false); // Dialog state
 
-  if (!userName || !userNIC || !userEmail || !contactNumber || !userAddress || !jobId || !jobName) {
+  if (
+    !userName ||
+    !userNIC ||
+    !userEmail ||
+    !contactNumber ||
+    !userAddress ||
+    !jobId ||
+    !jobName
+  ) {
     return <div>Loading...</div>;
   }
 
@@ -42,14 +58,21 @@ const ApplicationForm = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      await axios.post("http://localhost:8070/api/applications", formData, {
-        headers: {
-          "Content-Type": "application/json",
-        },
-      });
+      await axios.post(
+        `${process.env.REACT_APP_BACKEND_URL}/api/applications`,
+        formData,
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
       setOpenDialog(true); // Open success dialog
     } catch (error) {
-      console.error("Error submitting the form:", error.response?.data || error.message);
+      console.error(
+        "Error submitting the form:",
+        error.response?.data || error.message
+      );
       alert("Failed to submit the application. Please try again.");
     }
   };
@@ -72,7 +95,12 @@ const ApplicationForm = () => {
         <Typography variant="h4" gutterBottom align="center">
           Job Application Form
         </Typography>
-        <Typography variant="h6" gutterBottom align="center" sx={{ color: "#1976d2" }}>
+        <Typography
+          variant="h6"
+          gutterBottom
+          align="center"
+          sx={{ color: "#1976d2" }}
+        >
           Applying for: {jobName}
         </Typography>
         <form onSubmit={handleSubmit}>
@@ -171,11 +199,16 @@ const ApplicationForm = () => {
         <DialogTitle>Application Submitted</DialogTitle>
         <DialogContent>
           <DialogContentText>
-            Your application for the <strong>{jobName}</strong> position has been successfully submitted.
+            Your application for the <strong>{jobName}</strong> position has
+            been successfully submitted.
           </DialogContentText>
         </DialogContent>
         <DialogActions>
-          <Button onClick={handleDialogClose} color="primary" variant="contained">
+          <Button
+            onClick={handleDialogClose}
+            color="primary"
+            variant="contained"
+          >
             OK
           </Button>
         </DialogActions>

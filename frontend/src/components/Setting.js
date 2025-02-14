@@ -20,7 +20,10 @@ const SettingsPage = () => {
   useEffect(() => {
     const fetchSettings = async () => {
       try {
-        const response = await axios.get("http://localhost:8070/setting");
+        const response = await axios.get(
+          `${process.env.REACT_APP_BACKEND_URL}/setting`
+        );
+
 
         if (response.data.settings) {
           // Convert response into a key-value object
@@ -99,9 +102,10 @@ const SettingsPage = () => {
       setError(errorMessage);
       return;
     }
-  
-    try {
-      const response = await axios.put("http://localhost:8070/setting/update-by-name", {
+  try {
+    const response = await axios.put(
+      `${process.env.REACT_APP_BACKEND_URL}/setting/update-by-name`,
+      {
         healthInsurance: settings.healthInsurance,
         professionalTax: settings.professionalTax,
         standardAllowance: settings.standardAllowance,
@@ -111,13 +115,17 @@ const SettingsPage = () => {
         epfEmployee: settings.epfEmployee,
         epfEmployer: settings.epfEmployer,
         etfEmployer: settings.etfEmployer,
-      });
-  
-      Swal.fire("Success", "Settings updated successfully!", "success");
-    } catch (error) {
-      console.error("Error updating settings:", error.response?.data || error.message);
-      Swal.fire("Error", "Failed to update settings!", "error");
-    }
+      }
+    );
+
+    Swal.fire("Success", "Settings updated successfully!", "success");
+  } catch (error) {
+    console.error(
+      "Error updating settings:",
+      error.response?.data || error.message
+    );
+    Swal.fire("Error", "Failed to update settings!", "error");
+  }
   };  
   
   return (

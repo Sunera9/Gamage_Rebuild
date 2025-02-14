@@ -8,72 +8,75 @@ function TicketsTable() {
   const [selectedTicket, setSelectedTicket] = useState(null);
   const [showModal, setShowModal] = useState(false);
 
-  useEffect(() => {
-    const fetchTickets = async () => {
-      try {
-        const response = await axios.get("http://localhost:8070/tickets/get");
-        setTickets(response.data.tickets);
-      } catch (error) {
-        console.error("Error fetching tickets:", error);
-      }
-    };
+ useEffect(() => {
+   const fetchTickets = async () => {
+     try {
+       const response = await axios.get(
+         `${process.env.REACT_APP_BACKEND_URL}/tickets/get`
+       );
+       setTickets(response.data.tickets);
+     } catch (error) {
+       console.error("Error fetching tickets:", error);
+     }
+   };
 
-    fetchTickets();
-  }, []);
+   fetchTickets();
+ }, []);
 
-  const handleIdClick = (ticket) => {
-    setSelectedTicket(ticket);
-    setShowModal(true);
-  };
+ const handleIdClick = (ticket) => {
+   setSelectedTicket(ticket);
+   setShowModal(true);
+ };
 
-  const handleAccept = async () => {
-    try {
-      const response = await axios.put(
-        `http://localhost:8070/ticketEmail/accept/${selectedTicket._id}`
-      );
-      console.log("Ticket accepted:", response.data);
-      setShowModal(false);
-      setTickets(
-        tickets.map((ticket) =>
-          ticket._id === selectedTicket._id
-            ? { ...ticket, status: "Accepted" }
-            : ticket
-        )
-      );
-    } catch (error) {
-      console.error("Error accepting ticket:", error);
-    }
-  };
+ const handleAccept = async () => {
+   try {
+     const response = await axios.put(
+       `${process.env.REACT_APP_BACKEND_URL}/ticketEmail/accept/${selectedTicket._id}`
+     );
+     console.log("Ticket accepted:", response.data);
+     setShowModal(false);
+     setTickets(
+       tickets.map((ticket) =>
+         ticket._id === selectedTicket._id
+           ? { ...ticket, status: "Accepted" }
+           : ticket
+       )
+     );
+   } catch (error) {
+     console.error("Error accepting ticket:", error);
+   }
+ };
 
-  const handleReject = async () => {
-    try {
-      const response = await axios.put(
-        `http://localhost:8070/ticketEmail/reject/${selectedTicket._id}`
-      );
-      console.log("Ticket rejected:", response.data);
-      setShowModal(false);
-      setTickets(
-        tickets.map((ticket) =>
-          ticket._id === selectedTicket._id
-            ? { ...ticket, status: "Rejected" }
-            : ticket
-        )
-      );
-    } catch (error) {
-      console.error("Error rejecting ticket:", error);
-    }
-  };
+ const handleReject = async () => {
+   try {
+     const response = await axios.put(
+       `${process.env.REACT_APP_BACKEND_URL}/ticketEmail/reject/${selectedTicket._id}`
+     );
+     console.log("Ticket rejected:", response.data);
+     setShowModal(false);
+     setTickets(
+       tickets.map((ticket) =>
+         ticket._id === selectedTicket._id
+           ? { ...ticket, status: "Rejected" }
+           : ticket
+       )
+     );
+   } catch (error) {
+     console.error("Error rejecting ticket:", error);
+   }
+ };
 
-  const handleImageDownload = (fileUrl, fileName) => {
-    const downloadUrl = fileUrl.replace("/upload/", "/upload/fl_attachment/");
-    const link = document.createElement("a");
-    link.href = downloadUrl;
-    link.download = fileName || "downloaded_image.jpg";
-    link.target = "_blank";
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-  };
+ const handleImageDownload = (fileUrl, fileName) => {
+   const downloadUrl = fileUrl.replace("/upload/", "/upload/fl_attachment/");
+   const link = document.createElement("a");
+   link.href = downloadUrl;
+   link.download = fileName || "downloaded_image.jpg";
+   link.target = "_blank";
+   document.body.appendChild(link);
+   link.click();
+   document.body.removeChild(link);
+ };
+
 
   return (
     <>

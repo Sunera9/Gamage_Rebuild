@@ -40,43 +40,48 @@ const AllEmployee = () => {
   ];
 
   
-  useEffect(() => {
-    const fetchEmployeeData = async () => {
-      try {
-        const response = await axios.get("http://localhost:8070/users/get");
-        setEmployeeData(response.data);
-      } catch (error) {
-        console.error("Error fetching employee data:", error);
-      }
-    };
-    fetchEmployeeData();
-  }, []); // Initial data fetch
-
-  
-  const handleDelete = async (_id) => {
+useEffect(() => {
+  const fetchEmployeeData = async () => {
     try {
-      await axios.delete(`http://localhost:8070/users/delete/${_id}`);
-      setEmployeeData(employeeData.filter((emp) => emp._id !== _id));
-      alert("Employee deleted successfully");
+      const response = await axios.get(
+        `${process.env.REACT_APP_API_URL}/users/get`
+      );
+      setEmployeeData(response.data);
     } catch (error) {
-      console.error("Error deleting employee:", error);
-      alert("Failed to delete employee");
+      console.error("Error fetching employee data:", error);
     }
   };
+  fetchEmployeeData();
+}, []); // Initial data fetch
 
- 
-  const filteredEmployeeData = employeeData.filter((employee) =>
-    ["_id", "name", "email", "phone", "startDate", "endDate"].some((field) =>
-      employee[field]?.toString().toLowerCase().includes(searchQuery.toLowerCase()) // Making the search case-insensitive
-    )
-  );
+const handleDelete = async (_id) => {
+  try {
+    await axios.delete(
+      `${process.env.REACT_APP_BACKEND_URL}/users/delete/${_id}`
+    );
+    setEmployeeData(employeeData.filter((emp) => emp._id !== _id));
+    alert("Employee deleted successfully");
+  } catch (error) {
+    console.error("Error deleting employee:", error);
+    alert("Failed to delete employee");
+  }
+};
 
-  
-  const formatDate = (date) => {
-    if (!date) return '';
-    const d = new Date(date);
-    return d.toLocaleDateString(); 
-  };
+const filteredEmployeeData = employeeData.filter((employee) =>
+  ["_id", "name", "email", "phone", "startDate", "endDate"].some(
+    (field) =>
+      employee[field]
+        ?.toString()
+        .toLowerCase()
+        .includes(searchQuery.toLowerCase()) // Making the search case-insensitive
+  )
+);
+
+const formatDate = (date) => {
+  if (!date) return "";
+  const d = new Date(date);
+  return d.toLocaleDateString();
+};
 
   return (
     <>

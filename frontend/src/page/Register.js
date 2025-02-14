@@ -61,11 +61,12 @@ const Register = () => {
     setLoading(true); // Set loading to true while submitting
 
     axios
-      .post("http://localhost:8070/auth/register", user, {
+      .post(`${process.env.REACT_APP_BACKEND_URL}/auth/register`, user, {
         headers: {
           "Content-Type": "application/json",
         },
       })
+
       .then((response) => {
         console.log("Response:", response.data);
         Swal.fire({
@@ -78,11 +79,16 @@ const Register = () => {
         });
       })
       .catch((error) => {
-        console.error("Error:", error.response ? error.response.data : error.message);
+        console.error(
+          "Error:",
+          error.response ? error.response.data : error.message
+        );
         Swal.fire({
           icon: "error",
           title: "Registration Failed",
-          text: error.response?.data?.message || "Failed to register. Please try again.",
+          text:
+            error.response?.data?.message ||
+            "Failed to register. Please try again.",
           confirmButtonText: "OK",
         });
       })

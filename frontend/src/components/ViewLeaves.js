@@ -24,24 +24,24 @@ export default function ViewLeaves() {
     }
   }, []);
 
-  // Fetch leaves for the user
-  useEffect(() => {
-    if (id) {
-      axios
-        .get(`http://localhost:8070/leaves/get/${id}`)
-        .then((response) => {
-          setLeaves(response.data);
-        })
-        .catch((error) => {
-          console.error("Error fetching leaves:", error);
-          Swal.fire({
-            icon: "error",
-            title: "Error",
-            text: "Unable to fetch leave requests. Please try again later.",
-          });
+useEffect(() => {
+  if (id) {
+    axios
+      .get(`${process.env.REACT_APP_BACKEND_URL}/leaves/get/${id}`)
+      .then((response) => {
+        setLeaves(response.data);
+      })
+      .catch((error) => {
+        console.error("Error fetching leaves:", error);
+        Swal.fire({
+          icon: "error",
+          title: "Error",
+          text: "Unable to fetch leave requests. Please try again later.",
         });
-    }
-  }, [id]);
+      });
+  }
+}, [id]);
+
 
   return (
     <>

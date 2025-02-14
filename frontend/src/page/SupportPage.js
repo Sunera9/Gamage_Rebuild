@@ -8,29 +8,34 @@ const SupportPage = () => {
   const [error, setError] = useState(null);
   const [activeTab, setActiveTab] = useState("tickets"); // Default tab is "tickets"
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        setLoading(true);
+ useEffect(() => {
+   const fetchData = async () => {
+     try {
+       setLoading(true);
 
-        // Fetch tickets
-        const ticketsResponse = await axios.get("http://localhost:8070/tickets/get");
-        setTickets(ticketsResponse.data.tickets);
+       // Fetch tickets
+       const ticketsResponse = await axios.get(
+         `${process.env.REACT_APP_BACKEND_URL}/tickets/get`
+       );
+       setTickets(ticketsResponse.data.tickets);
 
-        // Fetch leaves
-        const leavesResponse = await axios.get("http://localhost:8070/leaves/get");
-        setLeaves(leavesResponse.data);
+       // Fetch leaves
+       const leavesResponse = await axios.get(
+         `${process.env.REACT_APP_BACKEND_URL}/leaves/get`
+       );
+       setLeaves(leavesResponse.data);
 
-        setLoading(false);
-      } catch (err) {
-        console.error("Error fetching data:", err);
-        setError("Failed to load data. Please try again later.");
-        setLoading(false);
-      }
-    };
+       setLoading(false);
+     } catch (err) {
+       console.error("Error fetching data:", err);
+       setError("Failed to load data. Please try again later.");
+       setLoading(false);
+     }
+   };
 
-    fetchData();
-  }, []);
+   fetchData();
+ }, []);
+
 
   if (loading) {
     return (

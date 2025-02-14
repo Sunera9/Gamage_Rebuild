@@ -23,7 +23,9 @@ const JobList = () => {
   useEffect(() => {
     const fetchJobs = async () => {
       try {
-        const response = await axios.get("http://localhost:8070/api/jobs");
+        const response = await axios.get(
+          `${process.env.REACT_APP_BACKEND_URL}/api/jobs`
+        );
         setJobs(response.data);
         setLoading(false);
       } catch (err) {
@@ -45,7 +47,7 @@ const JobList = () => {
       }
 
       const userResponse = await axios.get(
-        `http://localhost:8070/users/getByEmail/${userEmail}`
+        `${process.env.REACT_APP_BACKEND_URL}/users/getByEmail/${userEmail}`
       );
       const userData = userResponse.data;
 
@@ -87,7 +89,12 @@ const JobList = () => {
           </Typography>
         )}
         {!loading && jobs.length > 0 && (
-          <Grid container spacing={3} sx={{ marginTop: 3 }} justifyContent="center">
+          <Grid
+            container
+            spacing={3}
+            sx={{ marginTop: 3 }}
+            justifyContent="center"
+          >
             {jobs.map((job) => (
               <Grid item xs={12} sm={6} md={4} key={job._id}>
                 <Card
@@ -123,7 +130,8 @@ const JobList = () => {
                       color="textSecondary"
                       sx={{ marginTop: 1 }}
                     >
-                      <strong>Requirements:</strong> {job.requirements.join(", ")}
+                      <strong>Requirements:</strong>{" "}
+                      {job.requirements.join(", ")}
                     </Typography>
                     <Typography
                       variant="body2"
@@ -133,7 +141,9 @@ const JobList = () => {
                       <strong>Type:</strong> {job.jobType}
                     </Typography>
                   </CardContent>
-                  <CardActions sx={{ justifyContent: "center", paddingBottom: 2 }}>
+                  <CardActions
+                    sx={{ justifyContent: "center", paddingBottom: 2 }}
+                  >
                     <Button
                       size="small"
                       variant="contained"

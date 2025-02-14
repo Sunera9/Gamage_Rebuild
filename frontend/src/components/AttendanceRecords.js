@@ -11,9 +11,12 @@ const AttendanceRecords = () => {
 
   const fetchRecords = async () => {
     try {
-      const response = await axios.get("http://localhost:8070/attendance/records", {
-        params: { email, year, month },
-      });
+      const response = await axios.get(
+        `${process.env.REACT_APP_BACKEND_URL}/attendance/records`,
+        {
+          params: { email, year, month },
+        }
+      );
       setRecords(response.data.attendanceRecords);
       Swal.fire({
         icon: "success",
@@ -25,10 +28,12 @@ const AttendanceRecords = () => {
         icon: "error",
         title: "Error",
         text:
-          error.response?.data?.message || "An error occurred while fetching records.",
+          error.response?.data?.message ||
+          "An error occurred while fetching records.",
       });
     }
   };
+
 
   return (
     <div className="max-w-xl mx-auto p-6 bg-white rounded-lg shadow-md">

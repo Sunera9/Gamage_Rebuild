@@ -4,21 +4,36 @@ import Swal from "sweetalert2"; // Import SweetAlert2
 
 const AdminAttendence = () => {
   const [date, setDate] = useState(new Date().toISOString().split("T")[0]);
-  const [attendanceDate, setAttendanceDate] = useState(new Date().toISOString().split("T")[0]);
+  const [attendanceDate, setAttendanceDate] = useState(
+    new Date().toISOString().split("T")[0]
+  );
   const [status, setStatus] = useState("");
   const [remarks, setRemarks] = useState("");
   const [email, setEmail] = useState("");
   const [userId, setUserId] = useState("");
 
+  // Handle Admin Update for Attendance
   const handleAdminUpdate = async () => {
-    try {
-      const response = await axios.put("http://localhost:8070/attendance/admin-update", {
-        email,
-        date: attendanceDate,
-        status,
-        remarks,
+    if (!email || !attendanceDate || !status) {
+      Swal.fire({
+        icon: "warning",
+        title: "Missing Fields",
+        text: "Please make sure all fields are filled out.",
       });
-  
+      return;
+    }
+
+    try {
+      const response = await axios.put(
+        `${process.env.REACT_APP_BACKEND_URL}/attendance/admin-update`,
+        {
+          email,
+          date: attendanceDate,
+          status,
+          remarks,
+        }
+      );
+
       Swal.fire({
         icon: "success",
         title: "Attendance Updated",
@@ -34,12 +49,21 @@ const AdminAttendence = () => {
       });
     }
   };
-  
 
+  // Handle Marking Holiday
   const markHoliday = async () => {
+    if (!date) {
+      Swal.fire({
+        icon: "warning",
+        title: "Missing Date",
+        text: "Please select a date to mark as holiday.",
+      });
+      return;
+    }
+
     try {
       const response = await axios.post(
-        "http://localhost:8070/attendance/mark-holiday",
+        `${process.env.REACT_APP_BACKEND_URL}/attendance/mark-holiday`,
         { date }
       );
       Swal.fire({
@@ -51,7 +75,9 @@ const AdminAttendence = () => {
       Swal.fire({
         icon: "error",
         title: "Error",
-        text: error.response?.data?.message || "An error occurred",
+        text:
+          error.response?.data?.message ||
+          "An error occurred while marking holiday.",
       });
     }
   };
@@ -73,14 +99,14 @@ const AdminAttendence = () => {
           />
         </div>
         <div>
-              <label className="block font-medium">Date:</label>
-              <input
-                type="date"
-                className="w-full px-4 py-2 border rounded-md"
-                value={attendanceDate}
-                onChange={(e) => setAttendanceDate(e.target.value)}
-              />
-            </div>
+          <label className="block font-medium">Date:</label>
+          <input
+            type="date"
+            className="w-full px-4 py-2 border rounded-md"
+            value={attendanceDate}
+            onChange={(e) => setAttendanceDate(e.target.value)}
+          />
+        </div>
         <div>
           <label className="block font-medium">Status:</label>
           <select
