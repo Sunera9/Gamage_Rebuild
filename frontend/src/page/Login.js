@@ -55,63 +55,59 @@ const Login = () => {
     if (!validateForm()) return;
 
     setLoading(true); // Show loading state
-
-    try {
-      // API call to login
-      const response = await axios.post(
-        "https://gamage-rebuild.vercel.app/auth/login",
-        credentials,
-        {
-          headers: {
-            "Content-Type": "application/json",
-          },
-        }
-      );
-
-      console.log("Response:", response.data);
-      console.log(credentials);
-
-      // Store token, role, and email in localStorage
-      localStorage.setItem(
-        "user",
-        JSON.stringify({ token: response.data.token, role: response.data.role })
-      );
-      localStorage.setItem("userEmail", credentials.email); // Store user email
-
-      Swal.fire({
-        icon: "success",
-        title: "Login Successful",
-        text: "Welcome back!",
-        confirmButtonText: "OK",
-      }).then(() => {
-        // Navigate based on role
-        const role = response.data.role;
-        if (role === "visitor") {
-          navigate("/visitor/dashboard");
-        } else if (role === "employee") {
-          navigate("/employee/dashboard");
-        } else if (role === "admin") {
-          navigate("/admin/dashboard");
-        }
-      });
-    } catch (error) {
-      console.error(
-        "Error:",
-        error.response ? error.response.data : error.message
-      );
-
-      // Show error message
-      Swal.fire({
-        icon: "error",
-        title: "Login Failed",
-        text: error.response
-          ? error.response.data.message
-          : "Invalid credentials. Please try again.",
-        confirmButtonText: "OK",
-      });
-    } finally {
-      setLoading(false); // Hide loading state
+try {
+  // API call to login
+  const response = await axios.post(
+    `${process.env.REACT_APP_BACKEND_BASEURL}/auth/login`, // Use env variable
+    credentials,
+    {
+      headers: {
+        "Content-Type": "application/json",
+      },
     }
+  );
+
+  console.log("Response:", response.data);
+  console.log(credentials);
+
+  // Store token, role, and email in localStorage
+  localStorage.setItem(
+    "user",
+    JSON.stringify({ token: response.data.token, role: response.data.role })
+  );
+  localStorage.setItem("userEmail", credentials.email); // Store user email
+
+  Swal.fire({
+    icon: "success",
+    title: "Login Successful",
+    text: "Welcome back!",
+    confirmButtonText: "OK",
+  }).then(() => {
+    // Navigate based on role
+    const role = response.data.role;
+    if (role === "visitor") {
+      navigate("/visitor/dashboard");
+    } else if (role === "employee") {
+      navigate("/employee/dashboard");
+    } else if (role === "admin") {
+      navigate("/admin/dashboard");
+    }
+  });
+} catch (error) {
+  console.error("Error:", error.response ? error.response.data : error.message);
+
+  // Show error message
+  Swal.fire({
+    icon: "error",
+    title: "Login Failed",
+    text: error.response
+      ? error.response.data.message
+      : "Invalid credentials. Please try again.",
+    confirmButtonText: "OK",
+  });
+} finally {
+  setLoading(false); // Hide loading state
+}
   };
 
   return (
