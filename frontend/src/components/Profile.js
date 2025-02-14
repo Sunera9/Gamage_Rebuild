@@ -1,6 +1,13 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import { FiMail, FiPhone, FiMapPin, FiUser, FiCalendar, FiAward } from "react-icons/fi";
+import {
+  FiMail,
+  FiPhone,
+  FiMapPin,
+  FiUser,
+  FiCalendar,
+  FiAward,
+} from "react-icons/fi";
 
 const Profile = () => {
   const [user, setUser] = useState(null);
@@ -15,7 +22,9 @@ const Profile = () => {
           return;
         }
 
-        const response = await axios.get(`http://localhost:8070/users/getByEmail/${email}`);
+        const response = await axios.get(
+          `${process.env.REACT_APP_BACKEND_URL}/users/getByEmail/${email}`
+        );
         setUser(response.data.user);
       } catch (err) {
         console.error(err.message);
@@ -60,12 +69,19 @@ const Profile = () => {
         <div className="p-6 grid grid-cols-1 sm:grid-cols-2 gap-4">
           <ProfileField icon={<FiMail />} label="Email" value={user.email} />
           <ProfileField icon={<FiPhone />} label="Phone" value={user.phone} />
-          <ProfileField icon={<FiMapPin />} label="Address" value={user.address} />
+          <ProfileField
+            icon={<FiMapPin />}
+            label="Address"
+            value={user.address}
+          />
           <ProfileField icon={<FiUser />} label="NIC" value={user.nic} />
-          <ProfileField icon={<FiCalendar />} label="Date of Birth" value={new Date(user.dob).toLocaleDateString()} />
+          <ProfileField
+            icon={<FiCalendar />}
+            label="Date of Birth"
+            value={new Date(user.dob).toLocaleDateString()}
+          />
           <ProfileField icon={<FiAward />} label="Role" value={user.role} />
         </div>
-
       </div>
     </div>
   );
@@ -73,7 +89,9 @@ const Profile = () => {
 
 const ProfileField = ({ icon, label, value }) => (
   <div className="flex items-center bg-white border rounded-lg p-4 shadow-sm hover:shadow-md transition-shadow duration-300">
-    <div className="p-3 bg-blue-100 rounded-full text-blue-500 text-lg">{icon}</div>
+    <div className="p-3 bg-blue-100 rounded-full text-blue-500 text-lg">
+      {icon}
+    </div>
     <div className="ml-4">
       <p className="text-sm text-gray-500">{label}</p>
       <p className="text-lg font-medium text-gray-800">{value}</p>
