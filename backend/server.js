@@ -20,9 +20,7 @@ app.use(
       "https://gamage-rebuild-p9ce9adut-sunera9s-projects.vercel.app", 
     ],
     methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"], // Add OPTIONS method
-    allowedHeaders: ["Content-Type", "Authorization"],
-    preflightContinue: false, // Do not pass the preflight to the next handler
-    optionsSuccessStatus: 204, // Status code to return for successful OPTIONS request
+    credentials: true
   })
 );
 
@@ -32,7 +30,9 @@ app.use(express.json());
 
 const URL = process.env.MONGODB_URL;
 
-mongoose.connect(URL);
+mongoose.connect(
+  'mongodb+srv://gamagerecruiters3:GamagePass@newcluster.t0vet.mongodb.net/?retryWrites=true&w=majority&appName=NewCluster'
+);
 
 const connection = mongoose.connection;
 connection.once("open", () => {
