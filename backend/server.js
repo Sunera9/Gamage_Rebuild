@@ -15,9 +15,9 @@ app.use(
   cors({
     origin: [
       "https://gamage-rebuild-e918.vercel.app",
-         "https://gamage-rebuild-p9ce9adut-sunera9s-projects.vercel.app",
-      ],
-   
+      "https://gamage-rebuild-p9ce9adut-sunera9s-projects.vercel.app",
+      "http://localhost:3000"
+    ],
 
     methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"], // Add OPTIONS method
     credentials: true,
