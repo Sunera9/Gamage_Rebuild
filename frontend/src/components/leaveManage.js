@@ -12,10 +12,11 @@ function LeavesTable() {
     fetchLeaves();
   }, []);
 
+  // Fetch leaves from the backend
   const fetchLeaves = async () => {
     try {
       const response = await axios.get(
-        "https://gamage-rebuild.vercel.app/leaves/get"
+        `${process.env.REACT_APP_BACKEND_URL}/leaves/get`
       );
       setLeaves(response.data || []); // Ensure leaves is an array
     } catch (error) {
@@ -24,15 +25,17 @@ function LeavesTable() {
     }
   };
 
+  // Handle leave item click
   const handleIdClick = (leave) => {
     setSelectedLeave(leave); // Set selected leave details
     setShowModal(true); // Show the modal
   };
 
+  // Handle approve action
   const handleApprove = async () => {
     try {
       await axios.put(
-        `http://localhost:8070/leaveemail/accept/${selectedLeave._id}`,
+        `${process.env.REACT_APP_BACKEND_URL}/leaveemail/accept/${selectedLeave._id}`,
         { adminApproval: "Approved" }
       );
       setShowModal(false); // Close the modal
@@ -44,10 +47,11 @@ function LeavesTable() {
     }
   };
 
+  // Handle reject action
   const handleReject = async () => {
     try {
       await axios.put(
-        `http://localhost:8070/leaveemail/reject/${selectedLeave._id}`,
+        `${process.env.REACT_APP_BACKEND_URL}/leaveemail/reject/${selectedLeave._id}`,
         { adminApproval: "Rejected" }
       );
       setShowModal(false); // Close the modal
@@ -76,8 +80,12 @@ function LeavesTable() {
               <th className="py-2 px-4 text-left bg-gray-100">End Date</th>
               <th className="py-2 px-4 text-left bg-gray-100">Leave Type</th>
               <th className="py-2 px-4 text-left bg-gray-100">Duration</th>
-              <th className="py-2 px-4 text-left bg-gray-100">Admin Approval</th>
-              <th className="py-2 px-4 text-left bg-gray-100">Supervisor Approval</th>
+              <th className="py-2 px-4 text-left bg-gray-100">
+                Admin Approval
+              </th>
+              <th className="py-2 px-4 text-left bg-gray-100">
+                Supervisor Approval
+              </th>
             </tr>
           </thead>
           <tbody>
@@ -101,7 +109,9 @@ function LeavesTable() {
               ))
             ) : (
               <tr>
-                <td colSpan="8" className="py-2 px-4 text-center">No leaves available</td>
+                <td colSpan="8" className="py-2 px-4 text-center">
+                  No leaves available
+                </td>
               </tr>
             )}
           </tbody>
@@ -131,7 +141,8 @@ function LeavesTable() {
                 <strong>Admin Approval:</strong> {selectedLeave.adminApproval}
               </p>
               <p className="mb-2">
-                <strong>Supervisor Approval:</strong> {selectedLeave.supervisorApproval}
+                <strong>Supervisor Approval:</strong>{" "}
+                {selectedLeave.supervisorApproval}
               </p>
               <div className="modal-actions flex justify-end gap-4 mt-4">
                 <button
