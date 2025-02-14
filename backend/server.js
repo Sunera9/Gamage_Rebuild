@@ -41,6 +41,11 @@ connection.once("open", () => {
 
 
 
+// Simple test route
+app.get('/test', (req, res) => {
+  res.status(200).send("Backend is working!");
+});
+
 
 //Backend Routes 
 const userRouter = require('./routes/users'); 
