@@ -82,7 +82,7 @@ export default function TicketForm() {
     setIsLoading(true);
     try {
       const response = await axios.post(
-        "http://localhost:8070/tickets/add",
+        `${process.env.REACT_APP_BACKEND_URL}/tickets/add`, // Use environment variable here
         formData,
         {
           headers: {
@@ -118,85 +118,11 @@ export default function TicketForm() {
   };
 
   return (
-    <>
+    <div>
       <Header />
-      <div className="container-ticket">
-        <div className="row justify-content-center">
-          <div className="col-lg-8">
-            <div className="card">
-              <div className="card-body">
-                <form onSubmit={handleSubmit}>
-                  <h2 className="text-2xl font-semibold text-gray-700 mb-5">
-                    Create a Ticket
-                  </h2>
-
-                  <div className="mb-3">
-                    <label className="form-label">User ID:</label>
-                    <input
-                      type="text"
-                      value={userID}
-                      readOnly
-                      className="form-control"
-                      placeholder="User ID"
-                    />
-                  </div>
-
-                  <div className="mb-3">
-                    <label className="form-label">Description:</label>
-                    <textarea
-                      value={description}
-                      onChange={(e) => setDescription(e.target.value)}
-                      required
-                      className="form-control"
-                      placeholder="Enter description"
-                    ></textarea>
-                  </div>
-
-                  <div className="mb-3">
-                    <label className="form-label">Leave Type:</label>
-                    <select
-                      value={leaveType}
-                      onChange={(e) => setLeaveType(e.target.value)}
-                      required
-                      className="form-control"
-                    >
-                      <option value="">Select leave type</option>
-                      <option value="Personal">Personal</option>
-                      <option value="Educational">Educational</option>
-                      <option value="Medical">Medical</option>
-                    </select>
-                  </div>
-
-                  {(leaveType === "Educational" || leaveType === "Medical") && (
-                    <div className="mb-3">
-                      <label className="form-label">Upload File:</label>
-                      <input
-                        type="file"
-                        onChange={handleFileChange}
-                        className="form-control"
-                        required
-                      />
-                      {file && (
-                        <div className="mt-2 text-sm text-gray-700">
-                          <strong>Selected File:</strong> {file.name}
-                        </div>
-                      )}
-                    </div>
-                  )}
-
-                  <button
-                    type="submit"
-                    className="btn btn-primary w-100 mt-3"
-                    disabled={isLoading}
-                  >
-                    {isLoading ? "Submitting..." : "Submit Ticket"}
-                  </button>
-                </form>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </>
+      <form onSubmit={handleSubmit} className="ticket-form">
+        {/* Form Fields */}
+      </form>
+    </div>
   );
 }

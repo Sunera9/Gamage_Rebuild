@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import { Link, useNavigate  } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import Header from "../section/Header";
 import Swal from "sweetalert2";
 
@@ -58,11 +58,10 @@ export default function CreateLeave() {
       }
 
       const response = await axios.post(
-        "http://localhost:8070/leaves/add",
+        `${process.env.REACT_APP_BACKEND_URL}/leaves/add`, // Use environment variable here
         leaveDetails,
         {
           headers: {
-          
             "Content-Type": "application/json",
           },
         }
