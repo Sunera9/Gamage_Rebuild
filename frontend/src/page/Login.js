@@ -56,17 +56,19 @@ const Login = () => {
 
     setLoading(true); // Show loading state
 
+    const backendUrl = process.env.REACT_APP_BACKEND_URL;
+
     try {
       // API call to login
-      const response = await axios.post(
-        "https://gamage-rebuild-p9ce9adut-sunera9s-projects.vercel.app/auth/login",
-        credentials,
-        {
-          headers: {
-            "Content-Type": "application/json",
-          },
-        }
-      );
+     const response = await axios.post(
+       `${backendUrl}/auth/login`,
+       credentials,
+       {
+         headers: {
+           "Content-Type": "application/json",
+         },
+       }
+     );
 
       console.log("Response:", response.data);
       console.log(credentials);
