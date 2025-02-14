@@ -14,7 +14,9 @@ function LeavesTable() {
 
   const fetchLeaves = async () => {
     try {
-      const response = await axios.get("http://localhost:8070/leaves/get");
+      const response = await axios.get(
+        "https://gamage-rebuild-p9ce9adut-sunera9s-projects.vercel.app/leaves/get"
+      );
       setLeaves(response.data || []); // Ensure leaves is an array
     } catch (error) {
       console.error("Error fetching leaves:", error);
