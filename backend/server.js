@@ -37,7 +37,7 @@ connection.once("open", () => {
 });
 
 // Simple test route
-app.get("/test", (req, res) => {
+app.get("/", (req, res) => {
   res.status(200).send("Backend is working!");
 });
 
