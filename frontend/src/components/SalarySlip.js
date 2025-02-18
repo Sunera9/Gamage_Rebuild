@@ -10,7 +10,7 @@ const SalarySlip = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
 
- const API_BASE_URL = process.env.REACT_APP_BACKEND_URL + "/api"; // Use environment variable for the base URL
+ const API_BASE_URL = process.env.REACT_APP_BACKEND_URL; // Use environment variable for the base URL
 
  useEffect(() => {
    const fetchSalarySlip = async () => {
