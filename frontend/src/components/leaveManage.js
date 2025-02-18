@@ -96,7 +96,7 @@ function LeavesTable() {
                     onClick={() => handleIdClick(leave)}
                     className="py-2 px-4 text-blue-600 cursor-pointer underline"
                   >
-                    {leave.User?.user || "N/A"}
+                    {leave.User?.name || "N/A"}
                   </td>
                   <td className="py-2 px-4">{leave.User?.email || "N/A"}</td>
                   <td className="py-2 px-4">{leave.startDate}</td>
