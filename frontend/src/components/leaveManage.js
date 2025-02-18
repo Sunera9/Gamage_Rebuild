@@ -98,7 +98,7 @@ function LeavesTable() {
                   >
                     {leave.User?.name || "N/A"}
                   </td>
-                  <td className="py-2 px-4">{leave.User?.name || "N/A"}</td>
+                  <td className="py-2 px-4">{leave.User?.user || "N/A"}</td>
                   <td className="py-2 px-4">{leave.startDate}</td>
                   <td className="py-2 px-4">{leave.endDate}</td>
                   <td className="py-2 px-4">{leave.type}</td>
