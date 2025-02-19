@@ -51,7 +51,7 @@ const JobList = () => {
       );
       const userData = userResponse.data;
 
-      navigate(`/apply/${jobId}`, {
+      navigate(`/employee/apply/${jobId}`, {
         state: {
           userName: userData.user.name,
           userNIC: userData.user.nic,
@@ -102,7 +102,7 @@ const JobList = () => {
                     height: "100%",
                     display: "flex",
                     flexDirection: "column",
-                    justifyContent: "space-between", // Ensure content is spaced
+                    justifyContent: "space-between", 
                     "&:hover": {
                       boxShadow: 6,
                     },
