@@ -12,9 +12,11 @@ const DashboardCard = () => {
       try {
         // Fetch total applications, tickets, and employees count in parallel
         const [appRes, ticketRes, employeeRes] = await Promise.all([
-          fetch("http://localhost:8070/api/applications/count"),
-          fetch("http://localhost:8070/tickets/count"),
-          fetch("http://localhost:8070/users/getRoleCount/employee"), // Fetch employee count
+          fetch(`${process.env.REACT_APP_BACKEND_URL}/api/applications/count`),
+          fetch(`${process.env.REACT_APP_BACKEND_URL}/tickets/count`),
+          fetch(
+            `${process.env.REACT_APP_BACKEND_URL}/users/getRoleCount/employee`
+          ), 
         ]);
 
         // Convert responses to JSON
