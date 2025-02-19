@@ -78,7 +78,7 @@ router.post("/add", upload.single("file"), async (req, res) => {
 // Get all tickets
 router.route("/get").get(async (req, res) => {
   try {
-    const tickets = await TicketModel.find();
+    const tickets = await TicketModel.find().populate('User', 'name email');
     res.status(200).json({ status: "Tickets fetched", tickets });
   } catch (error) {
     res

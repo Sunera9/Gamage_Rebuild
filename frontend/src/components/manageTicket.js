@@ -14,6 +14,7 @@ function TicketsTable() {
        const response = await axios.get(
          `${process.env.REACT_APP_BACKEND_URL}/tickets/get`
        );
+       console.log(response);
        setTickets(response.data.tickets);
      } catch (error) {
        console.error("Error fetching tickets:", error);
