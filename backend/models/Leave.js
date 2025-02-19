@@ -2,8 +2,10 @@ const mongoose = require('mongoose');
 
 const LeaveSchema = new mongoose.Schema(
   {
-    userId: {
-        type: String,
+    User: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User", // Ensure this matches the UserModel name
+      required: true,
     },
     startDate: {
       type: Date,

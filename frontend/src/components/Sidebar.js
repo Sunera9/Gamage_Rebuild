@@ -144,7 +144,7 @@ const Sidebar = () => {
                         {userRole === 'admin' && (
                             <li>
                                 <Link
-                                    to="/admin/employee"
+                                    to="/admin/applications"
                                     className="flex items-center text-lg font-bold text-black hover:text-yellow-400"
                                 >
                                     <FontAwesomeIcon icon={faClipboardList} className="mr-3 text-gray-500" />

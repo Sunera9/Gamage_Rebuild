@@ -34,16 +34,29 @@ router.post('/add', async (req, res) => {
 });
 
 // Get all leave applications with populated user details
+// router.get("/get", async (req, res) => {
+//   try {
+//     const leaves = await LeaveModel.find().populate('userId', 'name email'); // Populate user details
+//     console.log(leaves);
+//     res.status(200).json(leaves);
+//   } catch (error) {
+//     res.status(500).json({ message: 'Error fetching leave applications', error: error.message });
+//   }
+// });
+
+// Get all leave applications with populated user details
 router.get("/get", async (req, res) => {
   try {
-    const leaves = await LeaveModel.find().populate('userId', 'name email'); // Populate user details
+    const leaves = await LeaveModel.find().populate('User', 'name email');
     res.status(200).json(leaves);
   } catch (error) {
-    res.status(500).json({ message: 'Error fetching leave applications', error: error.message });
+    console.error(error.message);
+    res.status(500).json({ status: "Error fetching leave applications", error: error.message });
   }
 });
 
-// Get a specific leave application by ID with populated user details
+
+// // Get a specific leave application by ID with populated user details
 router.route("/get/:id").get(async (req, res) => {
   try {
     const leave = await LeaveModel.findById(req.params.id).populate('User', 'name email');

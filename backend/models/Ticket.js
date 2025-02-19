@@ -1,21 +1,23 @@
-const mongoose = require('mongoose');
+const mongoose = require("mongoose");
 
 const TicketSchema = new mongoose.Schema({
-  userID: { 
-    type: String,
+  User: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "User", // Ensure this matches the UserModel name
+    required: true,
   },
-  description: { 
+  description: {
     type: String,
     required: true,
   },
-  status: { 
+  status: {
     type: String,
-    enum: ['open', 'in-progress', 'Rejected', 'Approved'],
-    default: 'open',
+    enum: ["open", "in-progress", "Rejected", "Approved"],
+    default: "open",
   },
   leaveType: {
     type: String,
-    enum: ['Personal', 'Educational', 'Medical'],
+    enum: ["Personal", "Educational", "Medical"],
     required: true,
   },
   files: {
@@ -24,15 +26,14 @@ const TicketSchema = new mongoose.Schema({
     fileType: String,
     fileSize: Number,
   },
-  fileType:{
-    type: String
-    
+  fileType: {
+    type: String,
   },
-  createdAt: { 
-    type: Date, 
+  createdAt: {
+    type: Date,
     default: new Date(),
   },
 });
 
-const TicketModel = mongoose.model("Ticket", TicketSchema)
-module.exports = TicketModel
+const TicketModel = mongoose.model("Ticket", TicketSchema);
+module.exports = TicketModel;
