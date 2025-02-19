@@ -129,7 +129,7 @@ const Recruite = () => {
   return (
     <div className="max-w-lg mx-auto p-6 bg-white rounded-md shadow-md mt-14">
       <h2 className="text-2xl font-semibold text-gray-800 mb-4">
-        Recruite Application
+        Recruit an Employee
       </h2>
       <form onSubmit={handleSubmit}>
         {/* Email */}
