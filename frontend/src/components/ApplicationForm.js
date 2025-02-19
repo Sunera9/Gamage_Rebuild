@@ -86,7 +86,7 @@ const ApplicationForm = () => {
   // Handle dialog close and redirect
   const handleDialogClose = () => {
     setOpenDialog(false);
-    navigate("/joblist"); // Navigate to job list
+    navigate("/employee/joblist"); // Navigate to job list
   };
 
   return (

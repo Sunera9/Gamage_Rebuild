@@ -51,7 +51,7 @@ const JobList = () => {
       );
       const userData = userResponse.data;
 
-      navigate(`/apply/${jobId}`, {
+      navigate(`/employee/apply/${jobId}`, {
         state: {
           userName: userData.user.name,
           userNIC: userData.user.nic,
