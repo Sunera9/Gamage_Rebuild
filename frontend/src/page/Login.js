@@ -89,7 +89,7 @@ const Login = () => {
         // Navigate based on role
         const role = response.data.role;
         if (role === "visitor") {
-          navigate("/visitor/dashboard");
+          navigate("/employee/joblist");
         } else if (role === "employee") {
           navigate("/employee/dashboard");
         } else if (role === "admin") {
