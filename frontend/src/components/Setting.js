@@ -131,7 +131,7 @@ const SettingsPage = () => {
   return (
     <>
       <Header />
-      <div style={{ maxWidth: "600px", margin: "0 auto", padding: "30px" }}>
+      <div style={{ maxWidth: "600px", margin: "0 auto", padding: "30px", marginTop:"32px" }}>
         {error && (
           <div
             style={{

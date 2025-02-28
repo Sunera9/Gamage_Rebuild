@@ -60,15 +60,15 @@ const Login = () => {
 
     try {
       // API call to login
-     const response = await axios.post(
-       `${backendUrl}/auth/login`,
-       credentials,
-       {
-         headers: {
-           "Content-Type": "application/json",
-         },
-       }
-     );
+      const response = await axios.post(
+        `${backendUrl}/auth/login`,
+        credentials,
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
 
       console.log("Response:", response.data);
       console.log(credentials);
@@ -119,80 +119,80 @@ const Login = () => {
   return (
     <>
       <Header />
-      <div className="flex items-center justify-center min-h-screen bg-gradient-to-r from-indigo-500 via-purple-600 to-pink-500">
-        <div className="flex flex-col max-w-lg px-8 py-10 bg-white rounded-xl shadow-xl mt-10 mb-16 dark:bg-gray-800 sm:px-16 md:px-20 lg:px-24">
-          <div className="self-center mb-6 text-2xl font-semibold text-gray-800 sm:text-3xl dark:text-white">
+      <div className="flex items-center justify-center min-h-screen">
+        <div className="flex flex-col w-full max-w-lg px-8 py-10 bg-white rounded-xl shadow-xl mt-24 mb-16 dark:bg-gray-800 sm:px-10 md:px-14 lg:px-16">
+          <div className="self-center mb-6 text-2xl font-semibold text-gray-800 sm:text-3xl dark:text-white text-center">
             Login to Your Account
           </div>
-          <span className="justify-center text-sm text-center text-gray-500 flex-items-center dark:text-gray-400">
+
+          <span className="text-sm text-center text-gray-500 dark:text-gray-400">
             Don't have an account?{" "}
             <a
               href="/register"
-              className="text-sm font-medium text-purple-600 underline hover:text-purple-800"
+              className="font-medium text-purple-600 underline hover:text-purple-800"
             >
               Register now
             </a>
           </span>
+
           <div className="p-6 mt-6">
-            <h1 className="text-lg font-medium text-gray-700 dark:text-gray-300 mb-4">
+            <h1 className="text-lg font-medium text-gray-700 dark:text-gray-300 mb-4 text-center">
               Login
             </h1>
+
             <form onSubmit={login}>
-              <div className="flex flex-col mb-4">
+              {/* Email Input */}
+              <div className="mb-4">
                 <label className="text-sm font-medium text-gray-600 mb-1 dark:text-gray-400">
                   Email Address
                 </label>
-                <div className="relative">
-                  <input
-                    type="email"
-                    name="email"
-                    className="rounded-lg border border-gray-300 w-full py-3 px-4 bg-gray-50 text-gray-800 placeholder-gray-400 shadow-sm focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent dark:bg-gray-700 dark:text-gray-200 dark:placeholder-gray-500 dark:focus:ring-purple-400"
-                    placeholder="Enter your Email"
-                    value={credentials.email}
-                    onChange={handleChange}
-                  />
-                </div>
+                <input
+                  type="email"
+                  name="email"
+                  className="rounded-lg border border-gray-300 w-full py-3 px-4 bg-gray-50 text-gray-800 placeholder-gray-400 shadow-sm focus:outline-none focus:ring-2 focus:ring-purple-500 dark:bg-gray-700 dark:text-gray-200 dark:placeholder-gray-500 dark:focus:ring-purple-400"
+                  placeholder="Enter your Email"
+                  value={credentials.email}
+                  onChange={handleChange}
+                />
               </div>
 
-              <div className="flex flex-col mb-4">
+              {/* Password Input */}
+              <div className="mb-4">
                 <label className="text-sm font-medium text-gray-600 mb-1 dark:text-gray-400">
                   Password
                 </label>
-                <div className="relative">
-                  <input
-                    type="password"
-                    name="password"
-                    className="rounded-lg border border-gray-300 w-full py-3 px-4 bg-gray-50 text-gray-800 placeholder-gray-400 shadow-sm focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent dark:bg-gray-700 dark:text-gray-200 dark:placeholder-gray-500 dark:focus:ring-purple-400"
-                    placeholder="Enter your Password"
-                    value={credentials.password}
-                    onChange={handleChange}
-                  />
-                </div>
+                <input
+                  type="password"
+                  name="password"
+                  className="rounded-lg border border-gray-300 w-full py-3 px-4 bg-gray-50 text-gray-800 placeholder-gray-400 shadow-sm focus:outline-none focus:ring-2 focus:ring-purple-500 dark:bg-gray-700 dark:text-gray-200 dark:placeholder-gray-500 dark:focus:ring-purple-400"
+                  placeholder="Enter your Password"
+                  value={credentials.password}
+                  onChange={handleChange}
+                />
               </div>
 
               {/* Role Selector */}
-              <div className="flex flex-col mb-4">
+              <div className="mb-6">
                 <label className="text-sm font-medium text-gray-600 mb-1 dark:text-gray-400">
                   Select Role
                 </label>
-                <div className="relative">
-                  <select
-                    className="rounded-lg border border-gray-300 w-full py-3 px-4 bg-gray-50 text-gray-800 placeholder-gray-400 shadow-sm focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent dark:bg-gray-700 dark:text-gray-200 dark:placeholder-gray-500 dark:focus:ring-purple-400"
-                    name="role"
-                    value={credentials.role}
-                    onChange={handleChange}
-                  >
-                    <option value="">Select Role</option>
-                    <option value="visitor">Visitor</option>
-                    <option value="employee">Employee</option>
-                    <option value="admin">Admin</option>
-                  </select>
-                </div>
+                <select
+                  className="rounded-lg border border-gray-300 w-full py-3 px-4 bg-gray-50 text-gray-800 shadow-sm focus:outline-none focus:ring-2 focus:ring-purple-500 dark:bg-gray-700 dark:text-gray-200 dark:focus:ring-purple-400"
+                  name="role"
+                  value={credentials.role}
+                  onChange={handleChange}
+                >
+                  <option value="">Select Role</option>
+                  <option value="visitor">Visitor</option>
+                  <option value="employee">Employee</option>
+                  <option value="admin">Admin</option>
+                </select>
               </div>
 
+              {/* Submit Button */}
               <button
                 type="submit"
-                className={`py-3 px-6 bg-purple-600 hover:bg-purple-700 focus:ring-purple-500 focus:ring-offset-purple-200 text-white w-full transition ease-in duration-200 text-center text-lg font-semibold shadow-md focus:outline-none focus:ring-2 focus:ring-offset-2 rounded-lg ${
+                className={`py-3 px-6 bg-purple-600 hover:bg-purple-700 text-white w-full transition duration-200 font-semibold shadow-md focus:outline-none focus:ring-2 focus:ring-purple-500 rounded-lg ${
                   loading ? "opacity-50 cursor-not-allowed" : ""
                 }`}
                 disabled={loading}

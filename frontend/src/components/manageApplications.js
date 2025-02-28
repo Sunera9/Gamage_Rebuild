@@ -32,8 +32,8 @@ function ApplicationsTable() {
 
   return (
     <div className="applications-table">
-      <div className="title">
-        <h2>Job Applications</h2>
+      <div className="text-center mt-12">
+        <h1 className="text-4xl">Job Applications</h1>
       </div>
 
       <table className="applications-table">

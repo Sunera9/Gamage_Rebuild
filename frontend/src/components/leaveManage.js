@@ -67,62 +67,59 @@ function LeavesTable() {
 
   return (
     <>
-      <Header />
-      <div className="container mx-auto p-6">
-        <div className="text-2xl font-bold mb-4">
-          <h2>Leave Applications</h2>
+      <div className="container mx-auto p-6 mt-8">
+        <div className="text-2xl font-bold mb-4 mt-8">
+          <h2>Leave Requests</h2>
         </div>
 
-        <table className="table-auto w-full border-collapse border border-gray-300 shadow-lg">
-          <thead>
-            <tr>
-              <th className="py-2 px-4 text-left bg-gray-100">User name</th>
-              <th className="py-2 px-4 text-left bg-gray-100">User Email</th>
-              <th className="py-2 px-4 text-left bg-gray-100">Start Date</th>
-              <th className="py-2 px-4 text-left bg-gray-100">End Date</th>
-              <th className="py-2 px-4 text-left bg-gray-100">Leave Type</th>
-              <th className="py-2 px-4 text-left bg-gray-100">Duration</th>
-              <th className="py-2 px-4 text-left bg-gray-100">
-                Admin Approval
-              </th>
-              <th className="py-2 px-4 text-left bg-gray-100">
-                Supervisor Approval
-              </th>
-            </tr>
-          </thead>
-          <tbody>
-            {leaves.length > 0 ? (
-              leaves.map((leave) => (
-                <tr key={leave._id} className="border-b hover:bg-gray-50">
-                  <td
-                    onClick={() => handleIdClick(leave)}
-                    className="py-2 px-4 text-blue-600 cursor-pointer underline"
-                  >
-                    {leave.User?.name || "N/A"}
-                  </td>
-                  <td className="py-2 px-4">{leave.User?.email || "N/A" }</td>
-                  <td className="py-2 px-4">{leave.startDate}</td>
-                  <td className="py-2 px-4">{leave.endDate}</td>
-                  <td className="py-2 px-4">{leave.type}</td>
-                  <td className="py-2 px-4">{leave.duration}</td>
-                  <td className="py-2 px-4">{leave.adminApproval}</td>
-                  <td className="py-2 px-4">{leave.supervisorApproval}</td>
-                </tr>
-              ))
-            ) : (
-              <tr>
-                <td colSpan="8" className="py-2 px-4 text-center">
-                  No leaves available
-                </td>
+        <div className="overflow-x-auto *:">
+          <table className="table-auto w-full border-collapse border border-gray-300 shadow-lg">
+            <thead>
+              <tr className="bg-gray-100">
+                <th className="py-2 px-4 text-left">User Name</th>
+                <th className="py-2 px-4 text-left">User Email</th>
+                <th className="py-2 px-4 text-left">Start Date</th>
+                <th className="py-2 px-4 text-left">End Date</th>
+                <th className="py-2 px-4 text-left">Leave Type</th>
+                <th className="py-2 px-4 text-left">Duration</th>
+                <th className="py-2 px-4 text-left">Admin Approval</th>
+                <th className="py-2 px-4 text-left">Supervisor Approval</th>
               </tr>
-            )}
-          </tbody>
-        </table>
+            </thead>
+            <tbody>
+              {leaves.length > 0 ? (
+                leaves.map((leave) => (
+                  <tr key={leave._id} className="border-b hover:bg-gray-50">
+                    <td
+                      onClick={() => handleIdClick(leave)}
+                      className="py-2 px-4 text-blue-600 cursor-pointer underline"
+                    >
+                      {leave.User?.name || "N/A"}
+                    </td>
+                    <td className="py-2 px-4">{leave.User?.email || "N/A"}</td>
+                    <td className="py-2 px-4">{leave.startDate}</td>
+                    <td className="py-2 px-4">{leave.endDate}</td>
+                    <td className="py-2 px-4">{leave.type}</td>
+                    <td className="py-2 px-4">{leave.duration}</td>
+                    <td className="py-2 px-4">{leave.adminApproval}</td>
+                    <td className="py-2 px-4">{leave.supervisorApproval}</td>
+                  </tr>
+                ))
+              ) : (
+                <tr>
+                  <td colSpan="8" className="py-2 px-4 text-center">
+                    No leaves available
+                  </td>
+                </tr>
+              )}
+            </tbody>
+          </table>
+        </div>
 
         {/* Modal for viewing leave details */}
         {showModal && selectedLeave && (
-          <div className="fixed inset-0 bg-gray-500 bg-opacity-50 flex justify-center items-center">
-            <div className="bg-white p-6 rounded-lg shadow-xl w-96">
+          <div className="fixed inset-0 bg-gray-500 bg-opacity-50 flex justify-center items-center p-4">
+            <div className="bg-white p-6 rounded-lg shadow-xl w-full max-w-md">
               <h3 className="text-xl font-bold mb-4">Leave Details</h3>
               <p className="mb-2">
                 <strong>User ID:</strong> {selectedLeave._id}
@@ -146,7 +143,7 @@ function LeavesTable() {
                 <strong>Supervisor Approval:</strong>{" "}
                 {selectedLeave.supervisorApproval}
               </p>
-              <div className="modal-actions flex justify-end gap-4 mt-4">
+              <div className="flex justify-end gap-4 mt-4">
                 <button
                   onClick={handleApprove}
                   className="bg-green-500 text-white px-4 py-2 rounded-lg hover:bg-green-600"

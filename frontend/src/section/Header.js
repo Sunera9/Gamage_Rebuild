@@ -48,7 +48,7 @@ const Header = () => {
         </div>
 
         {/* Search Bar */}
-        <div className="flex flex-1 justify-center">
+        {/* <div className="flex flex-1 justify-center">
           <div className="flex items-center bg-gray-100 p-2 rounded-full w-full sm:w-80 md:w-96 lg:w-[500px] shadow-sm">
             <input
               type="text"
@@ -64,7 +64,7 @@ const Header = () => {
               <FaSearch className="text-gray-500 hover:text-blue-500 transition-colors" />
             </button>
           </div>
-        </div>
+        </div> */}
 
         {/* Icons (Notifications and Profile) */}
         <div className="relative">
