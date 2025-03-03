@@ -36,7 +36,7 @@ const AttendanceRecords = () => {
 
 
   return (
-    <div className="max-w-xl mx-auto p-6 bg-white rounded-lg shadow-md">
+    <div className="max-w-xl mx-auto mt-16 p-6 bg-white rounded-lg shadow-md">
       <h2 className="text-2xl font-semibold text-center mb-4">Attendance Records</h2>
       <div className="space-y-4">
         <div>

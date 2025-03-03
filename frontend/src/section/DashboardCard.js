@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import Calendar from "react-calendar";
-import gamgelogo from '../assest/img/brand/gamageLogoEn.jpeg';
-import 'react-calendar/dist/Calendar.css';
+import gamgelogo from "../assest/img/brand/gamageLogoEn.jpeg";
+import "react-calendar/dist/Calendar.css";
 
 const DashboardCard = () => {
   const [dashboardCounts, setDashboardCounts] = useState({
@@ -81,13 +81,22 @@ const DashboardCard = () => {
             </div>
           </div>
         </div>
+        <div className="bg-white shadow-lg rounded-lg p-4 border border-gray-300 text-gray-900">
+          <Calendar
+            onChange={setDate}
+            value={date}
+            className="w-full h-full"
+            tileClassName="text-gray-900 font-semibold"
+            style={{ "--fc-small-text-color": "#1f2937" }} // Some calendars use this variable
+          />
+        </div>
 
-        <Calendar
+        {/* <Calendar
           onChange={setDate}
           value={date}
           className="w-full h-full"
           style={{ color: '#1f2937' }} 
-        />
+        /> */}
       </div>
     </div>
   );

@@ -142,7 +142,7 @@ const AttendanceForm = () => {
   };
 
   return (
-    <div className="max-w-xl mx-auto p-6 bg-white rounded-lg shadow-md">
+    <div className="max-w-xl mt-16 mx-auto p-6 bg-white rounded-lg shadow-md">
       <h2 className="text-2xl font-semibold text-center mb-4">
         Attendance Management
       </h2>

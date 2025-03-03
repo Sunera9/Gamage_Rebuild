@@ -82,7 +82,6 @@ const handleGenerateSheet = async () => {
 
   return (
     <>
-      <Header />
       <div className="min-h-screen bg-gray-100 flex items-center justify-center">
         <div className="max-w-4xl w-full bg-white shadow-lg rounded-lg p-6">
           <header className="text-center mb-8">

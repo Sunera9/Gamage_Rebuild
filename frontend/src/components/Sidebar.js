@@ -179,24 +179,46 @@ const Sidebar = () => {
 
             {/* Salary Dropdown */}
             <li>
-              <div
-                onClick={toggleSalaryMenu}
-                className="flex items-center cursor-pointer text-lg font-bold text-black hover:text-yellow-400"
-              >
-                <FontAwesomeIcon
-                  icon={faDollarSign}
-                  className="mr-3 text-green-500"
-                />
-                {isOpen && <p>Salary</p>}
-                {isOpen && (
+              {userRole === "admin" && (
+                <div
+                  onClick={toggleSalaryMenu}
+                  className="flex items-center cursor-pointer text-lg font-bold text-black hover:text-yellow-400"
+                >
                   <FontAwesomeIcon
-                    icon={faChevronDown}
-                    className={`ml-auto transition-transform ${
-                      isSalaryOpen ? "rotate-180" : ""
-                    }`}
+                    icon={faDollarSign}
+                    className="mr-3 text-green-500"
                   />
-                )}
-              </div>
+                  {isOpen && <p>Salary</p>}
+                  {isOpen && (
+                    <FontAwesomeIcon
+                      icon={faChevronDown}
+                      className={`ml-auto transition-transform ${
+                        isSalaryOpen ? "rotate-180" : ""
+                      }`}
+                    />
+                  )}
+                </div>
+              )}
+              {userRole === "employee" && (
+                <div
+                  onClick={toggleSalaryMenu}
+                  className="flex items-center cursor-pointer text-lg font-bold text-black hover:text-yellow-400"
+                >
+                  <FontAwesomeIcon
+                    icon={faDollarSign}
+                    className="mr-3 text-green-500"
+                  />
+                  {isOpen && <p>Salary</p>}
+                  {isOpen && (
+                    <FontAwesomeIcon
+                      icon={faChevronDown}
+                      className={`ml-auto transition-transform ${
+                        isSalaryOpen ? "rotate-180" : ""
+                      }`}
+                    />
+                  )}
+                </div>
+              )}
               {isSalaryOpen && (
                 <ul className="ml-6 space-y-2 mt-2">
                   {userRole === "admin" && (
@@ -260,6 +282,20 @@ const Sidebar = () => {
                 </Link>
               </li>
             )}
+            <li>
+              {userRole === "visitor" && (
+                <Link
+                  to="/employee/joblist"
+                  className="flex items-center text-lg font-bold text-black hover:text-yellow-400"
+                >
+                  <FontAwesomeIcon
+                    icon={faUser}
+                    className="mr-3 text-blue-500"
+                  />
+                  {isOpen && "Job Vacancies"}
+                </Link>
+              )}
+            </li>
 
             <li>
               {/*profile can view admin,employee,visitor */}
@@ -273,24 +309,46 @@ const Sidebar = () => {
             </li>
             {/* Attendance Dropdown */}
             <li>
-              <div
-                onClick={toggleAttendanceMenu}
-                className="flex items-center cursor-pointer text-lg font-bold text-black hover:text-yellow-400"
-              >
-                <FontAwesomeIcon
-                  icon={faClock}
-                  className="mr-3 text-purple-500"
-                />
-                {isOpen && "Attendance"}
-                {isOpen && (
+              {userRole === "employee" && (
+                <div
+                  onClick={toggleAttendanceMenu}
+                  className="flex items-center cursor-pointer text-lg font-bold text-black hover:text-yellow-400"
+                >
                   <FontAwesomeIcon
-                    icon={faChevronDown}
-                    className={`ml-auto transition-transform ${
-                      isAttendanceOpen ? "rotate-180" : ""
-                    }`}
+                    icon={faClock}
+                    className="mr-3 text-purple-500"
                   />
-                )}
-              </div>
+                  {isOpen && "Attendance"}
+                  {isOpen && (
+                    <FontAwesomeIcon
+                      icon={faChevronDown}
+                      className={`ml-auto transition-transform ${
+                        isAttendanceOpen ? "rotate-180" : ""
+                      }`}
+                    />
+                  )}
+                </div>
+              )}
+              {userRole === "admin" && (
+                <div
+                  onClick={toggleAttendanceMenu}
+                  className="flex items-center cursor-pointer text-lg font-bold text-black hover:text-yellow-400"
+                >
+                  <FontAwesomeIcon
+                    icon={faClock}
+                    className="mr-3 text-purple-500"
+                  />
+                  {isOpen && "Attendance"}
+                  {isOpen && (
+                    <FontAwesomeIcon
+                      icon={faChevronDown}
+                      className={`ml-auto transition-transform ${
+                        isAttendanceOpen ? "rotate-180" : ""
+                      }`}
+                    />
+                  )}
+                </div>
+              )}
               {isAttendanceOpen && (
                 <ul className="ml-6 space-y-2 mt-2">
                   {userRole === "employee" && (
@@ -342,7 +400,6 @@ const Sidebar = () => {
       </div>
     </div>
   );
-
 };
 
 export default Sidebar;

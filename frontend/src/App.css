@@ -1,3 +1,15 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+/* Change Month Name (e.g., "February 2025") */
+.react-calendar__navigation button {
+    color: #1f2937 !important; /* Tailwind's text-gray-900 */
+    font-weight: bold;
+  }
+  
+  /* Change Next/Prev Arrow Color */
+  .react-calendar__navigation button:enabled {
+    color: #1f2937 !important; /* Ensures arrows are visible */
+  }
+  

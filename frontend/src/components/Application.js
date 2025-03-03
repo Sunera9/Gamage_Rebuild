@@ -77,7 +77,6 @@ const Application = () => {
 
   return (
     <>
-    <Header/>
     <div className="flex items-center justify-center my-10">
       <div className="bg-white p-8 rounded-lg shadow-lg w-3/4 max-w-2xl">
         <h1 className="text-2xl font-bold text-center mb-6">

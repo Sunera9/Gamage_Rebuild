@@ -119,7 +119,6 @@ export default function TicketForm() {
 
   return (
     <div>
-      <Header />
       <form onSubmit={handleSubmit} className="ticket-form">
         {/* Form Fields */}
       </form>

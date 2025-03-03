@@ -107,7 +107,6 @@ export default function CreateLeave() {
 
   return (
     <>
-      <Header />
       <div className="container-ticket">
         <div className="row justify-content-center">
           <div className="col-lg-8">

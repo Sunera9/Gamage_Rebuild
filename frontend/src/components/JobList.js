@@ -68,7 +68,7 @@ const JobList = () => {
   };
 
   return (
-    <Container sx={{ marginTop: 6, display: "flex", justifyContent: "center" }}>
+    <Container sx={{ marginTop: 12, display: "flex", justifyContent: "center" }}>
       <Grid container spacing={3} direction="column" alignItems="center">
         <Typography variant="h4" gutterBottom align="center">
           Available Jobs

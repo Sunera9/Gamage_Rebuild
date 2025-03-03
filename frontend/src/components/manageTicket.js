@@ -81,7 +81,6 @@ function TicketsTable() {
 
   return (
     <>
-      <Header />
       <div className="flex justify-center p-6 mt-12">
         <div className="w-2/10 bg-white shadow-lg rounded-lg">
           <div className="text-center mb-4"></div>
