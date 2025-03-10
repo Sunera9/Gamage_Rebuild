@@ -112,7 +112,7 @@ const Register = () => {
   return (
     <>
       <Header />
-      <div className="flex items-center justify-center min-h-2-screen bg-gradient-to-r py-10 mt-12">
+      <div className="flex items-center justify-center min-h-2-screen py-10 mt-12 bg-gradient-to-r from-[rgb(147,51,234)] to-blue-500">
         <div className="bg-white dark:bg-gray-800 shadow-xl rounded-xl max-w-4xl w-11/12 p-8 md:p-6">
           <h2 className="text-2xl font-semibold text-gray-800 dark:text-white text-center mb-4">
             Create a New Account

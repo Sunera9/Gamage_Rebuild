@@ -91,7 +91,7 @@ const Login = () => {
         if (role === "visitor") {
           navigate("/employee/joblist");
         } else if (role === "employee") {
-          navigate("/employee/dashboard");
+          navigate("/profile");
         } else if (role === "admin") {
           navigate("/admin/dashboard");
         }
@@ -119,7 +119,7 @@ const Login = () => {
   return (
     <>
       <Header />
-      <div className="flex items-center justify-center min-h-screen">
+      <div className="flex items-center justify-center min-h-screen bg-gradient-to-r from-[rgb(147,51,234)] to-blue-500">
         <div className="flex flex-col w-full max-w-lg px-8 py-10 bg-white rounded-xl shadow-xl mt-24 mb-16 dark:bg-gray-800 sm:px-10 md:px-14 lg:px-16">
           <div className="self-center mb-6 text-2xl font-semibold text-gray-800 sm:text-3xl dark:text-white text-center">
             Login to Your Account

@@ -55,26 +55,22 @@ const Sidebar = () => {
       <div className="flex flex-col justify-between h-full">
         <div>
           <ul className="space-y-10">
-            <li>
-              {/*dashboard can view visitor,employee, admin */}
-              <Link
-                to="/dashboard"
-                className="flex items-center text-lg font-bold text-black hover:text-yellow-400"
-              >
-                <FontAwesomeIcon
-                  icon={faHome}
-                  className="mr-3 text-yellow-500"
-                />
-                {isOpen && "Dashboard"}
-                {/* Toggle Button */}
-                {/* <button
-                                        onClick={toggleSidebar}
-                                        className="text-gray-600 hover:text-gray-800"
-                                    >
-                                        <FontAwesomeIcon icon={isOpen ? faAngleLeft : faAngleRight} className="text-white" />
-                                    </button> */}
-              </Link>
-            </li>
+            {userRole === "admin" && (
+              <li>
+                {/*dashboard can view visitor,employee, admin */}
+                <Link
+                  to="/dashboard"
+                  className="flex items-center text-lg font-bold text-black hover:text-yellow-400"
+                >
+                  <FontAwesomeIcon
+                    icon={faHome}
+                    className="mr-3 text-yellow-500"
+                  />
+                  {isOpen && "Dashboard"}
+                </Link>
+              </li>
+            )}
+
             {userRole === "employee" && (
               <li>
                 <Link
