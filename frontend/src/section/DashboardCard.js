@@ -38,7 +38,7 @@ useEffect(() => {
 
       setDashboardCounts({
         totalApplications: appData.count || 0, // Fix the property name
-        totalTickets: ticketData.count || 0,
+        totalTickets: ticketData.totalTickets || 0,
         totalEmployees: employeeData.count || 0,
       });
     } catch (error) {
