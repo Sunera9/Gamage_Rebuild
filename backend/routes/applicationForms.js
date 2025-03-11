@@ -66,4 +66,16 @@ router.delete('/:id', async (req, res) => {
   }
 });
 
+
+// Get total application count
+router.get("/count", async (req, res) => {
+  try {
+    const count = await ApplicationForm.countDocuments();
+    res.json({ count });
+  } catch (err) {
+    console.error("Error fetching applications count:", err.message);
+    res.status(500).json({ status: "Error fetching applications count", error: err.message });
+  }
+});
+
 module.exports = router;
