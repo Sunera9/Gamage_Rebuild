@@ -11,38 +11,47 @@ const DashboardCard = () => {
   });
   const [date, setDate] = useState(new Date());
 
-  useEffect(() => {
-    const fetchCounts = async () => {
-      try {
-        const [appRes, ticketRes, employeeRes] = await Promise.all([
-          fetch(`${process.env.REACT_APP_BACKEND_URL}/api/application/count`),
-          fetch(`${process.env.REACT_APP_BACKEND_URL}/tickets/count`),
-          fetch(
-            `${process.env.REACT_APP_BACKEND_URL}/users/getRoleCount/employee`
-          ),
-        ]);
+useEffect(() => {
+  const fetchCounts = async () => {
+    try {
+      const [appRes, ticketRes, employeeRes] = await Promise.all([
+        fetch(`${process.env.REACT_APP_BACKEND_URL}/api/application/count`),
+        fetch(`${process.env.REACT_APP_BACKEND_URL}/tickets/count`),
+        fetch(
+          `${process.env.REACT_APP_BACKEND_URL}/users/getRoleCount/employee`
+        ),
+      ]);
 
-        const [appData, ticketData, employeeData] = await Promise.all([
-          appRes.json(),
-          ticketRes.json(),
-          employeeRes.json(),
-        ]);
-
-        setDashboardCounts({
-          totalApplications: appData.totalApplications || 0,
-          totalTickets: ticketData.totalTickets || 0,
-          totalEmployees: employeeData.count || 0,
-        });
-      } catch (error) {
-        console.error("Error fetching dashboard statistics:", error);
+      if (!appRes.ok || !ticketRes.ok || !employeeRes.ok) {
+        throw new Error("One of the API requests failed");
       }
-    };
 
-    fetchCounts();
-  }, []);
+      const [appData, ticketData, employeeData] = await Promise.all([
+        appRes.json(),
+        ticketRes.json(),
+        employeeRes.json(),
+      ]);
+
+      console.log("Application Data:", appData);
+      console.log("Ticket Data:", ticketData);
+      console.log("Employee Data:", employeeData);
+
+      setDashboardCounts({
+        totalApplications: appData.count || 0, // Fix the property name
+        totalTickets: ticketData.count || 0,
+        totalEmployees: employeeData.count || 0,
+      });
+    } catch (error) {
+      console.error("Error fetching dashboard statistics:", error);
+    }
+  };
+
+  fetchCounts();
+}, []);
 
   return (
     <div>
+      
       {/* Company Logo Section */}
       <div className="flex justify-center mb-6">
         <img src={gamgelogo} alt="Company Logo" className="w-1/6" />
