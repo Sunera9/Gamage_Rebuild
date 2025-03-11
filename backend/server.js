@@ -76,6 +76,7 @@ app.use("/tickets", ticketRouter);
 app.use("/leaves", leaveRouter);
 app.use("/api", jobRoutes);
 app.use("/api/applications", applicationForms);
+app.use("/api/application", applicationRouter);
 
 app.listen(PORT, () => {
   console.log(`Server is up and running on port number: ${PORT}`);

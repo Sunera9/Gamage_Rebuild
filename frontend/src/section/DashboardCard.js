@@ -15,7 +15,7 @@ const DashboardCard = () => {
     const fetchCounts = async () => {
       try {
         const [appRes, ticketRes, employeeRes] = await Promise.all([
-          fetch(`${process.env.REACT_APP_BACKEND_URL}/api/applications/count`),
+          fetch(`${process.env.REACT_APP_BACKEND_URL}/api/application/count`),
           fetch(`${process.env.REACT_APP_BACKEND_URL}/tickets/count`),
           fetch(
             `${process.env.REACT_APP_BACKEND_URL}/users/getRoleCount/employee`
