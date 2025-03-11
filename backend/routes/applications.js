@@ -127,4 +127,15 @@ router.route("/update/:id").put(async (req, res) => {
   }
 });
 
+// Get the total count of applications
+router.route("/count").get(async (req, res) => {
+  try {
+    const count = await ApplicationModel.countDocuments();
+    res.status(200).json({ status: "Total applications count", count });
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).json({ status: "Error with counting applications", error: err.message });
+  }
+});
+
 module.exports = router;
