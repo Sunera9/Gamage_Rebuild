@@ -69,7 +69,7 @@ app.use("/setting", settingRouter);
 app.use("/profile", profileRouter);
 app.use("/attendance", attendanceRouter);
 app.use("/auth", authRouter);
-app.use("/uploads", express.static("uploads"));
+
 
 app.use("/leaveEmail", leaveEmailRoute);
 app.use("/ticketEmail", ticketEmailRoute);
@@ -78,6 +78,7 @@ app.use("/leaves", leaveRouter);
 app.use("/api", jobRoutes);
 app.use("/api/applications", applicationForms);
 app.use("/api/application", applicationRouter);
+app.use("/uploads", express.static("uploads"));
 
 app.listen(PORT, () => {
   console.log(`Server is up and running on port number: ${PORT}`);
