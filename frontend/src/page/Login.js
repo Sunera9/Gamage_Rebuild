@@ -185,7 +185,7 @@ const Login = () => {
                   <option value="">Select Role</option>
                   <option value="visitor">Visitor</option>
                   <option value="employee">Employee</option>
-                  <option value="admin">Admin</option>
+               { /*  <option value="admin">Admin</option>  */}
                 </select>
               </div>
 
