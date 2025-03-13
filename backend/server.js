@@ -69,6 +69,7 @@ app.use("/setting", settingRouter);
 app.use("/profile", profileRouter);
 app.use("/attendance", attendanceRouter);
 app.use("/auth", authRouter);
+app.use("/uploads", express.static("uploads"));
 
 app.use("/leaveEmail", leaveEmailRoute);
 app.use("/ticketEmail", ticketEmailRoute);

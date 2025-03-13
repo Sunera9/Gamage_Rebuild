@@ -57,17 +57,17 @@ function ApplicationsTable() {
                 <td>{application.jobName || "N/A"}</td>
                 <td>
                   <a
-                    href={application.resume}
-                    target="_blank"
-                    rel="noopener noreferrer"
+                    href={`${process.env.REACT_APP_BACKEND_URL}/api/applications/resume/${application.resume}`}
+                    download
                     style={{
                       color: "blue",
                       textDecoration: "underline",
                     }}
                   >
-                    View Resume
+                    Download Resume
                   </a>
                 </td>
+
                 <td>
                   <button
                     onClick={() => handleRowClick(application)}
