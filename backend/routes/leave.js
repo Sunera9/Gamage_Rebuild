@@ -57,17 +57,26 @@ router.get("/get", async (req, res) => {
 
 
 // // Get a specific leave application by ID with populated user details
-router.route("/get/:id").get(async (req, res) => {
+router.get("/leave/get/:id", async (req, res) => {
   try {
-    const leave = await LeaveModel.findById(req.params.id).populate('User', 'name email');
+    const leave = await LeaveModel.findById(req.params.id).populate(
+      "User",
+      "name email"
+    );
     if (!leave) {
-      return res.status(404).json({ message: 'Leave application not found' });
+      return res.status(404).json({ message: "Leave application not found" });
     }
     res.status(200).json(leave);
   } catch (error) {
-    res.status(500).json({ message: 'Error fetching leave application', error: error.message });
+    res
+      .status(500)
+      .json({
+        message: "Error fetching leave application",
+        error: error.message,
+      });
   }
 });
+
 
 // Update leave application
 router.put('/leaves/:id', async (req, res) => {
