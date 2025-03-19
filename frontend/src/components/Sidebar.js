@@ -100,7 +100,7 @@ const Sidebar = () => {
               </li>
             )}
 
-            {userRole === "employee" && (
+            {/* {userRole === "employee" && (
               <li>
                 <Link
                   to="/employee/joblist"
@@ -113,7 +113,7 @@ const Sidebar = () => {
                   {isOpen && "Jobs"}
                 </Link>
               </li>
-            )}
+            )} */}
             {userRole === "admin" && (
               <li>
                 <Link

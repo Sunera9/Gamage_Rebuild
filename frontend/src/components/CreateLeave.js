@@ -17,6 +17,7 @@ export default function CreateLeave() {
   const [message, setMessage] = useState("");
   const [userID, setUserID] = useState("");
   const navigate = useNavigate();
+  const [leaveId, setLeaveId] = useState(null);
 
   // Populate userId from token
   useEffect(() => {
@@ -58,7 +59,7 @@ export default function CreateLeave() {
       }
 
       const response = await axios.post(
-        `${process.env.REACT_APP_BACKEND_URL}/leaves/add`, // Use environment variable here
+        `${process.env.REACT_APP_BACKEND_URL}/leaves/add`,
         leaveDetails,
         {
           headers: {
@@ -66,6 +67,9 @@ export default function CreateLeave() {
           },
         }
       );
+
+      const id = response.data.leave._id;
+      setLeaveId(id);
 
       // Show success alert
       Swal.fire({
@@ -128,7 +132,7 @@ export default function CreateLeave() {
                         </div>
                         <div className="modal-footer">
                           <Link
-                            to="/leaves"
+                            to={`/leaves?id=${leaveId}`} // Pass the ID in the URL
                             className="btn btn-primary"
                             onClick={handleOK}
                           >

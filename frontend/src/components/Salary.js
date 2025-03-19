@@ -89,7 +89,7 @@ const handleGenerateSheet = async () => {
           </header>
 
           {/* Search Section */}
-          <section className="mb-8">
+          {/* <section className="mb-8">
             <h2 className="text-xl font-semibold text-gray-700 mb-4">Search Salary Records</h2>
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
               <input
@@ -145,7 +145,7 @@ const handleGenerateSheet = async () => {
                 </tbody>
               </table>
             )}
-          </section>
+          </section> */}
 
           {/* Salary Sheet Section */}
           <section>
