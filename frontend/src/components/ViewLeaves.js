@@ -7,39 +7,47 @@ export default function ViewLeaves() {
   const [leaves, setLeaves] = useState([]);
   const [id, setUserID] = useState("");
 
+  // Fetch userId from localStorage
   useEffect(() => {
-    // Fetch user ID from local storage (or authentication system)
-    const userId = localStorage.getItem("userId"); // Adjust based on your auth method
-    if (userId) {
-      setUserID(userId);
+    const storedUser = localStorage.getItem("user");
+    if (storedUser) {
+      try {
+        const parsedUser = JSON.parse(storedUser);
+        const tokenPayload = JSON.parse(atob(parsedUser.token.split(".")[1]));
+        setUserID(tokenPayload.userId);
+      } catch (error) {
+        console.error("Error parsing token:", error);
+        Swal.fire("Invalid Token", "Please log in again.", "error");
+      }
+    } else {
+      Swal.fire("Missing Token", "Please log in again.", "error");
     }
   }, []);
 
-  useEffect(() => {
-    if (id) {
-      axios
-        .get(`${process.env.REACT_APP_BACKEND_URL}/leaves/get/${id}`)
-        .then((response) => {
-          setLeaves(response.data);
-        })
-        .catch((error) => {
-          console.error("Error fetching leaves:", error);
-          Swal.fire({
-            icon: "error",
-            title: "Error",
-            text: "Unable to fetch leave requests. Please try again later.",
-          });
+useEffect(() => {
+  if (id) {
+    axios
+      .get(`${process.env.REACT_APP_BACKEND_URL}/leaves/get/${id}`)
+      .then((response) => {
+        setLeaves(response.data);
+      })
+      .catch((error) => {
+        console.error("Error fetching leaves:", error);
+        Swal.fire({
+          icon: "error",
+          title: "Error",
+          text: "Unable to fetch leave requests. Please try again later.",
         });
-    }
-  }, [id]);
+      });
+  }
+}, [id]);
+
 
   return (
     <>
-      <Header />
+   
       <div className="container-ticket">
-        <h2 className="text-2xl font-semibold text-gray-700 my-5">
-          My Leave Requests
-        </h2>
+        <h2 className="text-2xl font-semibold text-gray-700 my-5">My Leave Requests</h2>
         <div className="table-responsive">
           <table className="table table-striped table-bordered">
             <thead className="thead-dark">
@@ -48,32 +56,24 @@ export default function ViewLeaves() {
                 <th>Start Date</th>
                 <th>End Date</th>
                 <th>Type</th>
-                <th>Duration (days)</th>
+                <th>Duration</th>
                 <th>Reason</th>
                 <th>Status</th>
               </tr>
             </thead>
             <tbody>
               {leaves.length > 0 ? (
-                leaves.map((leave) => {
-                  const startDate = new Date(leave.startDate);
-                  const endDate = new Date(leave.endDate);
-                  const duration = Math.ceil(
-                    (endDate - startDate) / (1000 * 60 * 60 * 24) + 1
-                  ); // Duration calculation
-
-                  return (
-                    <tr key={leave._id}>
-                      <td>{leave._id}</td>
-                      <td>{startDate.toLocaleDateString()}</td>
-                      <td>{endDate.toLocaleDateString()}</td>
-                      <td>{leave.type}</td>
-                      <td>{duration} days</td>
-                      <td>{leave.reason}</td>
-                      <td>{leave.adminApproval}</td>
-                    </tr>
-                  );
-                })
+                leaves.map((leave) => (
+                  <tr key={leave._id}>
+                    <td>{leave._id}</td>
+                    <td>{new Date(leave.startDate).toLocaleDateString()}</td>
+                    <td>{new Date(leave.endDate).toLocaleDateString()}</td>
+                    <td>{leave.type}</td>
+                    <td>{leave.duration}</td>
+                    <td>{leave.reason}</td>
+                    <td>{leave.status}</td>
+                  </tr>
+                ))
               ) : (
                 <tr>
                   <td colSpan="7" className="text-center">
