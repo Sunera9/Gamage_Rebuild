@@ -27,7 +27,7 @@ export default function ViewLeaves() {
 useEffect(() => {
   if (id) {
     axios
-      .get(`${process.env.REACT_APP_BACKEND_URL}/leaves/get/${id}`)
+      .get(`${process.env.REACT_APP_BACKEND_URL}/leave/get/${id}`)
       .then((response) => {
         setLeaves(response.data);
       })
